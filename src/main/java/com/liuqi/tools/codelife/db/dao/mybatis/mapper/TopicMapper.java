@@ -1,0 +1,37 @@
+package com.liuqi.tools.codelife.db.dao.mybatis.mapper;
+
+import com.liuqi.tools.codelife.entity.Topic;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Collection;
+import java.util.List;
+
+/**
+ * @Author: LiuQI
+ * @Created: 2018/4/3 11:36
+ * @Version: V1.0
+ **/
+@Mapper
+public interface TopicMapper {
+    Collection<Topic> findAll();
+    
+    Collection<Topic> findByUser(@Param("id") Integer id);
+    
+    Topic findByTitle(@Param("title") String title);
+    
+    Topic findById(@Param("id") Integer id);
+    
+    void insert(@Param("title") String title, @Param("introduction") String introduction, @Param("img") String img);
+    
+    void update(@Param("id") Integer id, @Param("title") String title,
+                @Param("introduction") String introduction, @Param("img") String img);
+    
+    void addTopicArticles(@Param("id") Integer id, @Param("articles") List<Integer> articles);
+    
+    void subscribeTopic(@Param("userId") Integer userId, @Param("topicId") Integer topicId);
+    
+    void unSubscribeTopic(@Param("userId") Integer userId, @Param("topicId") Integer topicId);
+    
+    void delete(@Param("id") Integer id);
+}

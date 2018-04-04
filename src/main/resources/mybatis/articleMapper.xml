@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleMapper">
+    <resultMap id="articleResult" type="com.liuqi.tools.codelife.entity.Article">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="authorID" column="author_id"/>
+        <result property="authorName"  column="author_name"/>
+        <result property="createDate" column="create_date"/>
+        <result property="status" column="status" jdbcType="INTEGER"
+                typeHandler="com.liuqi.tools.codelife.entity.ArticleStatusTypeHandler"/>
+        <result property="contentUrl" column="content_url"/>
+        <result property="remark" column="remark"/>
+        <result property="readCount" column="read_count"/>
+        <result property="praiseCount" column="praise_count"/>
+        <association property="articleType" column="type" select="findTypeById"
+                     javaType="com.liuqi.tools.codelife.entity.ArticleType"/>
+    </resultMap>
+
+    <sql id="selectType">
+        select
+            id as id,
+            user as userId,
+            name as name
+        from
+            article_type
+    </sql>
+
+    <!-- 通过类型ID查找类型 -->
+    <select id="findTypeById" resultType="com.liuqi.tools.codelife.entity.ArticleType">
+        <include refid="selectType"/>
+        where id = #{id}
+    </select>
+
+    <select id="findTypeByName" resultType="com.liuqi.tools.codelife.entity.ArticleType">
+        <include refid="selectType"/>
+        where name = #{typeName}
+    </select>
+
+    <!-- 查找所有文章分类 -->
+    <select id="findAllTypes" resultType="com.liuqi.tools.codelife.entity.ArticleType">
+        <include refid="selectType"/>
+    </select>
+
+    <sql id="selectArticle">
+        select
+            t1.id as id,
+            t1.title as title,
+            t1.type as type,
+            t3.name as type_name,
+            t1.author as author_id,
+            t2.realname as author_name,
+            t1.create_date as create_date,
+            t1.status as status,
+            t1.content_url as content_url,
+            t1.remark as remark,
+            t1.read_count as read_count,
+            t1.praise_count as praise_count
+        from article t1
+        left join user t2
+            on t1.author = t2.id
+        left join article_type t3
+            on t1.type = t3.id
+    </sql>
+
+    <!--查找专题下的文章-->
+    <select id="findByTopic" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        left join topic_article t4
+        on t4.article_id = t1.id
+        where t4.topic_id = #{id}
+    </select>
+
+    <!-- 通过文章ID查找文章-->
+    <select id="findById" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        where t1.id = #{id}
+    </select>
+
+    <!-- 通过用户ID查找文章 -->
+    <select id="findByAuthor" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        where t1.author = #{id}
+    </select>
+
+    <select id="findAll" resultMap="articleResult">
+        <include refid="selectArticle"/>
+    </select>
+
+    <select id="findByType" resultMap="articleResult">
+        <include refid="selectArticle"/>
+
+        where t1.type=#{typeId}
+    </select>
+
+    <select id="findTopArticles" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        order by read_count desc, create_date desc
+        limit #{i}
+    </select>
+
+    <!-- 新增Article对象   -->
+    <insert id="save" parameterType="com.liuqi.tools.codelife.entity.Article">
+        insert into article(title, type, author, create_date, status, content_url, read_count, remark)
+        values(#{title}, #{articleType.id}, #{authorID}, #{createDate},
+            #{status, typeHandler=com.liuqi.tools.codelife.entity.ArticleStatusTypeHandler},
+            #{contentUrl}, #{readCount}, #{remark})
+    </insert>
+
+    <!-- 新增文章分类对象 -->
+    <insert id="saveType" parameterType="com.liuqi.tools.codelife.entity.ArticleType">
+        insert into article_type(name, user) value(#{name}, #{userId})
+    </insert>
+
+    <update id="addReadCount" parameterType="com.liuqi.tools.codelife.entity.Article">
+        update article set read_count = read_count + 1 where id = #{id}
+    </update>
+
+    <delete id="deleteArticle">
+        delete from article where id=#{id}
+    </delete>
+
+    <update id="updateArticle">
+        update article set type=#{type}, title=#{title} where id=#{id}
+    </update>
+
+    <update id="renameType">
+        update article_type set name = #{name} where id=#{id}
+    </update>
+
+    <update id="addPraiseCount">
+        update article set praise_count = praise_count + #{count} where id=#{id}
+    </update>
+</mapper>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+        xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+        layout:decorator="layout/layout">
+<head>
+    <meta charset="UTF-8"/>
+    <title>专题浏览</title>
+
+    <style>
+        .topic-title-main {
+            font-size: 1.1em;
+            color: gray;
+            border-bottom: 1px solid #f2f2f2;
+        }
+
+         /*TOPIC清单中的TOPIC块*/
+        .topic-block {
+            margin-right: 1px;
+            margin-bottom: 10px;
+            border: 1px solid #fff;
+            background: #fbfbfb;
+            box-shadow: 2px 2px 8px #ccc;
+            padding: 10px;
+            font-size: 0.9em;
+        }
+
+        .topic-block-title {
+            border-bottom: 1px dotted #ccc;
+            padding-bottom: 5px;
+        }
+
+        .topic-block p {
+            color: #483D8B;
+        }
+
+        .topic-block ul {
+            list-style: circle;
+            margin: 0px;
+            padding-left: 20px;
+        }
+
+        .topic-block ul li{
+            margin: 4px;
+        }
+
+        .topic-block span{
+
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content" class="container-fluid">
+    <div class="row m-4">
+        <!--搜索操作-->
+        <input type="text"
+               placeholder="搜索专题"
+               class="form-control col-md-4 mr-md-2 offset-md-3"/>
+        <input type="button" value="搜索"
+            class="btn btn-primary"/>
+    </div>
+
+    <div class="row topic-list">
+        <!--我订阅的专题-->
+        <div class="topic-title-main col-12 mb-2">已订阅专题</div>
+        <div class="col-sm-6">
+            <div class="topic-block row">
+                <h6 class="col-12 topic-block-title">
+                    <div class="row">
+                        <span class="col-sm-10">测试专题标题</span>
+                        <span class="col-sm-2 text-right">取消订阅</span>
+                    </div>
+                </h6>
+                <p class="col-sm-6">
+                    专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍
+                </p>
+                <ul class="col-sm-6">
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="topic-block row">
+                <h6 class="col-12 topic-block-title">测试专题</h6>
+                <p class="col-sm-6">
+                    专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍
+                </p>
+                <ul class="col-sm-6">
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row p-1 topic-list">
+        <div class="col-12 mb-2 mt-4 topic-title-main">
+            专题浏览
+        </div>
+
+        <!--专题列表-->
+        <div class="col-sm-3">
+
+            <div class="row topic-block">
+                <h6 class="col-sm-12 topic-block-title">
+                    <div class="row">
+                        <span class="col-sm-10">测试专题标题</span>
+                        <span class="col-sm-2 text-right">订阅</span>
+                    </div>
+                </h6>
+
+                <p class="m-0">专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍</p>
+
+                <ul class="col-12">
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                </ul>
+                <span class="offset-md-9"><a href="#">>>查看更多</a></span>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="row topic-block">
+                <h6 class="col-12 topic-block-title">测试专题标题</h6>
+                <p class="m-0">专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍</p>
+
+                <ul class="col-12">
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                </ul>
+                <span class="offset-md-9"><a href="#">>>查看更多</a></span>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="row topic-block">
+                <h6 class="col-12 topic-block-title">测试专题标题</h6>
+                <p class="m-0">专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍</p>
+
+                <ul class="col-12">
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                </ul>
+                <span class="offset-md-9"><a href="#">>>查看更多</a></span>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="row topic-block">
+                <h6 class="col-12 topic-block-title">测试专题标题</h6>
+                <p class="m-0">专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍</p>
+
+                <ul class="col-12">
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                </ul>
+                <span class="offset-md-9"><a href="#">>>查看更多</a></span>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="row topic-block">
+                <h6 class="col-12 topic-block-title">测试专题标题</h6>
+                <p class="m-0">专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍</p>
+
+                <ul class="col-12">
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                </ul>
+                <span class="offset-md-9"><a href="#">>>查看更多</a></span>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="row topic-block">
+                <h6 class="col-12 topic-block-title">测试专题标题</h6>
+                <p class="m-0">专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍</p>
+
+                <ul class="col-12">
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                </ul>
+                <span class="offset-md-9"><a href="#">>>查看更多</a></span>
+            </div>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="row topic-block">
+                <h6 class="col-12 topic-block-title">测试专题标题</h6>
+                <p class="m-0">专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍</p>
+
+                <ul class="col-12">
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                    <li><a href="#">测试文章</a></li>
+                </ul>
+                <span class="offset-md-9"><a href="#">>>查看更多</a></span>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

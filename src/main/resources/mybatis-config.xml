@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <package name="com.liuqi.tools.codelife.entity"/>
+    </typeAliases>
+
+    <!-- 注册Handler -->
+    <typeHandlers>
+        <typeHandler handler="com.liuqi.tools.codelife.entity.ArticleStatusTypeHandler"/>
+        <typeHandler handler="com.liuqi.tools.codelife.entity.UserStatusTypeHandler"/>
+    </typeHandlers>
+
+    <mappers>
+        <mapper resource="mybatis/userMapper.xml"/>
+        <mapper resource="mybatis/articleMapper.xml"/>
+        <mapper resource="mybatis/userLogMapper.xml"/>
+        <mapper resource="mybatis/roleMapper.xml"/>
+        <mapper resource="mybatis/topicMapper.xml"/>
+    </mappers>
+</configuration>

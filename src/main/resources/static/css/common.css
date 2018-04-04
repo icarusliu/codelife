@@ -1,0 +1,56 @@
+body {
+    background: #fdfdfd;
+}
+
+/*导航栏CSS调整*/
+#mainNav {
+    background: #F0F8FF;
+    padding-bottom: 0px;
+}
+
+#mainNavUl .active {
+    background: #fdfdfd;
+}
+
+#mainNavUl li: hover{
+    background: #fff;
+}
+
+#mainNavUl li {
+    width: 100px;
+}
+
+/*子菜单样式调整*/
+.list-group-item {
+    border-color: #AFEEEE;
+    color: black;
+}
+
+.list-group-item:hover {
+    background-color: #F0F8FF;
+}
+
+.list-group .active {
+    background-color: #F0FFFF;
+    border-color: #AFEEEE;
+    color: black;
+}
+
+/*右侧内容区域样式调整*/
+.right-content {
+    border: 1px solid #AFEEEE;
+    border-right: none;
+    border-bottom: none;
+}
+
+/*底部*/
+.footer {
+    border-top: 1px solid #ddd;
+}
+
+/* 错误信息，默认隐藏 */
+.error-message {
+    font-size: 0.8em;
+    color: red;
+    display: none;
+}

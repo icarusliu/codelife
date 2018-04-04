@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicMapper">
+    <resultMap id="topicResult" type="com.liuqi.tools.codelife.entity.Topic">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="introduction" column="introduction"/>
+        <result property="img" column="img"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select
+            t1.id as id,
+            t1.title,
+            t1.introduction
+        from
+            topic t1
+    </sql>
+
+    <select id="findAll" resultMap="topicResult">
+        <include refid="selectSql"/>
+    </select>
+
+    <select id="findByUser" resultMap="topicResult">
+        <include refid="selectSql"/>
+        left join topic_user t2
+        on t1.id = t2.topic_id
+        where t2.user_id = #{id}
+    </select>
+
+    <select id="findByTitle" resultMap="topicResult">
+        <include refid="selectSql"/>
+        where title=#{title}
+    </select>
+
+    <select id="findById" resultMap="topicResult">
+        <include refid="selectSql"/>
+        where id=#{id}
+    </select>
+
+    <insert id="insert">
+        insert into topic(title, introduction, img)
+        values(#{title}, #{introduction}, #{img})
+    </insert>
+
+    <update id="update">
+        update topic
+        set title = #{title}, introduction=#{introduction}, img = #{img}
+        where id=#{id}
+    </update>
+
+    <insert id="addTopicArticles" parameterType="java.util.List">
+        insert into topic_articl(topic_id, article_id)
+        values
+        <foreach collection="articles" item="item" index="index" open="" close="" separator=",">
+            (#{id}, #{item})
+        </foreach>
+    </insert>
+</mapper>

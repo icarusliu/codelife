@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+        xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+        layout:decorator="layout/systemLayout">
+<head>
+    <meta charset="UTF-8"/>
+    <title>专题管理</title>
+
+    <script th:inline="javascript">
+        var dataTableUrl = [[@{/topic/getAll}]];
+        var addTopicUrl = [[@{/topicManager/add}]]
+        var fileSizeError = false;
+
+        var tableId = "dataTable";
+        var table = null;
+
+        var pId;
+
+        $(function(){
+            table = new DataTable(tableId, dataTableUrl, "toolBar");
+            table.refresh();
+
+            //绑定新增Form的提交事件
+            $.formSubmit('newForm',  function() {
+                saveTopic();
+            });
+        });
+
+        //向服务器新增Topic
+         function saveTopic() {
+            if (fileSizeError) {
+                //如果文件太大了，不能提交
+                return;
+            }
+
+            var title = $("#title").val();
+            var introduction = $("#introduction").val();
+
+            var data = new FormData();
+            data.append("title", title);
+            data.append("introduction", introduction);
+            data.append("img", $("#img")[0].files[0]);
+
+            postFormData(addTopicUrl, data, function(){
+                table.refresh();
+                $("#newDialog").modal("hide");
+            });
+        }
+
+        //新增Topic
+        function add() {
+            $("#newDialog").modal("show");
+        }
+
+        //检查文件大小
+        function checkFileSize(target) {
+            var fileSize = target.files[0].size;
+            if (fileSize / 1000 > 1000) {
+                fileSizeError = true;
+                $("#errorMessage").text("文件不能大于1M");
+                $("#errorMessage").show();
+            } else {
+                fileSizeError = false;
+                $("#errorMessage").hide();
+            }
+        }
+
+        //检查专题标题是否已经存在
+        function checkTitle() {
+            var title = $("#title").val();
+            var topics = table.getData();
+
+            for (var i in topics) {
+                var topic = topics[i];
+
+                if (topic.id != pId && topic.title == title) {
+                    $("#errorMessage").text("相同名称的专题已经存在！");
+                    $("#errorMessage").show();
+                    return;
+                }
+            }
+
+            $("#errorMessage").hide();
+        }
+    </script>
+</head>
+<body>
+
+<div layout:fragment="subContent">
+    <div class="row">
+        <!-- 右侧列表 -->
+        <div class="col">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th data-width="500" data-field="title">标题</th>
+                        <th data-width="500" data-field="introduction">介绍</th>
+                        <th data-width="500" data-field="img">封面</th>
+                        <th data-width="500" data-formatter="addButtons" data-events="operateEvent">操作</th>
+                    </tr>
+                </thead>
+            </table>
+
+            <!-- 工具栏 -->
+            <div id="toolBar">
+                <button type="button" class="btn" onclick="javascript: add(); ">新增</button>
+                <button type="button" class="btn" onclick="javascript: table.refresh(); ">刷新</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增专题对话框 -->
+    <div class="modal fade" id="newDialog" tabindex="-1" role="dialog" aria-labelledby="dialogTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="dialogTitle">新增专题</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="newForm" method="post" class="mr-4">
+                        <label class="error-message" id="errorMessage">相同名称的专题已存在！</label>
+
+                        <div class="row">
+                            <label class="col-sm-3 mt-1">标题标题：</label>
+                            <input class="col form-control mb-2" type="text" id="title" placeholder=""
+                                   maxlength="100"
+                                   onblur="javascript: checkTitle();  "
+                                   required/>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-3 mt-1">专题介绍：</label>
+                            <textarea class="col form-control mb-2" type="text" id="introduction"
+                                      rows="3"
+                                      maxlength="200" placeholder="" required></textarea>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-sm-3 mt-1">专题封面：</label>
+                            <input class="col form-control mb-2" type="file" id="img"
+                                   accept="image/jpg,image/png"
+                                   onchange="checkFileSize(this); "
+                                   placeholder="专题封面"/>
+                        </div>
+
+                        <div class="row mt-2">
+                            <button type="button" class="col-sm-2 btn btn-secondary offset-sm-7 mr-2"
+                                    data-dismiss="modal">取消</button>
+                            <button type="submit" class="col-sm-2 btn btn-primary" id="submitButton">保存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

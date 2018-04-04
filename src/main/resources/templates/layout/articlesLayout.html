@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+        xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+        layout:decorator="layout/layout">
+<head>
+    <meta charset="UTF-8"/>
+    <title>文章浏览</title>
+
+    <script th:inline="javascript">
+        //加载完成后设置哪个分类被选中
+        $(function(){
+            var typeId = [[${typeId}]];
+            if (undefined != typeId  && null != typeId) {
+                var as = $("#navUl>a");
+                for (var i = 0; i < as.length; i++) {
+                    var a = as[i];
+                    var url = $(a).attr("href");
+                    var urlTypeId = $.getUrlVar("typeId", url);
+
+                    if (urlTypeId == typeId) {
+                        $(a).attr("class", "list-group-item active");
+                    } else {
+                        $(a).attr("class", "list-group-item");
+                    }
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+<div layout:fragment="content" class="container-fluid">
+    <div class="row">
+        <!-- 左侧导航页面 -->
+        <div class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar"
+             style="background: #fefefe; border-bottom: 1px solid #eeeeee; ">
+            <div class="list-group" id="navUl" >
+                <a class="list-group-item"  th:each="type: ${types}" th:href="@{'/articles?typeId=' + ${type.id}}" th:text="${type.name}">
+                </a>
+            </div>
+        </div>
+
+        <!-- 右侧文章列表 -->
+        <div layout:fragment="subContent" class="col-sm-9 col-md-10 right-content">
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

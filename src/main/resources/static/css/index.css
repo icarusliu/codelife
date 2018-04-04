@@ -1,0 +1,42 @@
+.content {
+    padding-top: 10px;
+}
+
+/*文章列表*/
+.article-list-title {
+    font-size: 0.9em;
+    border-bottom: 1px solid #bbb;
+    padding-bottom: 10px;
+
+    color: #4682B4;
+    font-weight: bold;
+}
+
+.article-list-group {
+    list-style: none;
+}
+
+.article-list-item {
+    font-size: 0.8em;
+}
+
+.article-list-item a {
+    color: #483D8B;
+}
+
+/*网站介绍段落中的表格风格*/
+.desc-table {
+    border-color: #AFEEEE;
+}
+
+.desc-table th {
+    background: #F0F8FF;
+    text-align: center;
+}
+
+.desc-table th, .desc-table td {
+    padding: 4px;
+    padding-left: 10px;
+    min-width: 100px;
+    border-color: #AFEEEE;
+}
