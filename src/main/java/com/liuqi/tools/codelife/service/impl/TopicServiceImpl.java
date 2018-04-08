@@ -198,7 +198,19 @@ public class TopicServiceImpl implements TopicService {
             throw new RestException("用户编号不能为空！");
         }
         
+        //检查用户编号是否存在
         userService.findById(userId);
+        
+        //检查是否已经有过订阅
+        Collection<Topic> myTopics = topicDao.findByUser(userId);
+        if (null != myTopics) {
+            for (Topic topic: myTopics) {
+                if (topic.getId() == topicId) {
+                    logger.warn("Topic already subscribed, topicId: " + topicId);
+                    return;
+                }
+            }
+        }
         
         topicDao.subscribeTopic(userId, topicId);
     }

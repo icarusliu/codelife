@@ -49,7 +49,37 @@
         .topic-block span{
 
         }
+
+        /*订阅按钮样式*/
+        .topic-subscribe-button {
+            font-size: 0.8em;
+            cursor: pointer;
+            color: blue;
+        }
+
+        .topic-subscribe-button:hover{
+            color: red;
+        }
     </style>
+
+    <script th:inline="javascript">
+        var subscribeUrl = [[@{/topic/subscribe}]];
+        var unSubscribeUrl = [[@{/topic/unSubscribe}]];
+
+        //订阅
+        function subscribe(id) {
+            post(subscribeUrl, {id: id}, function() {
+                alert("订阅成功！");
+            });
+        }
+
+        //取消订阅
+        function unSubscribe(id) {
+            post(unSubscribeUrl, {id: id}, function() {
+                alert("取消订阅成功！");
+            });
+        }
+    </script>
 </head>
 <body>
 <div layout:fragment="content" class="container-fluid">
@@ -65,37 +95,21 @@
     <div class="row topic-list">
         <!--我订阅的专题-->
         <div class="topic-title-main col-12 mb-2">已订阅专题</div>
-        <div class="col-sm-6">
+        <div class="col-sm-6" th:each="topic: ${myTopics}">
             <div class="topic-block row">
                 <h6 class="col-12 topic-block-title">
                     <div class="row">
-                        <span class="col-sm-10">测试专题标题</span>
-                        <span class="col-sm-2 text-right">取消订阅</span>
+                        <span class="col-sm-10" th:text="${topic.title}"></span>
+                        <span class="col-sm-2 text-right topic-subscribe-button"
+                              th:onclick="'unSubscribe(' + ${topic.id} + ')'">取消订阅</span>
                     </div>
                 </h6>
-                <p class="col-sm-6">
-                    专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍
+                <p class="col-sm-6" th:text="${topic.introduction}">
                 </p>
                 <ul class="col-sm-6">
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="topic-block row">
-                <h6 class="col-12 topic-block-title">测试专题</h6>
-                <p class="col-sm-6">
-                    专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍
-                </p>
-                <ul class="col-sm-6">
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
+                    <li th:each="article: ${topic.articles}">
+                        <a th:href="@{/articleDetail} + '?id=' + ${article.id}" th:text="${article.title}"></a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -113,16 +127,20 @@
                 <h6 class="col-sm-12 topic-block-title">
                     <div class="row">
                         <span class="col-sm-10" th:text="${topic.title}"></span>
-                        <span class="col-sm-2 text-right">订阅</span>
+                        <span class="col-sm-2 text-right topic-subscribe-button"
+                              th:if="${#authentication.name != 'anonymousUser'}"
+                              th:onclick="'subscribe(' + ${topic.id} + ')'">订阅</span>
                     </div>
                 </h6>
 
                 <p class="m-0" th:text="${topic.introduction}"></p>
 
                 <ul class="col-12">
-                    <!--<li><a href="#" th:each="article in ${}" th:text="${article.title}"></a></li>-->
+                    <li th:each="article: ${topic.articles}">
+                        <a th:href="@{/articleDetail} + '?id=' + ${article.id}" th:text="${article.title}"></a>
+                    </li>
                 </ul>
-                <span class="offset-md-9"><a href="#">>>查看更多</a></span>
+                <span class="offset-md-9"><a th:href="@{/topic/detail} + '?id=' + ${topic.id}">>>查看更多</a></span>
             </div>
         </div>
 

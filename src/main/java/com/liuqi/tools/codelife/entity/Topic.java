@@ -1,5 +1,7 @@
 package com.liuqi.tools.codelife.entity;
 
+import java.util.Collection;
+
 /**
  * 专题对象
  *
@@ -24,6 +26,8 @@ public class Topic {
      * 专题封面图片
      */
     private String img;
+    
+    private Collection<Article> articles;
     
     public int getId() {
         return id;
@@ -55,5 +59,34 @@ public class Topic {
     
     public void setImg(String img) {
         this.img = img;
+    }
+    
+    public Collection<Article> getArticles() {
+        return articles;
+    }
+    
+    /**
+     * 判断两个Topic对象是否是同一个
+     * 如果ID一样则是同一个，否则不是
+     *
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Topic)) {
+            return false;
+        }
+        
+        int id = ((Topic)obj).getId();
+        if (this.getId() == id) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public void setArticles(Collection<Article> articles) {
+        this.articles = articles;
     }
 }

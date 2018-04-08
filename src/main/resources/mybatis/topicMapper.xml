@@ -60,6 +60,15 @@
         </foreach>
     </insert>
 
+    <insert id="subscribeTopic">
+        insert into topic_user(topic_id, user_id)
+        values(#{topicId}, #{userId})
+    </insert>
+
+    <delete id="unSubscribeTopic">
+        delete from topic_user where topic_id=#{topicId} and user_id = #{userId}
+    </delete>
+
     <delete id="deleteTopicArticle">
         delete from topic_article where topic_id=#{id} and article_id = #{articleId}
     </delete>
