@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 专题服务实现类
@@ -178,7 +179,14 @@ public class TopicServiceImpl implements TopicService {
     public void addTopicArticls(Integer id, List<Integer> articles) throws RestException {
         checkTopicId(id);
         
-        topicDao.addTopicArticles(id, articles);
+        //如果已经添加过的不再重复添加
+        Collection<Integer> articles1 = getTopicArticles(id).stream()
+                .map(item -> item.getId()).collect(Collectors.toList());
+        List<Integer> notAdded = articles.stream().filter(item -> !articles1.contains(item))
+                .collect(Collectors.toList());
+        if (0 != notAdded.size()) {
+            topicDao.addTopicArticles(id, notAdded);
+        }
     }
     
     @Override
@@ -212,8 +220,17 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public void deleteTopic(Integer id) throws RestException {
         checkTopicId(id);
+     
+        //先删除用户订阅关系再删除专题下的所有文章，最后删除专题对象
+        topicDao.clearTopicSubscribers(id);
+        topicDao.clearTopicArticles(id);
         
         topicDao.delete(id);
+    }
+    
+    @Override
+    public void deleteTopicArticle(Integer id, Integer articleId) {
+        topicDao.deleteTopicArticle(id, articleId);
     }
     
     private void checkTopicId(Integer id) throws RestException {

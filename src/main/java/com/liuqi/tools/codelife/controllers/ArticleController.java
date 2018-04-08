@@ -146,6 +146,18 @@ public class ArticleController {
         articleService.unpraise(id);
     }
     
+    /**
+     * 根据标题关键字进行搜索
+     *
+     * @param key
+     * @return
+     */
+    @PostMapping("/searchArticleByTitle")
+    @ResponseBody
+    public Collection<Article> searchTitle(@RequestParam("key") String key) {
+        return articleService.searchTitle(key);
+    }
+    
     private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);
     private static final String ARTICLE_READ_IDS = "article-read-ids";
 }

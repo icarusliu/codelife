@@ -79,6 +79,11 @@
         where t1.id = #{id}
     </select>
 
+    <select id="searchByTitleKey" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        where t1.title like concat('%', concat(#{key}, '%'))
+    </select>
+
     <!-- 通过用户ID查找文章 -->
     <select id="findByAuthor" resultMap="articleResult">
         <include refid="selectArticle"/>

@@ -128,4 +128,12 @@ public interface ArticleService {
      * @return
      */
     Collection<Article> findByAuthor(User user) throws RestException;
+    
+    /**
+     * 通过标题关键字进行搜索
+     *
+     * @param key
+     * @return
+     */
+    Collection<Article> searchTitle(String key);
 }

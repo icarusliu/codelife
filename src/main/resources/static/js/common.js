@@ -55,15 +55,22 @@ $.extend({
 /**
  * 提交POST请求
  **/
-function post(url, data, success) {
-    $.post({
-        url: url,
-        data: data,
-        success: function(data) {
-                    ajaxSuccess(data, success);
-                },
-        error: ajaxError
-    });
+function post(url, data, success, options) {
+    var obj = new Object();
+    obj.url = url;
+    obj.data = data;
+    obj.success = function(data) {
+        ajaxSuccess(data, success);
+    }
+    obj.error = ajaxError;
+
+    if (options) {
+        for (var i in options) {
+            obj[i] = options[i];
+        }
+    }
+
+    $.post(obj);
 }
 
 //POST提交FormData
@@ -123,8 +130,8 @@ function DataTable(tableId, dataUrl, toolbarId) {
 
     //获取表格中的数据
     this.getData = function() {
-        $("#" + tableId).bootstrapTable("getData");
-    }
+        return $("#" + tableId).bootstrapTable("getData");
+    };
 }
 
 //表格的样式

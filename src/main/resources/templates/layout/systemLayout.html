@@ -30,7 +30,7 @@
                 var a = as[i];
                 var url = $(a).attr("href");
 
-                if (url == page) {
+                if (0 == page.indexOf(url)) {
                     $(a).attr("class", "list-group-item active");
                 } else {
                     $(a).attr("class", "list-group-item");

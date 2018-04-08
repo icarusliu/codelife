@@ -94,4 +94,12 @@ public interface TopicService {
      * @param id
      */
     void deleteTopic(Integer id) throws RestException;
+    
+    /**
+     * 删除专题中的某个文章
+     *
+     * @param id
+     * @param articleId
+     */
+    void deleteTopicArticle(Integer id, Integer articleId);
 }

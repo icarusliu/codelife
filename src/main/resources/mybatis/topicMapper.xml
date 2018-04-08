@@ -14,7 +14,8 @@
         select
             t1.id as id,
             t1.title,
-            t1.introduction
+            t1.introduction,
+            t1.img
         from
             topic t1
     </sql>
@@ -52,10 +53,26 @@
     </update>
 
     <insert id="addTopicArticles" parameterType="java.util.List">
-        insert into topic_articl(topic_id, article_id)
+        insert into topic_article(topic_id, article_id)
         values
         <foreach collection="articles" item="item" index="index" open="" close="" separator=",">
             (#{id}, #{item})
         </foreach>
     </insert>
+
+    <delete id="deleteTopicArticle">
+        delete from topic_article where topic_id=#{id} and article_id = #{articleId}
+    </delete>
+
+    <delete id="clearTopicSubscribers">
+        delete from topic_user where topic_id =#{id}
+    </delete>
+
+    <delete id="clearTopicArticles">
+        delete from topic_article where topic_id=#{id}
+    </delete>
+
+    <delete id="delete">
+        delete from topic where id=#{id}
+    </delete>
 </mapper>

@@ -107,134 +107,20 @@
         </div>
 
         <!--专题列表-->
-        <div class="col-sm-3">
+        <div class="col-sm-3" th:each="topic: ${topics}">
 
             <div class="row topic-block">
                 <h6 class="col-sm-12 topic-block-title">
                     <div class="row">
-                        <span class="col-sm-10">测试专题标题</span>
+                        <span class="col-sm-10" th:text="${topic.title}"></span>
                         <span class="col-sm-2 text-right">订阅</span>
                     </div>
                 </h6>
 
-                <p class="m-0">专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍</p>
+                <p class="m-0" th:text="${topic.introduction}"></p>
 
                 <ul class="col-12">
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                </ul>
-                <span class="offset-md-9"><a href="#">>>查看更多</a></span>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="row topic-block">
-                <h6 class="col-12 topic-block-title">测试专题标题</h6>
-                <p class="m-0">专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍</p>
-
-                <ul class="col-12">
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                </ul>
-                <span class="offset-md-9"><a href="#">>>查看更多</a></span>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="row topic-block">
-                <h6 class="col-12 topic-block-title">测试专题标题</h6>
-                <p class="m-0">专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍</p>
-
-                <ul class="col-12">
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                </ul>
-                <span class="offset-md-9"><a href="#">>>查看更多</a></span>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="row topic-block">
-                <h6 class="col-12 topic-block-title">测试专题标题</h6>
-                <p class="m-0">专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍</p>
-
-                <ul class="col-12">
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                </ul>
-                <span class="offset-md-9"><a href="#">>>查看更多</a></span>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="row topic-block">
-                <h6 class="col-12 topic-block-title">测试专题标题</h6>
-                <p class="m-0">专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍</p>
-
-                <ul class="col-12">
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                </ul>
-                <span class="offset-md-9"><a href="#">>>查看更多</a></span>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="row topic-block">
-                <h6 class="col-12 topic-block-title">测试专题标题</h6>
-                <p class="m-0">专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍</p>
-
-                <ul class="col-12">
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                </ul>
-                <span class="offset-md-9"><a href="#">>>查看更多</a></span>
-            </div>
-        </div>
-
-        <div class="col-sm-3">
-            <div class="row topic-block">
-                <h6 class="col-12 topic-block-title">测试专题标题</h6>
-                <p class="m-0">专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍专题介绍</p>
-
-                <ul class="col-12">
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
-                    <li><a href="#">测试文章</a></li>
+                    <!--<li><a href="#" th:each="article in ${}" th:text="${article.title}"></a></li>-->
                 </ul>
                 <span class="offset-md-9"><a href="#">>>查看更多</a></span>
             </div>

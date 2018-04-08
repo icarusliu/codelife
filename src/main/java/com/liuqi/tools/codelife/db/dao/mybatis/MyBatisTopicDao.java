@@ -70,4 +70,19 @@ public class MyBatisTopicDao implements TopicDao {
     public void delete(Integer id) {
         topicMapper.delete(id);
     }
+    
+    @Override
+    public void clearTopicArticles(Integer id) {
+        topicMapper.clearTopicArticles(id);
+    }
+    
+    @Override
+    public void clearTopicSubscribers(Integer id) {
+        topicMapper.clearTopicSubscribers(id);
+    }
+    
+    @Override
+    public void deleteTopicArticle(Integer id, Integer articleId) {
+        topicMapper.deleteTopicArticle(id, articleId);
+    }
 }

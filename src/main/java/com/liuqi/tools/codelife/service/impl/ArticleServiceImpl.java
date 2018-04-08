@@ -203,5 +203,13 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDao.findByAuthor(user.getId());
     }
     
+    @Override
+    public Collection<Article> searchTitle(String key) {
+        if (null == key) {
+            return Collections.EMPTY_LIST;
+        }
+        return articleDao.searchByTitleKey(key);
+    }
+    
     private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
 }

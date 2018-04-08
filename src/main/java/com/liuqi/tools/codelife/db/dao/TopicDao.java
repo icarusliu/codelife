@@ -88,4 +88,26 @@ public interface TopicDao {
      * @param id
      */
     void delete(Integer id);
+    
+    /**
+     * 清空专题下的文章
+     *
+     * @param id
+     */
+    void clearTopicArticles(Integer id);
+    
+    /**
+     * 清空专题的订阅关系
+     *
+     * @param id
+     */
+    void clearTopicSubscribers(Integer id);
+    
+    /**
+     * 删除专题下的指定文章
+     *
+     * @param id
+     * @param articleId
+     */
+    void deleteTopicArticle(Integer id, Integer articleId);
 }

@@ -34,4 +34,24 @@ public interface TopicMapper {
     void unSubscribeTopic(@Param("userId") Integer userId, @Param("topicId") Integer topicId);
     
     void delete(@Param("id") Integer id);
+    
+    /**
+     * 删除Topic下的指定文章
+      * @param id
+     * @param articleId
+     */
+    void deleteTopicArticle(@Param("id") Integer id, @Param("articleId") Integer articleId);
+    
+    /**
+     * 清空专题的订阅关系
+     * 
+     * @param id
+     */
+    void clearTopicSubscribers(@Param("id") Integer id);
+    
+    /**
+     * 清空专题的文章
+     * @param id
+     */
+    void clearTopicArticles(@Param("id")Integer id);
 }

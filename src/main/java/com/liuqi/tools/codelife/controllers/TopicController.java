@@ -2,6 +2,7 @@ package com.liuqi.tools.codelife.controllers;
 
 import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.Topic;
+import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.File;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * 专题控制器
@@ -47,10 +49,17 @@ public class TopicController {
     @RequestMapping
     public ModelAndView topic() {
         //获取所有专题列表
-        Collection<Topic> topics = topicService.findAll();
+        User loginUser = authenticationService.getLoginUser();
+        Collection<Topic> topics;
+        if (null != loginUser) {
+            topics = topicService.getUserTopics(loginUser.getId());
+        } else {
+            topics = Collections.EMPTY_LIST;
+        }
         
         return ModelAndViewBuilder.of("topic")
                 .setData("myTopics", topics)
+                .setData("topics", topicService.findAll())
                 .build();
     }
     

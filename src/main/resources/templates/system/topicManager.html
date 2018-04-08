@@ -11,8 +11,10 @@
 
     <script th:inline="javascript">
         var dataTableUrl = [[@{/topic/getAll}]];
-        var addTopicUrl = [[@{/topicManager/add}]]
-        var fileSizeError = false;
+        var addTopicUrl = [[@{/system/topicManager/add}]]
+        var showImgUrl = [[@{/topic/getImg}]];
+        var editUrl = [[@{/system/topicManager/edit}]];
+        var deleteUrl = [[@{/system/topicManager/delete}]];
 
         var tableId = "dataTable";
         var table = null;
@@ -31,11 +33,6 @@
 
         //向服务器新增Topic
          function saveTopic() {
-            if (fileSizeError) {
-                //如果文件太大了，不能提交
-                return;
-            }
-
             var title = $("#title").val();
             var introduction = $("#introduction").val();
 
@@ -58,12 +55,11 @@
         //检查文件大小
         function checkFileSize(target) {
             var fileSize = target.files[0].size;
-            if (fileSize / 1000 > 1000) {
-                fileSizeError = true;
-                $("#errorMessage").text("文件不能大于1M");
+            if (fileSize / 1000 > 200) {
+                $(target).val("");
+                $("#errorMessage").text("文件不能大于200K，请重新选择！");
                 $("#errorMessage").show();
             } else {
-                fileSizeError = false;
                 $("#errorMessage").hide();
             }
         }
@@ -79,11 +75,46 @@
                 if (topic.id != pId && topic.title == title) {
                     $("#errorMessage").text("相同名称的专题已经存在！");
                     $("#errorMessage").show();
+                    $("#submitButton").attr("disabled", true);
                     return;
                 }
             }
 
             $("#errorMessage").hide();
+            $("#submitButton").attr("disabled", false);
+        }
+
+        //封面列转换器 由文件名称转换成文件显示
+        function formatImg(value, row, index, field) {
+            var img = row.img;
+            if (img) {
+                return "<a href='" + showImgUrl + "?fileName=" + img + "' target='_blank'>查看</a>";
+            } else {
+                return "-";
+            }
+        }
+
+        //组装表格操作按钮
+        function addButtons() {
+            var buttons = new Array();
+
+            buttons.push("<button type='button' id='editButton' class='btn mr-2'>修改</button>");
+            buttons.push("<button type='button' id='deleteButton' class='btn'>删除</button>");
+
+            return buttons.join("");
+        }
+
+        window.operateEvent = {
+            "click #editButton": function(e, value, row, index) {
+                window.open(editUrl + "?id=" + row.id, "_self");
+            },
+            "click #deleteButton": function(e, value, row, index) {
+                if (confirm("请确认是否删除专题？")) {
+                    post(deleteUrl, {id: row.id}, function() {
+                        table.refresh();
+                    });
+                }
+            }
         }
     </script>
 </head>
@@ -96,10 +127,10 @@
             <table id="dataTable">
                 <thead>
                     <tr>
-                        <th data-width="500" data-field="title">标题</th>
+                        <th data-width="200" data-field="title">标题</th>
                         <th data-width="500" data-field="introduction">介绍</th>
-                        <th data-width="500" data-field="img">封面</th>
-                        <th data-width="500" data-formatter="addButtons" data-events="operateEvent">操作</th>
+                        <th data-width="200" data-field="img" data-formatter="formatImg">封面</th>
+                        <th data-width="200" data-formatter="addButtons" data-events="operateEvent">操作</th>
                     </tr>
                 </thead>
             </table>
@@ -129,7 +160,7 @@
                         <div class="row">
                             <label class="col-sm-3 mt-1">标题标题：</label>
                             <input class="col form-control mb-2" type="text" id="title" placeholder=""
-                                   maxlength="100"
+                                   maxlength="100" autofocus
                                    onblur="javascript: checkTitle();  "
                                    required/>
                         </div>

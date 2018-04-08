@@ -1,8 +1,11 @@
 package com.liuqi.tools.codelife.controllers;
 
+import com.liuqi.tools.codelife.entity.Article;
+import com.liuqi.tools.codelife.entity.Topic;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.util.FileUtils;
+import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 专题管理控制器
@@ -23,8 +30,8 @@ import java.util.List;
  * @Created: 2018/4/3 10:27
  * @Version: V1.0
  **/
-@RestController
-@RequestMapping("/topicManager")
+@Controller
+@RequestMapping("/system/topicManager")
 @PreAuthorize("hasAuthority('ADMIN')")
 public class TopicManagerController {
     @Autowired
@@ -40,6 +47,7 @@ public class TopicManagerController {
      * @param imgFile 封面图片文件
      */
     @RequestMapping("/add")
+    @ResponseBody
     public void add(@RequestParam("title") String title, @RequestParam("introduction") String introduction ,
                     @RequestParam(value = "img", required = false)MultipartFile imgFile) throws RestException {
         String fileName = "";
@@ -69,7 +77,47 @@ public class TopicManagerController {
      * @throws RestException
      */
     @RequestMapping("/addArticles")
-    public void addArticles(@RequestParam("id") Integer id, @RequestParam("articles")List<Integer> articles) throws RestException {
-        topicService.addTopicArticls(id, articles);
+    @ResponseBody
+    public void addArticles(@RequestParam("id") Integer id, @RequestParam("articles")String articles) throws RestException {
+        topicService.addTopicArticls(id, Arrays.stream(articles.split(","))
+                .map(item -> Integer.valueOf(item)).collect(Collectors.toList()));
+    }
+    
+    /**
+     * 修改专题
+     * @param id
+     */
+    @RequestMapping("/edit")
+    public ModelAndView edit(@RequestParam("id") Integer id) {
+        Topic topic = topicService.findById(id);
+        Collection<Article> articles = topicService.getTopicArticles(id);
+        
+        return ModelAndViewBuilder.of("system/topicEdit")
+                .setData("topic", topic)
+                .setData("articles", articles)
+                .build();
+    }
+    
+    /**
+     * 删除专题
+     *
+     * @param id
+     */
+    @RequestMapping("/delete")
+    @ResponseBody
+    public void delete(@RequestParam("id")Integer id) throws RestException {
+        topicService.deleteTopic(id);
+    }
+    
+    /**
+     * 删除专题下的文章
+     *
+     * @param id
+     * @param articleId
+     */
+    @RequestMapping("/deleteArticle")
+    @ResponseBody
+    public void deleteArticle(@RequestParam("id") Integer id, @RequestParam("articleId") Integer articleId) {
+        topicService.deleteTopicArticle(id, articleId);
     }
 }

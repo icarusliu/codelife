@@ -136,4 +136,12 @@ public interface ArticleMapper {
      * @return
      */
     Collection<Article> findByTopic(@Param("id") Integer id);
+    
+    /**
+     * 通过标题关键字搜索文章
+     *
+     * @param key
+     * @return
+     */
+    Collection<Article> searchByTitleKey(@Param("key") String key);
 }

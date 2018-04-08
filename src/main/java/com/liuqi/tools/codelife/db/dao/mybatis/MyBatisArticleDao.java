@@ -134,4 +134,9 @@ public class MyBatisArticleDao implements ArticleDao{
     public Collection<Article> findByTopic(Integer id) {
         return articleMapper.findByTopic(id);
     }
+    
+    @Override
+    public Collection<Article> searchByTitleKey(String key) {
+        return Optional.ofNullable(articleMapper.searchByTitleKey(key)).orElse(Collections.EMPTY_LIST);
+    }
 }
