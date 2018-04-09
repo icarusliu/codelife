@@ -141,8 +141,21 @@ public class TopicController {
      * @return
      */
     @GetMapping("/detail")
-    public String detail(@RequestParam("id") String topicId) {
-        return "/topicDetail";
+    public ModelAndView detail(@RequestParam("id") Integer topicId) {
+        //获取用户订阅专题
+        User loginUser = authenticationService.getLoginUser();
+        Collection<Topic> myTopics;
+        if (null != loginUser) {
+            myTopics = topicService.getUserTopics(loginUser.getId());
+        } else {
+            myTopics = Collections.EMPTY_LIST;
+        }
+        
+        return ModelAndViewBuilder.of("topicDetail")
+                .setData("topic", topicService.findById(topicId))
+                .setData("articles", topicService.getTopicArticles(topicId))
+                .setData("myTopics", myTopics)
+                .build();
     }
     
     

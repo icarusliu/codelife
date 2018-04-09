@@ -20,6 +20,12 @@ body {
     width: 100px;
 }
 
+/*左侧导航标题样式*/
+.left-nav-title {
+    font-size: 0.8em;
+    padding-bottom: 4px;
+}
+
 /*子菜单样式调整*/
 .list-group-item {
     border-color: #AFEEEE;

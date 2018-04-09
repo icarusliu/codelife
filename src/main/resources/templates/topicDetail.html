@@ -8,10 +8,77 @@
 <head>
     <meta charset="UTF-8"/>
     <title>专题首页</title>
+
+    <link th:href="@{/css/article.css}" type="text/css" rel="stylesheet">
+
+    <style>
+        .topic-detail-panel {
+            border: 1px solid #efefef;
+        }
+
+        .topic-detail-panel-info {
+            border-bottom: 1px solid #efefef;
+            padding-bottom: 4px;
+            padding-top: 10px;
+            background: #Fafafa;
+        }
+    </style>
+
+    <script th:inline="javascript">
+        var topic = [[${topic}]];
+
+        $(function(){
+            //左侧我的订阅专题列表选中状态控制
+            var as = $("#topicList>a");
+            var length = as.length;
+            for (var i = 0; i < length; i++) {
+                var title = $(as[i]).text();
+                if (title == topic.title) {
+                    $(as[i]).addClass("active");
+                } else {
+                    $(as[i]).removeClass("active");
+                }
+            }
+        });
+    </script>
 </head>
 <body>
-<div layout:fragment="content">
-    test
+<div layout:fragment="content" class="p-2 row">
+    <!--我的专题列表-->
+    <div class="col-sm-2">
+        <h5 class="text-primary left-nav-title">我订阅的专题</h5>
+        <div class="list-group" id="topicList">
+                <a class="list-group-item"
+                        th:each="topic: ${myTopics}"
+                        th:href="@{/topic/detail} + '?id=' + ${topic.id}" th:text="${topic.title}"></a>
+        </div>
+    </div>
+
+    <div class="col-sm-10 topic-detail-panel">
+    <!--上面专题信息-->
+        <section class="row topic-detail-panel-info">
+            <h1 class="col-sm-8" th:text="${topic.title}"></h1>
+            <div class="w-100 mb-2"></div>
+            <p class="col-sm-8" th:text="${topic.introduction}"></p>
+            <img class="col-sm-3" height="200px"
+                 th:src="@{/topic/getImg} + '?fileName=' + ${topic.img}" id="img"/>
+        </section>
+
+    <!--下面文章清单-->
+        <div class="row article-list-group pb-2 pt-2 mt-0" th:each="article: ${articles}">
+            <div class="col">
+                <a th:text="${article.title}" class="article-list-item-title font-weight-bold"
+                   th:href="@{'/articleDetail?id=' + ${article.id}}"></a>
+                <div th:text="${article.remark}" class="mt-2 mb-2 article-list-item-remark"></div>
+                <div class="article-list-item-info">
+                    <span th:text="${article.authorName}" class="mr-4"></span>
+                    发表于：<cite th:text="${article.createDate}" class="mr-5"></cite>
+                    阅读次数：<cite th:text="${article.readCount}" class="mr-5"></cite>
+                    点赞数：<cite th:text="${article.praiseCount}"></cite>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

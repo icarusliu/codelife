@@ -70,6 +70,7 @@
         function subscribe(id) {
             post(subscribeUrl, {id: id}, function() {
                 alert("订阅成功！");
+                location.reload();
             });
         }
 
@@ -77,6 +78,7 @@
         function unSubscribe(id) {
             post(unSubscribeUrl, {id: id}, function() {
                 alert("取消订阅成功！");
+                location.reload();
             });
         }
     </script>
@@ -111,6 +113,7 @@
                         <a th:href="@{/articleDetail} + '?id=' + ${article.id}" th:text="${article.title}"></a>
                     </li>
                 </ul>
+                <span class="offset-md-10 col-md-2 text-right"><a th:href="@{/topic/detail} + '?id=' + ${topic.id}">>>查看更多</a></span>
             </div>
         </div>
     </div>

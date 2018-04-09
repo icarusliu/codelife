@@ -9,34 +9,7 @@
     <meta charset="UTF-8"/>
     <title>文章浏览</title>
 
-    <style>
-        .articlePanel {
-             background: -moz-linear-gradient(top, #fefefe, #fafafa);
-            background: -moz-linear-gradient(to bottom, #fefefe, #fafafa);
-            background: -ms-linear-gradient(top, #fefefe, #fafafa);
-            background: -o-linear-gradient(top, #fefefe, #fafafa);
-            background: -webkit-linear-gradient(top, #fefefe, #fafafa);
-        }
-
-        .articlePanel:hover {
-            background: #f9f9f9;
-        }
-
-        .article-list-title {
-            color: #483D8B;
-        }
-
-        .remark {
-            color: #483D8B;
-            font-size: 0.9em;
-        }
-
-        .infoPanel {
-            color: #aaa;
-            font-size: 0.8em;
-        }
-    </style>
-
+    <link th:href="@{/css/article.css}" type="text/css" rel="stylesheet">
     <script th:src="@{/js/showdown/showdown.min.js}"></script>
 
     <script>
@@ -50,12 +23,12 @@
 </head>
 <body>
 <div layout:fragment="subContent">
-    <div class="row articlePanel pb-2 pt-2 mt-0" th:each="article: ${articles}">
+    <div class="row article-list-group pb-2 pt-2 mt-0" th:each="article: ${articles}">
         <div class="col">
-            <a th:text="${article.title}" class="article-list-title font-weight-bold"
+            <a th:text="${article.title}" class="article-list-item-title font-weight-bold"
                th:href="@{'/articleDetail?id=' + ${article.id}}"></a>
-            <div th:text="${article.remark}" class="mt-2 mb-2 remark"></div>
-            <div class="infoPanel">
+            <div th:text="${article.remark}" class="mt-2 mb-2 article-list-item-remark"></div>
+            <div class="article-list-item-info">
                 <span th:text="${article.authorName}" class="mr-4"></span>
                 发表于：<cite th:text="${article.createDate}" class="mr-5"></cite>
                 阅读次数：<cite th:text="${article.readCount}" class="mr-5"></cite>
