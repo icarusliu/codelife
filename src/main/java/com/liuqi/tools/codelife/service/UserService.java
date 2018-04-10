@@ -85,4 +85,13 @@ public interface UserService {
      * @Throws RestException 如果未找到用户时抛出异常
      */
     User findById(Integer id) throws RestException;
+    
+    /**
+     * 根据关键字搜索用户
+     * 可以是用户名、ID或者是显示名称
+     *
+     * @param key
+     * @return
+     */
+    Collection<User> search(String key);
 }

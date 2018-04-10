@@ -4,11 +4,14 @@ import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Collection;
 
 /**
  * 用户Controller
@@ -21,6 +24,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UserController {
     @Autowired
     private UserService userService;
+    
+    @PostMapping("/user/search")
+    @ResponseBody
+    @PreAuthorize("isAuthenticated()")
+    public Collection<User> search(@RequestParam("key") String key) {
+        return userService.search(key);
+    }
     
     /**
      * 判断用户名是否存在

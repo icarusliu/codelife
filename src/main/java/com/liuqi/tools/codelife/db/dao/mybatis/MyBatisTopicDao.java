@@ -3,6 +3,7 @@ package com.liuqi.tools.codelife.db.dao.mybatis;
 import com.liuqi.tools.codelife.db.dao.TopicDao;
 import com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicMapper;
 import com.liuqi.tools.codelife.entity.Topic;
+import com.liuqi.tools.codelife.entity.TopicType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -42,13 +43,13 @@ public class MyBatisTopicDao implements TopicDao {
     }
     
     @Override
-    public void insert(String title, String introduction, String img) {
-        topicMapper.insert(title, introduction, img);
+    public void insert(Topic topic) {
+        topicMapper.insert(topic);
     }
     
     @Override
-    public void update(Integer id, String title, String introduction, String img) {
-        topicMapper.update(id, title, introduction, img);
+    public void update(Topic topic) {
+        topicMapper.update(topic);
     }
     
     @Override

@@ -2,8 +2,7 @@ package com.liuqi.tools.codelife.service.impl;
 
 import com.liuqi.tools.codelife.db.dao.ArticleDao;
 import com.liuqi.tools.codelife.db.dao.TopicDao;
-import com.liuqi.tools.codelife.entity.Article;
-import com.liuqi.tools.codelife.entity.Topic;
+import com.liuqi.tools.codelife.entity.*;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.service.UserService;
@@ -95,20 +94,37 @@ public class TopicServiceImpl implements TopicService {
     
     /**
      * 新增专题
-
      * @param title
      * @param introduction
      * @param img
+     * @param topicType
      */
     @Override
-    public void addTopic(String title, String introduction, String img) throws RestException {
+    public void addTopic(String title, String introduction, String img, TopicType topicType, User creator) throws RestException {
         checkTopicProps(title, introduction, img);
+    
+        //检测同名的是否存在
+        Topic findTopic = findByTitle(title);
+        if (null != findTopic) {
+            logger.error("Topic with the same title already exists!");
+            throw new RestException("同名的专题已经存在，请不要重复添加！");
+        }
         
-        topicDao.insert(title, introduction, img);
+        Topic topic = new Topic();
+        topic.setCreator(creator);
+        topic.setAdmin(creator);
+        topic.setTitle(title);
+        topic.setIntroduction(introduction);
+        topic.setImg(img);
+        topic.setType(topicType);
+        topic.setStatus(TopicStatus.WAIT_APPROVE);
+        
+        topicDao.insert(topic);
     }
     
     @Override
-    public void updateTopic(Integer id, String title, String introduction, String img) throws RestException {
+    public void updateTopic(Integer id, String title, String introduction, String img,
+                            TopicType type, Integer admin) throws RestException {
         checkTopicProps(title, introduction, img);
         
         if (null == id) {
@@ -118,12 +134,21 @@ public class TopicServiceImpl implements TopicService {
         
         //检测ID是否存在
         Topic topic = findById(id);
-        if (null != topic) {
+        if (null == topic) {
             logger.error("Topic with the special id does not exist, id: " + id);
             throw new RestException("指定编号的专题不存在！");
         }
         
-        topicDao.update(id, title, introduction, img);
+        topic.setTitle(title);
+        topic.setIntroduction(introduction);
+        topic.setImg(img);
+        topic.setType(type);
+        if (null != admin) {
+            User adminUser = userService.findById(admin);
+            topic.setAdmin(adminUser);
+        }
+        
+        topicDao.update(topic);
     }
     
     /**
@@ -165,13 +190,6 @@ public class TopicServiceImpl implements TopicService {
         if (null != img && img.length() > Integer.valueOf(maxImgLength)) {
             logger.error("Topic img is too long, img: {}, maxLength: {}!", img, maxImgLength);
             throw new RestException("封面长度不能超过" + maxImgLength);
-        }
-        
-        //检测同名的是否存在
-        Topic topic = findByTitle(title);
-        if (null != topic) {
-            logger.error("Topic with the same title already exists!");
-            throw new RestException("同名的专题已经存在，请不要重复添加！");
         }
     }
     

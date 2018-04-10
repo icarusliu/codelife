@@ -30,3 +30,9 @@ create table topic_user(
     constraint FK_TOPIC_USER_TOPIC foreign key (topic_id) references topic(id),
     constraint FK_TOPIC_USER_USER foreign key (user_id) references user(id)
 );
+
+-- Topic 增加管理员、类型字段
+alter table topic add column status tinyint not null default 0 comment '专题状态，0：待审批中；1：正常；';
+alter table topic add column type tinyint not null default 0 comment '专题类型，0：开放式；1：封闭式';
+alter table topic add column creator int not null default 1 comment '创建者';
+alter table topic add column admin int comment '专题管理员';

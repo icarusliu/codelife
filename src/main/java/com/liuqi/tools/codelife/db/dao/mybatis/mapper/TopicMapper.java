@@ -1,6 +1,7 @@
 package com.liuqi.tools.codelife.db.dao.mybatis.mapper;
 
 import com.liuqi.tools.codelife.entity.Topic;
+import com.liuqi.tools.codelife.entity.TopicType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,10 +23,9 @@ public interface TopicMapper {
     
     Topic findById(@Param("id") Integer id);
     
-    void insert(@Param("title") String title, @Param("introduction") String introduction, @Param("img") String img);
+    void insert(Topic topic);
     
-    void update(@Param("id") Integer id, @Param("title") String title,
-                @Param("introduction") String introduction, @Param("img") String img);
+    void update(Topic topic);
     
     void addTopicArticles(@Param("id") Integer id, @Param("articles") List<Integer> articles);
     

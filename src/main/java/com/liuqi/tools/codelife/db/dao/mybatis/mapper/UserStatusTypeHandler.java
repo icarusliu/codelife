@@ -1,5 +1,6 @@
-package com.liuqi.tools.codelife.entity;
+package com.liuqi.tools.codelife.db.dao.mybatis.mapper;
 
+import com.liuqi.tools.codelife.entity.UserStatus;
 import org.apache.ibatis.type.EnumOrdinalTypeHandler;
 
 /**

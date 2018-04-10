@@ -1,5 +1,6 @@
 package com.liuqi.tools.codelife.entity;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Collection;
  * @Created: 2018/3/23 21:56
  * @Version: V1.0
  **/
-public class User {
+public class User implements Serializable{
     private int id;
     
     private String username;

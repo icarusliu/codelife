@@ -1,5 +1,6 @@
 package com.liuqi.tools.codelife.entity;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Collection;
  * @Created: 2018/4/2 17:03
  * @Version: V1.0
  **/
-public class Topic {
+public class Topic implements Serializable {
     private int id;
     
     /**
@@ -27,7 +28,15 @@ public class Topic {
      */
     private String img;
     
+    private TopicStatus status;
+    
+    private TopicType type;
+    
     private Collection<Article> articles;
+    
+    private User creator;
+    
+    private User admin;
     
     public int getId() {
         return id;
@@ -84,6 +93,38 @@ public class Topic {
         }
         
         return false;
+    }
+    
+    public User getCreator() {
+        return creator;
+    }
+    
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+    
+    public User getAdmin() {
+        return admin;
+    }
+    
+    public void setAdmin(User admin) {
+        this.admin = admin;
+    }
+    
+    public TopicStatus getStatus() {
+        return status;
+    }
+    
+    public void setStatus(TopicStatus status) {
+        this.status = status;
+    }
+    
+    public TopicType getType() {
+        return type;
+    }
+    
+    public void setType(TopicType type) {
+        this.type = type;
     }
     
     public void setArticles(Collection<Article> articles) {

@@ -2,7 +2,10 @@ package com.liuqi.tools.codelife.controllers;
 
 import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.Topic;
+import com.liuqi.tools.codelife.entity.TopicType;
+import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
+import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.util.FileUtils;
 import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
@@ -40,6 +43,20 @@ public class TopicManagerController {
     @Value("${app.file.topic.savePath}")
     private String saveFilePath;
     
+    @Autowired
+    private AuthenticationService authenticationService;
+    
+    /**
+     * 专题管理页面
+     * @return
+     */
+    @RequestMapping
+    public ModelAndView topicManager() {
+        return ModelAndViewBuilder.of("system/topicManager")
+                .setData("topicTypes", TopicType.values())
+                .build();
+    }
+    
     /**
      * 新增专题
      * @param title
@@ -49,6 +66,7 @@ public class TopicManagerController {
     @RequestMapping("/add")
     @ResponseBody
     public void add(@RequestParam("title") String title, @RequestParam("introduction") String introduction ,
+                    @RequestParam("type") Integer type,
                     @RequestParam(value = "img", required = false)MultipartFile imgFile) throws RestException {
         String fileName = "";
         
@@ -57,16 +75,48 @@ public class TopicManagerController {
             fileName = FileUtils.saveToFile(imgFile, saveFilePath);
         }
         
+        TopicType topicType = TopicType.valueOf(type);
+        
+        //获取创建用户
+        User loginUser = authenticationService.getLoginUser();
+        
         //调用保存服务将Topic存入数据库
         try {
-            topicService.addTopic(title, introduction, fileName);
+            topicService.addTopic(title, introduction, fileName, topicType, loginUser);
         } catch (Exception ex) {
             //如果出现异常需要将保存的文件删除
             FileUtils.deleteFile(saveFilePath, fileName);
             
             throw ex;
         }
+    }
+    
+    /**
+     * 更新专题
+     *
+     * @param title
+     * @param introduction
+     * @param type
+     * @param admin
+     * @param imgFile
+     */
+    @RequestMapping("/update")
+    @ResponseBody
+    public void update(
+                @RequestParam("id") Integer id,
+                @RequestParam("title") String title, @RequestParam("introduction") String introduction ,
+                       @RequestParam("type") Integer type,
+                       @RequestParam(value = "admin", required = false) Integer admin,
+                       @RequestParam(value = "img", required = false)MultipartFile imgFile) throws RestException {
+        String fileName = "";
+    
+        //先将文件保存到某个目录
+        if (null != imgFile) {
+            fileName = FileUtils.saveToFile(imgFile, saveFilePath);
+        }
         
+        TopicType topicType = TopicType.valueOf(type);
+        topicService.updateTopic(id, title, introduction, fileName, topicType, admin);
     }
     
     /**
@@ -95,6 +145,7 @@ public class TopicManagerController {
         return ModelAndViewBuilder.of("system/topicEdit")
                 .setData("topic", topic)
                 .setData("articles", articles)
+                .setData("types", TopicType.values())
                 .build();
     }
     

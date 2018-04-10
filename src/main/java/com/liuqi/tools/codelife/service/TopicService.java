@@ -2,6 +2,8 @@ package com.liuqi.tools.codelife.service;
 
 import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.Topic;
+import com.liuqi.tools.codelife.entity.TopicType;
+import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
 
 import java.util.Collection;
@@ -46,12 +48,12 @@ public interface TopicService {
     
     /**
      * 新增专题
-     *
-     * @param title
+     *  @param title
      * @param introduction
      * @param img
+     * @param topicType
      */
-    void addTopic(String title, String introduction, String img) throws RestException;
+    void addTopic(String title, String introduction, String img, TopicType topicType, User creator) throws RestException;
     
     /**
      * 更新专题
@@ -60,8 +62,10 @@ public interface TopicService {
      * @param title
      * @param introduction
      * @param img
+     * @param type
+     * @param admin
      */
-    void updateTopic(Integer id, String title, String introduction, String img) throws RestException;
+    void updateTopic(Integer id, String title, String introduction, String img, TopicType type, Integer admin) throws RestException;
     
     /**
      * 批量配置专题中的文章

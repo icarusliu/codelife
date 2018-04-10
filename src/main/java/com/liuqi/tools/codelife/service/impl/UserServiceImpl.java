@@ -16,6 +16,7 @@ import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -226,6 +227,22 @@ public class UserServiceImpl implements UserService{
         }
         
         return user;
+    }
+    
+    /**
+     * 通过关键字搜索用户
+     *
+     * @param key
+     * @return
+     */
+    @Override
+    public Collection<User> search(String key) {
+        key = key.trim();
+        if ("".equals(key)) {
+            return Collections.EMPTY_LIST;
+        }
+        
+        return userDao.search(key);
     }
     
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);

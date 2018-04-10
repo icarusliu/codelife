@@ -10,7 +10,7 @@
         <result property="authorName"  column="author_name"/>
         <result property="createDate" column="create_date"/>
         <result property="status" column="status" jdbcType="INTEGER"
-                typeHandler="com.liuqi.tools.codelife.entity.ArticleStatusTypeHandler"/>
+                typeHandler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleStatusTypeHandler"/>
         <result property="contentUrl" column="content_url"/>
         <result property="remark" column="remark"/>
         <result property="readCount" column="read_count"/>
@@ -110,7 +110,7 @@
     <insert id="save" parameterType="com.liuqi.tools.codelife.entity.Article">
         insert into article(title, type, author, create_date, status, content_url, read_count, remark)
         values(#{title}, #{articleType.id}, #{authorID}, #{createDate},
-            #{status, typeHandler=com.liuqi.tools.codelife.entity.ArticleStatusTypeHandler},
+            #{status, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleStatusTypeHandler},
             #{contentUrl}, #{readCount}, #{remark})
     </insert>
 

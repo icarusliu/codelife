@@ -9,8 +9,10 @@
 
     <!-- 注册Handler -->
     <typeHandlers>
-        <typeHandler handler="com.liuqi.tools.codelife.entity.ArticleStatusTypeHandler"/>
-        <typeHandler handler="com.liuqi.tools.codelife.entity.UserStatusTypeHandler"/>
+        <typeHandler handler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleStatusTypeHandler"/>
+        <typeHandler handler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.UserStatusTypeHandler"/>
+        <typeHandler handler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicStatusTypeHandler"/>
+        <typeHandler handler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicTypeTypeHandler"/>
     </typeHandlers>
 
     <mappers>

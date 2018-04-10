@@ -7,7 +7,10 @@ import com.liuqi.tools.codelife.entity.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Author: LiuQI
@@ -52,6 +55,11 @@ public class MybatisUserDao implements UserDao{
     @Override
     public void addUser(User user) {
         userMapper.addUser(user);
+    }
+    
+    @Override
+    public Collection<User> search(String key) {
+        return Optional.ofNullable(userMapper.search(key)).orElse(Collections.EMPTY_LIST);
     }
     
     

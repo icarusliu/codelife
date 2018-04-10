@@ -10,7 +10,7 @@
         <result property="realName" column="realname"/>
         <result property="registerTime" column="register_time"/>
         <result property="status" column="status" jdbcType="TINYINT"
-                typeHandler="com.liuqi.tools.codelife.entity.UserStatusTypeHandler"/>
+                typeHandler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.UserStatusTypeHandler"/>
         <result property="errorCount" column="error_count"/>
         <collection property="roles" ofType="com.liuqi.tools.codelife.entity.Role">
             <id property="id" column="role_id"/>
@@ -35,6 +35,13 @@
         left join role
             on role.id = user_role.role_id
     </sql>
+
+    <select id="search" resultMap="userResult">
+        <include refid="selectUser"/>
+        where user.id like concat(#{key}, '%')
+            or user.name like concat('%', #{key}, '%')
+            or user.realname like concat('%', #{key}, '%')
+    </select>
 
     <!-- 通过用户名称查找用户-->
     <select id="findByUsername" resultMap="userResult">
@@ -63,7 +70,9 @@
            <trim prefix="set" suffixOverrides=",">
                <if test="username != null">name = #{username}, </if>
                <if test="password != null">password = #{password}, </if>
-               <if test="status != null">status = #{status, typeHandler=com.liuqi.tools.codelife.entity.UserStatus}, </if>
+               <if test="status != null">status = #{status,
+                   typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.UserStatusTypeHandler},
+               </if>
                <if test="errorCount != null">error_count = #{errorCount}, </if>
                <if test="realName != null">realname = #{realName},</if>
            </trim>
@@ -73,7 +82,7 @@
     <insert id="addUser" parameterType="com.liuqi.tools.codelife.entity.User">
         insert into user(name, realname, password, status, error_count, register_time)
         values(#{username}, #{realName}, #{password},
-            #{status, typeHandler=com.liuqi.tools.codelife.entity.UserStatusTypeHandler},
+            #{status, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.UserStatusTypeHandler},
             #{errorCount}, #{registerTime})
     </insert>
 </mapper>

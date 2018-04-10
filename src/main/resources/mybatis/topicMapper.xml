@@ -8,6 +8,14 @@
         <result property="title" column="title"/>
         <result property="introduction" column="introduction"/>
         <result property="img" column="img"/>
+        <result property="status" column="status" jdbcType="INTEGER"
+            typeHandler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicStatusTypeHandler"/>
+        <result property="type" column="type" jdbcType="INTEGER"
+                typeHandler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicTypeTypeHandler"/>
+        <association property="creator" javaType="User" column="creator"
+                     select="com.liuqi.tools.codelife.db.dao.mybatis.mapper.UserMapper.findById"></association>
+        <association property="admin" javaType="User" column="admin"
+                     select="com.liuqi.tools.codelife.db.dao.mybatis.mapper.UserMapper.findById"></association>
     </resultMap>
 
     <sql id="selectSql">
@@ -15,7 +23,11 @@
             t1.id as id,
             t1.title,
             t1.introduction,
-            t1.img
+            t1.img,
+            t1.creator,
+            t1.admin,
+            t1.status,
+            t1.type
         from
             topic t1
     </sql>
@@ -41,14 +53,21 @@
         where id=#{id}
     </select>
 
-    <insert id="insert">
-        insert into topic(title, introduction, img)
-        values(#{title}, #{introduction}, #{img})
+    <insert id="insert" parameterType="Topic">
+        insert into topic(title, introduction, img, type, status, creator, admin)
+        values(#{title}, #{introduction}, #{img},
+            #{type, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicTypeTypeHandler},
+            #{status, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicStatusTypeHandler},
+            #{creator.id},
+            #{admin.id}
+        )
     </insert>
 
-    <update id="update">
+    <update id="update" parameterType="Topic">
         update topic
-        set title = #{title}, introduction=#{introduction}, img = #{img}
+        set title = #{title}, introduction=#{introduction}, img = #{img},
+            type=#{type, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicTypeTypeHandler},
+            admin=#{admin.id}
         where id=#{id}
     </update>
 

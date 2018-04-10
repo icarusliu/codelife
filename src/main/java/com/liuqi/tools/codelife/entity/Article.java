@@ -1,5 +1,7 @@
 package com.liuqi.tools.codelife.entity;
 
+import java.io.Serializable;
+
 /**
  * 文章对象
  *
@@ -8,7 +10,7 @@ package com.liuqi.tools.codelife.entity;
  * @Created: 2018/3/26 16:12
  * @Version: V1.0
  **/
-public class Article {
+public class Article implements Serializable {
     private int id;
     private String title;
     private ArticleType articleType;

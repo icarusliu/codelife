@@ -58,12 +58,5 @@ public class SystemManagerController {
         return "system/logStatistics";
     }
     
-    /**
-     * 专题管理页面
-     * @return
-     */
-    @RequestMapping("/topicManager")
-    public String topicManager() {
-        return "system/topicManager";
-    }
+
 }

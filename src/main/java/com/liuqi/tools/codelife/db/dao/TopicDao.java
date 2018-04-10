@@ -1,6 +1,7 @@
 package com.liuqi.tools.codelife.db.dao;
 
 import com.liuqi.tools.codelife.entity.Topic;
+import com.liuqi.tools.codelife.entity.TopicType;
 
 import java.util.Collection;
 import java.util.List;
@@ -43,21 +44,16 @@ public interface TopicDao {
     
     /**
      * 新增专题
-     * @param title
-     * @param introduction
-     * @param img
+     * @param topic
      */
-    void insert(String title, String introduction, String img);
+    void insert(Topic topic);
     
     /**
      * 更新专题
      *
-     * @param id
-     * @param title
-     * @param introduction
-     * @param img
+     * @param topic
      */
-    void update(Integer id, String title, String introduction, String img);
+    void update(Topic topic);
     
     /**
      * 批量在专题下新增文章

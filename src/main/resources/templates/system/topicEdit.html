@@ -15,15 +15,43 @@
         var searchArticleUrl = [[@{/searchArticleByTitle}]];
         var addArticlesUrl = [[@{/system/topicManager/addArticles}]];
         var deleteTopicArticleUrl = [[@{/system/topicManager/deleteArticle}]];
+        var searchUserUrl = [[@{/user/search}]];
+        var updateTopicUrl = [[@{/system/topicManager/update}]];
 
         var id = [[${topic.id}]];
         var table;
+        var adminId;
 
         $(function(){
             $("#img").attr("src", imgUrl);
 
             //表格初始化
             table = new DataTable("dataTable", getTopicArticlesUrl + "?topicId=" + id, "toolBar");
+
+            //修改提交事件初始化
+            $.formSubmit("topicForm",  function() {
+                var title = $("#title").val();
+                var introduction = $("#introduction").val();
+                var type = $("#type").val();
+                var admin = adminId;
+                var imgFile = $("#imgInput")[0].files[0];
+
+                var data = new FormData();
+                data.append("id", id);
+                data.append("title", title);
+                data.append("introduction", introduction);
+                data.append("type", type);
+                if (admin) {
+                    data.append("admin", admin);
+                }
+                if (imgFile) {
+                    data.append("img", imgFile);
+                }
+
+                postFormData(updateTopicUrl, data, function(){
+                    alert("更新成功！");
+                });
+            });
         });
 
         //检查文件大小
@@ -118,6 +146,44 @@
                 });
             }
         }
+
+        //变更管理员
+        function changeAdmin() {
+            $("#adminDialog").modal("show");
+            $("#adminKeyWord").focus().select();
+        }
+
+        //根据关键字搜索用户
+        function searchUser() {
+            var key = $("#adminKeyWord").val();
+            if ("" == key) {
+                $("#adminFormErrorMessage").text("未输入关键字");
+                $("#adminFormErrorMessage").show();
+                return;
+            }
+
+            post(searchUserUrl, {key: key}, function(data) {
+                $("#adminSelect").html("");
+
+                for (var i in data) {
+                    var user = data[i];
+
+                    $("<option value='" + user.id + "'>" + user.realName + "</option>")
+                        .appendTo($("#adminSelect"));
+                }
+            });
+
+            $("#adminFormErrorMessage").hide();
+        }
+
+        //设置Admin框中的值
+        function setAdmin() {
+            var userId = $("#adminSelect").val();
+            var userName = $("#adminSelect").text();
+            $("#admin").val(userName);
+            adminId = userId;
+            $("#adminDialog").modal("hide");
+        }
     </script>
 </head>
 <body>
@@ -127,24 +193,41 @@
 
     <h5 class="ml-2 text-primary">基本信息</h5>
     <hr/>
-    <form class="row m-2">
+    <form class="row m-2" id="topicForm" method="post">
         <label class="error-message" id="errorMessage"></label>
         <div class="w-100"></div>
 
         <label class="col-sm-1 text-right">标题：</label>
-        <input type="text" class="col-sm-6 form-control"
+        <input type="text" class="col-sm-6 form-control" id="title"
                th:value="${topic.title}"/>
 
         <div class="w-100 mb-2"></div>
         <label class="col-sm-1 text-right">介绍：</label>
-        <textarea class="col-sm-6 form-control"
+        <textarea class="col-sm-6 form-control" id="introduction"
                   th:text="${topic.introduction}"/>
+
+        <div class="w-100 mb-2"></div>
+        <label class="col-sm-1 text-right">类型：</label>
+        <select class="col-sm-6 form-control" id="type">
+            <option th:each="type: ${types}" th:value="${type.ordinal}" th:text="${type.name}"
+                th:if="${topic.type == type}" selected></option>
+
+            <option th:each="type: ${types}" th:value="${type.ordinal}" th:text="${type.name}"
+                    th:if="${topic.type != type}"></option>
+        </select>
+
+        <div class="w-100 mb-2"></div>
+        <label class="col-sm-1 text-right">管理员：</label>
+        <input class="col-sm-2 form-control" id="admin"
+                type="text" readonly th:value="${topic.admin} ? ${topic.admin.realName} : ''"/>
+        <button class="btn btn-secondary ml-2"
+                type="button" onclick="changeAdmin(); ">变更</button>
 
         <div class="w-100 mb-2"></div>
         <label class="col-sm-1 text-right">封面：</label>
         <img class="col-sm-2" height="100px"
                 src="#" id="img"/>
-        <input type="file"
+        <input type="file" id="imgInput"
                accept="image/jpg,image/png"
                onchange="checkFileSize(this); "
                class="form-control col-sm-2"/>
@@ -156,6 +239,46 @@
                 class="btn btn-primary  ml-4"/>
         </div>
     </form>
+
+    <div class="modal fade" id="adminDialog" tabindex="-1" role="dialog" aria-labelledby="dialogTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">选择管理员</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="adminForm" method="post" class="mr-4 ml-2">
+                        <span class="error-message" id="adminFormErrorMessage"></span>
+
+                        <div class="row">
+                            <input class="col-sm-10 form-control mr-1" type="text" id="adminKeyWord"
+                                   placeholder="关键字"
+                                   maxlength="100" autofocus
+                                   required/>
+                            <input type="button" class="btn" value="搜索" onclick="searchUser()"/>
+                        </div>
+
+                        <select class="row form-control mt-2"
+                                id="adminSelect"
+                                aria-multiselectable="true"
+                                multiple="false">
+
+                        </select>
+
+                        <div class="row mt-2">
+                            <button type="button" class="col-sm-2 btn btn-secondary offset-sm-7 mr-2"
+                                    data-dismiss="modal">取消</button>
+                            <button type="button" onclick="setAdmin()"
+                                    class="col-sm-2 btn btn-primary">确定</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <h5 class="ml-2 text-primary">专题文章</h5>
     <hr/>
@@ -196,7 +319,7 @@
                         <div class="row">
                             <input class="col-sm-10 form-control mr-1" type="text" id="articleTitleKeyWord"
                                    placeholder="文章关键字"
-                                   maxlength="100" autofocus
+                                   maxlength="100"
                                    required/>
                             <input type="button" class="btn" value="搜索" onclick="searchArticle()"/>
                         </div>

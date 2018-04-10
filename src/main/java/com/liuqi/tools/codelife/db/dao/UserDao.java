@@ -58,4 +58,12 @@ public interface UserDao {
      * @param user
      */
     void addUser(User user);
+    
+    /**
+     * 通过关键字搜索用户
+     *
+     * @param key
+     * @return
+     */
+    Collection<User> search(String key);
 }

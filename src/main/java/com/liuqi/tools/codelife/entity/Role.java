@@ -1,5 +1,7 @@
 package com.liuqi.tools.codelife.entity;
 
+import java.io.Serializable;
+
 /**
  * 角色对象
  *
@@ -7,7 +9,7 @@ package com.liuqi.tools.codelife.entity;
  * @Created: 2018/3/24 15:48
  * @Version: V1.0
  **/
-public class Role {
+public class Role implements Serializable {
     private int id;
     private String name;
     /**

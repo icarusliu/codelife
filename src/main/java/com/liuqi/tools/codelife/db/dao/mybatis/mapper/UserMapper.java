@@ -3,6 +3,7 @@ package com.liuqi.tools.codelife.db.dao.mybatis.mapper;
 import com.liuqi.tools.codelife.entity.User;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -57,4 +58,11 @@ public interface UserMapper {
      * @param user
      */
     void addUser(User user);
+    
+    /**
+     * 通过关键字搜索用户
+     * @param key
+     * @return
+     */
+    Collection<User> search(@Param("key") String key);
 }
