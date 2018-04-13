@@ -16,15 +16,19 @@
     line-height: 80px;
 }
 
+.article-block {
+    background: #fff;
+    box-shadow: 0px 0px 4px #ddd;
+    margin-right: 10px;
+}
+
 .article-subtitle {
     font-size: 0.8em;
 }
 
 #content {
-    background: #fbfbfb;
-    border: 1px solid #f9f9f9;
-
     padding: 40px;
+    background: #fcfcfc;
 }
 
 #content pre{
