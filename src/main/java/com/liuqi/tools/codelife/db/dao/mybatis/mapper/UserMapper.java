@@ -2,6 +2,7 @@ package com.liuqi.tools.codelife.db.dao.mybatis.mapper;
 
 import com.liuqi.tools.codelife.entity.User;
 import org.apache.ibatis.annotations.*;
+import org.springframework.security.core.parameters.P;
 
 import java.util.Collection;
 import java.util.List;
@@ -65,4 +66,19 @@ public interface UserMapper {
      * @return
      */
     Collection<User> search(@Param("key") String key);
+    
+    /**
+     * 给用户添加权限
+     * @param userId
+     * @param roleId
+     */
+    void addRole(@Param("userId") int userId, @Param("roleId") int roleId);
+    
+    /**
+     * 获取专题用户清单
+     *
+     * @param topicId
+     * @return
+     */
+    Collection<User> getTopicUsers(@Param("topicId") Integer topicId);
 }

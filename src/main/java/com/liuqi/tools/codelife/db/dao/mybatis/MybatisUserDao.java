@@ -2,6 +2,7 @@ package com.liuqi.tools.codelife.db.dao.mybatis;
 
 import com.liuqi.tools.codelife.db.dao.mybatis.mapper.UserMapper;
 import com.liuqi.tools.codelife.db.dao.UserDao;
+import com.liuqi.tools.codelife.entity.Role;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.entity.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,16 @@ public class MybatisUserDao implements UserDao{
     @Override
     public Collection<User> search(String key) {
         return Optional.ofNullable(userMapper.search(key)).orElse(Collections.EMPTY_LIST);
+    }
+    
+    @Override
+    public void addRole(User user, Role role) {
+        userMapper.addRole(user.getId(), role.getId());
+    }
+    
+    @Override
+    public Collection<User> getTopicUsers(Integer topicId) {
+        return userMapper.getTopicUsers(topicId);
     }
     
     

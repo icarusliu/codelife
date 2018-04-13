@@ -20,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
  **/
 @Controller
 @RequestMapping("/system")
-@PreAuthorize("hasAuthority('ADMIN')")
 public class SystemManagerController {
     @Autowired
     private UserService userService;
@@ -28,12 +27,19 @@ public class SystemManagerController {
     @Autowired
     private RoleService roleService;
     
+    @RequestMapping
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TOPIC_ADMIN')")
+    public String system() {
+        return "system/index";
+    }
+    
     /**
-     * 系统管理默认进角色管理页面
+     * 角色管理界面
      *
      * @return
      */
-    @RequestMapping({"/", "/roleManager"})
+    @RequestMapping({"/roleManager"})
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String roleManager() {
         return "system/roleManager";
     }
@@ -44,6 +50,7 @@ public class SystemManagerController {
      * @return
      */
     @RequestMapping("/userManager")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String userManager() {
         return "system/userManager";
     }
@@ -54,6 +61,7 @@ public class SystemManagerController {
      * @return
      */
     @RequestMapping("/logStatistics")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String logStatistics() {
         return "system/logStatistics";
     }

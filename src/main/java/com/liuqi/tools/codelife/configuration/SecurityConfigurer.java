@@ -46,8 +46,6 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                     .accessDecisionManager(getAccessDecisionManager())
                     .antMatchers("/*", "/css/**/*", "/js/**/*", "/icons/**/*",
                             "/h2-console/", "/h2-console/**/*", "/topic/**/*").permitAll()
-                    //系统管理界面与分类管理目前只能由ADMIN访问
-                    .antMatchers("/system/**/*").hasAuthority("ADMIN")
                     .anyRequest().authenticated()
                 .and()
                 .formLogin()

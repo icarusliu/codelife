@@ -3,12 +3,15 @@ package com.liuqi.tools.codelife.db.dao.mybatis;
 import com.liuqi.tools.codelife.db.dao.TopicDao;
 import com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicMapper;
 import com.liuqi.tools.codelife.entity.Topic;
-import com.liuqi.tools.codelife.entity.TopicType;
+import com.liuqi.tools.codelife.entity.TopicStatus;
+import com.liuqi.tools.codelife.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * MyBatis专题数据库操作类
@@ -85,5 +88,25 @@ public class MyBatisTopicDao implements TopicDao {
     @Override
     public void deleteTopicArticle(Integer id, Integer articleId) {
         topicMapper.deleteTopicArticle(id, articleId);
+    }
+    
+    @Override
+    public Collection<Topic> findUserNotSubscribed(User user) {
+        return topicMapper.findUserNotSubscribed(user);
+    }
+    
+    @Override
+    public void updateStatus(Integer id, TopicStatus status) {
+        topicMapper.updateStatus(id, status);
+    }
+    
+    @Override
+    public Collection<Topic> findByAdmin(User loginUser) {
+        return Optional.ofNullable(topicMapper.findByAdmin(loginUser.getId())).orElse(Collections.EMPTY_LIST);
+    }
+    
+    @Override
+    public Collection<Topic> search(String key) {
+        return Optional.ofNullable(topicMapper.search(key)).orElse(Collections.EMPTY_LIST);
     }
 }

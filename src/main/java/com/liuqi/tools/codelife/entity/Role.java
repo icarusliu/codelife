@@ -40,4 +40,14 @@ public class Role implements Serializable {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (null == obj || !(obj instanceof Role)) {
+            return false;
+        } else {
+            Role destRole = (Role)obj;
+            return destRole.getId() == getId();
+        }
+    }
 }

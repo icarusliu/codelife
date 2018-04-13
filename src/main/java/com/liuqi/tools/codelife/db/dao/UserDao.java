@@ -1,5 +1,6 @@
 package com.liuqi.tools.codelife.db.dao;
 
+import com.liuqi.tools.codelife.entity.Role;
 import com.liuqi.tools.codelife.entity.Topic;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.entity.UserStatus;
@@ -29,6 +30,7 @@ public interface UserDao {
      * @return 返回查找的用户对象，如果未查找到返回Null
      */
     User findByUsername(String username);
+    
     
     /**
      * 通过编号查找用户
@@ -66,4 +68,20 @@ public interface UserDao {
      * @return
      */
     Collection<User> search(String key);
+    
+    /**
+     * 给用户添加角色
+     *
+     * @param user
+     * @param role
+     */
+    void addRole(User user, Role role);
+    
+    /**
+     * 获取专题用户
+     *
+     * @param topicId
+     * @return
+     */
+    Collection<User> getTopicUsers(Integer topicId);
 }

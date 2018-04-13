@@ -65,7 +65,7 @@ public class RoleServiceImpl implements RoleService {
     private void roleNameExists(String roleName, Integer id) throws RestException {
         Collection<Role> roles = roleDao.findAllRoles();
         for (Role role: roles) {
-            if (role.getId() != id && role.getName().equals(roleName)) {
+            if (null != id && role.getId() != id && role.getName().equals(roleName)) {
                 //如果编号不一样但名称一样，则表明有重复
                 logger.error("Role name already exists, role name: {}", roleName);
                 throw new RestException("角色名称重复！");

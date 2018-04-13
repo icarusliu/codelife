@@ -78,7 +78,7 @@
             </li>
 
             <!-- 只有管理员才能看到系统管理界面 -->
-            <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+            <li class="nav-item" sec:authorize="hasAuthority('ADMIN') or hasAuthority('TOPIC_ADMIN')">
                 <a class="nav-link text-center font-weight-bold" th:href="@{/system/}">系统管理</a>
             </li>
             <!--<li class="nav-item dropdown">-->

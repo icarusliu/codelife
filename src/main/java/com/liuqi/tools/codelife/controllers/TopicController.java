@@ -17,11 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.File;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 /**
  * 专题控制器
@@ -62,27 +60,13 @@ public class TopicController {
             myTopics.forEach(topic -> topic.setArticles(topicService.getTopicArticles(topic.getId())));
         }
         
-        //获取所有的未订阅专题
-        Collection<Topic> topics = topicService.findAll();
-        if (null != topics) {
-            topics = topics.stream().filter(topic -> !myTopics.contains(topic))
-                    .map(topic -> {
-                        topic.setArticles(topicService.getTopicArticles(topic.getId()));
-                        
-                        return topic;
-                    }).collect(Collectors.toList());
-        }
+        //获取所有的未订阅并且类型是开放的专题，私有的专题不能直接展现
+        Collection<Topic> topics = topicService.findUserNotSubscribed(loginUser);
         
         return ModelAndViewBuilder.of("topic")
                 .setData("myTopics", myTopics)
                 .setData("topics", topics)
                 .build();
-    }
-    
-    @RequestMapping("/getAll")
-    @ResponseBody
-    public Collection<Topic> getAll() {
-        return topicService.findAll();
     }
     
     /**
@@ -158,6 +142,21 @@ public class TopicController {
                 .build();
     }
     
+    /**
+     * 根据关键字搜索专题
+     * 关键字将会命中专题的标题、介绍字段
+     *
+     * @param key
+     * @return
+     */
+    @GetMapping("/search")
+    public ModelAndView search(@RequestParam("key") String key) {
+        Collection<Topic> topics = topicService.search(key);
+        
+        return ModelAndViewBuilder.of("topicSearch")
+                .setData("topics", topics)
+                .build();
+    }
     
     private static final Logger logger = LoggerFactory.getLogger(TopicController.class);
 }

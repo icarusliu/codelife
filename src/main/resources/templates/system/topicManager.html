@@ -10,11 +10,12 @@
     <title>专题管理</title>
 
     <script th:inline="javascript">
-        var dataTableUrl = [[@{/topic/getAll}]];
+        var dataTableUrl = [[@{/system/topicManager/getAll}]];
         var addTopicUrl = [[@{/system/topicManager/add}]]
         var showImgUrl = [[@{/topic/getImg}]];
         var editUrl = [[@{/system/topicManager/edit}]];
         var deleteUrl = [[@{/system/topicManager/delete}]];
+        var setNormalUrl = [[@{/system/topicManager/setStatusNormal}]];
 
         var tableId = "dataTable";
         var table = null;
@@ -106,8 +107,13 @@
         }
 
         //组装表格操作按钮
-        function addButtons() {
+        function addButtons(value, row, index, field) {
             var buttons = new Array();
+
+            //如果是待审批状态，那么可以进行审批操作
+            if (row.status == '待审批') {
+                buttons.push("<button type='button' id='approveButton' class='btn mr-2'>审批</button>");
+            }
 
             buttons.push("<button type='button' id='editButton' class='btn mr-2'>修改</button>");
             buttons.push("<button type='button' id='deleteButton' class='btn'>删除</button>");
@@ -117,6 +123,12 @@
 
         //表格按钮事件处理
         window.operateEvent = {
+            "click #approveButton": function(e, value, row, index) {
+                //更新状态
+                post(setNormalUrl, {id: row.id}, function() {
+                    table.refresh();
+                });
+            },
             "click #editButton": function(e, value, row, index) {
                 window.open(editUrl + "?id=" + row.id, "_self");
             },
@@ -146,14 +158,15 @@
                         <th data-width="100" data-field="type">类型</th>
                         <th data-width="500" data-field="introduction">介绍</th>
                         <th data-width="100" data-field="img" data-formatter="formatImg">封面</th>
-                        <th data-width="200" data-formatter="addButtons" data-events="operateEvent">操作</th>
+                        <th data-width="300" data-formatter="addButtons" data-events="operateEvent">操作</th>
                     </tr>
                 </thead>
             </table>
 
             <!-- 工具栏 -->
             <div id="toolBar">
-                <button type="button" class="btn" onclick="javascript: add(); ">新增</button>
+                <button type="button" class="btn" onclick="javascript: add(); "
+                        sec:authorize="hasAuthority('ADMIN')">新增</button>
                 <button type="button" class="btn" onclick="javascript: table.refresh(); ">刷新</button>
             </div>
         </div>

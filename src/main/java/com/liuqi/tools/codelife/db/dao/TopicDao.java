@@ -1,7 +1,9 @@
 package com.liuqi.tools.codelife.db.dao;
 
 import com.liuqi.tools.codelife.entity.Topic;
+import com.liuqi.tools.codelife.entity.TopicStatus;
 import com.liuqi.tools.codelife.entity.TopicType;
+import com.liuqi.tools.codelife.entity.User;
 
 import java.util.Collection;
 import java.util.List;
@@ -106,4 +108,36 @@ public interface TopicDao {
      * @param articleId
      */
     void deleteTopicArticle(Integer id, Integer articleId);
+    
+    /**
+     * 获取用户未订阅的所有开放专题
+     *
+     * @param user
+     * @return
+     */
+    Collection<Topic> findUserNotSubscribed(User user);
+    
+    /**
+     * 更新专题状态
+     *
+      * @param id
+     * @param status
+     */
+    void updateStatus(Integer id, TopicStatus status);
+    
+    /**
+     * 获取管理员为指定用户的所有专题
+     *
+     * @param loginUser
+     * @return
+     */
+    Collection<Topic> findByAdmin(User loginUser);
+    
+    /**
+     * 根据关键字搜索专题
+     *
+     * @param key
+     * @return
+     */
+    Collection<Topic> search(String key);
 }

@@ -18,7 +18,7 @@
         </collection>
     </resultMap>
 
-    <sql id="selectUser">
+    <sql id="selectUserBase">
         select
             user.id as user_id,
             user.name as username,
@@ -34,6 +34,10 @@
             on user.id = user_role.user_id
         left join role
             on role.id = user_role.role_id
+    </sql>
+
+    <sql id="selectUser">
+        <include refid="selectUserBase"/>
     </sql>
 
     <select id="search" resultMap="userResult">
@@ -57,6 +61,13 @@
     <select id="findById" resultMap="userResult">
         <include refid="selectUser"></include>
         where user.id=#{id}
+    </select>
+
+    <select id="getTopicUsers" resultMap="userResult">
+        <include refid="selectUserBase"/>
+        inner join topic_user tu
+        on tu.user_id = user.id
+        and tu.topic_id = #{topicId}
     </select>
 
     <!--修改用户状态-->
@@ -84,5 +95,10 @@
         values(#{username}, #{realName}, #{password},
             #{status, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.UserStatusTypeHandler},
             #{errorCount}, #{registerTime})
+    </insert>
+
+    <insert id="addRole">
+        insert into user_role(user_id, role_id)
+        values(#{userId}, #{roleId})
     </insert>
 </mapper>

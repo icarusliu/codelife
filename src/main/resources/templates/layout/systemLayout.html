@@ -46,11 +46,15 @@
         <div class="col-sm-3 col-md-2 bg-faded sidebar"
              style="background: #fefefe; border-bottom: 1px solid #eeeeee; ">
             <div class="list-group" id="navUl" >
-                <a class="list-group-item" th:href="@{/system/roleManager}">角色管理</a>
-                <a class="list-group-item" th:href="@{/system/userManager}">用户管理</a>
+                <a class="list-group-item" th:href="@{/system/roleManager}"
+                   sec:authorize="hasAuthority('ADMIN')">角色管理</a>
+                <a class="list-group-item" th:href="@{/system/userManager}"
+                   sec:authorize="hasAuthority('ADMIN')">用户管理</a>
                 <!--<a class="list-group-item" th:href="@{/system/logStatistics}">日志分析</a>-->
-                <a class="list-group-item" th:href="@{/system/topicManager}">专题管理</a>
-                <a class="list-group-item" th:href="@{/system/indexManager}">首页管理</a>
+                <a class="list-group-item" th:href="@{/system/topicManager}"
+                   sec:authorize="hasAuthority('ADMIN') or hasAuthority('TOPIC_ADMIN')">专题管理</a>
+                <a class="list-group-item" th:href="@{/system/indexManager}"
+                   sec:authorize="hasAuthority('ADMIN')">首页管理</a>
             </div>
         </div>
 

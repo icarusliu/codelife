@@ -36,6 +36,11 @@
         <include refid="selectSql"/>
     </select>
 
+    <select id="findByAdmin" resultMap="topicResult">
+        <include refid="selectSql"/>
+        where admin=#{userId}
+    </select>
+
     <select id="findByUser" resultMap="topicResult">
         <include refid="selectSql"/>
         left join topic_user t2
@@ -53,6 +58,23 @@
         where id=#{id}
     </select>
 
+    <!--查找用户未订阅的并且是开放的专题清单，而且专题需要是Normal状态 -->
+    <select id="findUserNotSubscribed" resultMap="topicResult" parameterType="User">
+        <include refid="selectSql"/>
+        left join topic_user t2
+            on t1.id = t2.topic_id
+            and t2.user_id = #{id}
+        where t2.id is null
+            and t1.type=0
+            and t1.status=1
+    </select>
+
+    <select id="search" resultMap="topicResult">
+        <include refid="selectSql"/>
+        where (t1.title like concat('%', #{key}, '%') or t1.introduction like concat('%', #{key}, '%'))
+        and t1.type=0 and t1.status = 1
+    </select>
+
     <insert id="insert" parameterType="Topic">
         insert into topic(title, introduction, img, type, status, creator, admin)
         values(#{title}, #{introduction}, #{img},
@@ -68,6 +90,12 @@
         set title = #{title}, introduction=#{introduction}, img = #{img},
             type=#{type, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicTypeTypeHandler},
             admin=#{admin.id}
+        where id=#{id}
+    </update>
+
+    <update id="updateStatus">
+        update topic
+        set status = #{status, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicStatusTypeHandler}
         where id=#{id}
     </update>
 

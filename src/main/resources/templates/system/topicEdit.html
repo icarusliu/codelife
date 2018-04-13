@@ -17,16 +17,20 @@
         var deleteTopicArticleUrl = [[@{/system/topicManager/deleteArticle}]];
         var searchUserUrl = [[@{/user/search}]];
         var updateTopicUrl = [[@{/system/topicManager/update}]];
+        var getTopicUserUrl = [[@{/system/topicManager/getTopicUsers}]];
 
         var id = [[${topic.id}]];
         var table;
         var adminId;
+        var userTable;
 
         $(function(){
             $("#img").attr("src", imgUrl);
 
             //表格初始化
             table = new DataTable("dataTable", getTopicArticlesUrl + "?topicId=" + id, "toolBar");
+
+            userTable = new DataTable("userDataTable", getTopicUserUrl + "?topicId=" + id, "userTableToolBar");
 
             //修改提交事件初始化
             $.formSubmit("topicForm",  function() {
@@ -336,6 +340,144 @@
                                     data-dismiss="modal">取消</button>
                             <button type="button" onclick="addToArticle()"
                                     class="col-sm-2 btn btn-primary" id="submitButton">增加</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        var addUserToTopicUrl = [[@{/system/topicManager/addUserToTopic}]];
+        var removeUserFromTopicUrl = [[@{/system/topicManager/removeUserFromTopic}]];
+
+        function addUser() {
+            $("#addUserDialog").modal("show");
+        }
+
+        function searchUser() {
+            var key = $("#userKeyWord").val();
+            if ("" == key) {
+                $("#userModalErrorMessage").text("请输入关键字进行查询！");
+                $("#userModalErrorMessage").show();
+                return;
+            }
+
+            $("#userModalErrorMessage").hide();
+
+            //根据关键字去服务器搜索用户清单
+            post(searchUserUrl, {key: key}, function(data) {
+                //先清空List
+                $("#userSearchResult").html("");
+
+                //已添加到专题的用户不再列出
+                var topicUsers = userTable.getData();
+
+                for (var i in data) {
+                    //如果已添加到专题中，则在此不再列出来
+                    var alreadyAdded = false;
+                    for (var j in topicUsers) {
+                        if (topicUsers[j].id == data[i].id) {
+                            alreadyAdded = true;
+                            break;
+                        }
+                    }
+
+                    if (alreadyAdded) {
+                        continue;
+                    }
+
+                    var user = data[i];
+
+                    $("<option value='" + user.id + "'>" + user.realName + "</option>")
+                        .appendTo($("#userSearchResult"));
+                }
+            });
+        }
+
+        function addUserToTopic() {
+            var userId = $("#userSearchResult").val();
+            if (userId && userId[0]) {
+                post(addUserToTopicUrl, {userId: userId[0], topicId: id}, function() {
+                    $("#addUserDialog").modal("hide");
+                    userTable.refresh();
+                });
+            }
+        }
+
+         //组装用户表格的操作按钮
+        function userTableAddButtons() {
+            var result = new Array();
+            result.push("<button type='button' class='btn' id='deleteButton'>删除</button>");
+
+            return result.join("");
+        }
+
+        //处理用户表格的按钮事件
+        window.userTableEvent = {
+            "click #deleteButton": function(e, value, row, index) {
+                post(removeUserFromTopicUrl, {userId: row.id, topicId: id}, function() {
+                    userTable.refresh();
+                });
+            }
+        }
+    </script>
+
+    <h5 class="ml-2 text-primary">专题用户</h5>
+    <hr/>
+    <div class="row ml-1 mb-4">
+        <table id="userDataTable">
+            <thead>
+            <tr>
+                <th data-width="500" data-field="username">用户名</th>
+                <th data-width="200" data-field="realName">用户姓名</th>
+                <th data-width="200" data-formatter="userTableAddButtons" data-events="userTableEvent">操作</th>
+            </tr>
+            </thead>
+        </table>
+
+        <!-- 工具栏 -->
+        <div id="userTableToolBar">
+            <button type="button" class="btn" onclick="javascript: addUser(); ">新增</button>
+            <button type="button" class="btn" onclick="javascript: userTable.refresh(); ">刷新</button>
+        </div>
+    </div>
+
+
+    <!--新增Topic下的文章 -->
+    <div class="modal fade" id="addUserDialog" tabindex="-1" role="dialog" aria-labelledby="dialogTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">新增用户到专题</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="userNewForm" method="post" class="mr-4 ml-2">
+                        <span class="error-message" id="userModalErrorMessage"></span>
+
+                        <div class="row">
+                            <input class="col-sm-10 form-control mr-1" type="text" id="userKeyWord"
+                                   placeholder="用户关键字"
+                                   maxlength="100"
+                                   required/>
+                            <input type="button" class="btn" value="搜索" onclick="searchUser()"/>
+                        </div>
+
+                        <select class="row form-control mt-2"
+                                id="userSearchResult"
+                                aria-multiselectable="false"
+                                multiple="false">
+
+                        </select>
+
+                        <div class="row mt-2">
+                            <button type="button" class="col-sm-2 btn btn-secondary offset-sm-7 mr-2"
+                                    data-dismiss="modal">取消</button>
+                            <button type="button" onclick="addUserToTopic()"
+                                    class="col-sm-2 btn btn-primary" id="userSubmitButton">增加</button>
                         </div>
                     </form>
                 </div>

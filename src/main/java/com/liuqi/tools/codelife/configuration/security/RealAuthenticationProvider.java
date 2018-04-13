@@ -60,13 +60,13 @@ public class RealAuthenticationProvider implements AuthenticationProvider {
         if (!user.getPassword().equals(password.orElse(""))) {
             logger.error("Password is wrong!");
             String errorMessage;
-            
+    
             //判断出错次数是否超过限制
             if (Integer.valueOf(maxErrorCount) - 1 == user.getErrorCount()) {
                 //包括这次已经达到最大出错次数
                 logger.error("Password wrong count has reached the max times({}), user({}) will be locked!"
                         , maxErrorCount, user.getUsername());
-                
+    
                 errorMessage = "密码错误，已连续错误" + maxErrorCount + "次，用户被锁定，请联系管理员或者第二天再试！";
             } else {
                 errorMessage = "密码错误，剩余尝试次数：" + (Integer.valueOf(maxErrorCount) - 1 - user.getErrorCount());
@@ -74,8 +74,14 @@ public class RealAuthenticationProvider implements AuthenticationProvider {
     
             //更新出错次数
             userService.updateErrorCount(user, user.getErrorCount() + 1);
-            
-            throw new AuthenticationException(errorMessage){};
+    
+            throw new AuthenticationException(errorMessage) {
+            };
+        }
+        
+        //密码正确时修改出错次数
+        if (0 != user.getErrorCount()) {
+            userService.updateErrorCount(user, 0);
         }
         
         RealUserDetails userDetails = new RealUserDetails(user);

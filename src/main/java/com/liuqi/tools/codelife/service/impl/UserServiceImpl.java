@@ -1,6 +1,7 @@
 package com.liuqi.tools.codelife.service.impl;
 
 import com.liuqi.tools.codelife.db.dao.UserDao;
+import com.liuqi.tools.codelife.entity.Role;
 import com.liuqi.tools.codelife.entity.Topic;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.entity.UserStatus;
@@ -243,6 +244,22 @@ public class UserServiceImpl implements UserService{
         }
         
         return userDao.search(key);
+    }
+    
+    /**
+     * 为用户授予角色，如果已经授予过不再进行重复授予
+     *
+     * @param user
+     * @param role
+     */
+    @Override
+    public void addRole(User user, Role role) {
+        Collection<Role> roles = user.getRoles();
+        if (roles.contains(role)) {
+            logger.warn("Role already exists for user, role: " + role + ", user: " + user);
+            return;
+        }
+        userDao.addRole(user, role);
     }
     
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);

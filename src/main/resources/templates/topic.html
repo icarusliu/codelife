@@ -32,6 +32,11 @@
             padding-bottom: 5px;
         }
 
+        .topic-block img {
+            box-shadow: 1px 1px 1px #bfbfbf;
+            border: 1px solid #efefef;
+        }
+
         .topic-block p {
             color: #483D8B;
         }
@@ -85,34 +90,45 @@
 </head>
 <body>
 <div layout:fragment="content" class="container-fluid">
-    <div class="row m-4">
-        <!--搜索操作-->
+    <!--搜索操作-->
+    <form method="get" th:action="@{/topic/search}"
+          class="row m-4">
         <input type="text"
-               placeholder="搜索专题"
+               placeholder="搜索专题" name="key" required
                class="form-control col-md-4 mr-md-2 offset-md-3"/>
-        <input type="button" value="搜索"
+        <input type="submit" value="搜索"
             class="btn btn-primary"/>
-    </div>
+    </form>
 
     <div class="row topic-list">
         <!--我订阅的专题-->
         <div class="topic-title-main col-12 mb-2">已订阅专题</div>
         <div class="col-sm-6" th:each="topic: ${myTopics}">
             <div class="topic-block row">
-                <h6 class="col-12 topic-block-title">
+                <h6 class="col-sm-12 topic-block-title">
                     <div class="row">
                         <span class="col-sm-10" th:text="${topic.title}"></span>
                         <span class="col-sm-2 text-right topic-subscribe-button"
                               th:onclick="'unSubscribe(' + ${topic.id} + ')'">取消订阅</span>
                     </div>
                 </h6>
-                <p class="col-sm-6" th:text="${topic.introduction}">
-                </p>
-                <ul class="col-sm-6">
-                    <li th:each="article: ${topic.articles}">
-                        <a th:href="@{/articleDetail} + '?id=' + ${article.id}" th:text="${article.title}"></a>
-                    </li>
-                </ul>
+
+                <div class="row">
+                    <div class="col-sm">
+                        <p class="col-sm" th:text="${topic.introduction}">
+                        </p>
+
+                        <ul class="col-sm-12">
+                            <li th:each="article: ${topic.articles}">
+                                <a th:href="@{/articleDetail} + '?id=' + ${article.id}" th:text="${article.title}"></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <img class="topic-block-img col-sm-4 mr-4 p-2" th:if="${topic.img != ''}"
+                         th:src="@{/topic/getImg} + '?fileName=' + ${topic.img}" height="200px"/>
+                </div>
+
                 <span class="offset-md-10 col-md-2 text-right"><a th:href="@{/topic/detail} + '?id=' + ${topic.id}">>>查看更多</a></span>
             </div>
         </div>

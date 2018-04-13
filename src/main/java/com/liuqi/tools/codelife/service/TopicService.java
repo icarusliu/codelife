@@ -1,9 +1,6 @@
 package com.liuqi.tools.codelife.service;
 
-import com.liuqi.tools.codelife.entity.Article;
-import com.liuqi.tools.codelife.entity.Topic;
-import com.liuqi.tools.codelife.entity.TopicType;
-import com.liuqi.tools.codelife.entity.User;
+import com.liuqi.tools.codelife.entity.*;
 import com.liuqi.tools.codelife.exceptions.RestException;
 
 import java.util.Collection;
@@ -19,6 +16,14 @@ public interface TopicService {
      * @return
      */
     Collection<Topic> findAll();
+    
+    /**
+     * 获取用户未订阅的所有开放的专题
+     *
+     * @param user
+     * @return
+     */
+    Collection<Topic> findUserNotSubscribed(User user);
     
     /**
      * 获取专题下的所有文章清单
@@ -106,4 +111,36 @@ public interface TopicService {
      * @param articleId
      */
     void deleteTopicArticle(Integer id, Integer articleId);
+    
+    /**
+     * 更新专题状态
+     *
+     * @param id
+     * @param status
+     */
+    void updateStatus(Integer id, TopicStatus status);
+    
+    /**
+     * 获取管理员为指定用户的专题清单
+     *
+     * @param loginUser
+     * @return
+     */
+    Collection<Topic> findByAdmin(User loginUser);
+    
+    /**
+     * 获取专题订阅用户列表
+     *
+     * @param topicId
+     * @return
+     */
+    Collection<User> getTopicUsers(Integer topicId);
+    
+    /**
+     * 根据关键字搜索专题
+     *
+     * @param key
+     * @return
+     */
+    Collection<Topic> search(String key);
 }

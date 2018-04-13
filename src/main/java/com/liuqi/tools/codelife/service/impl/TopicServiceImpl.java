@@ -2,8 +2,10 @@ package com.liuqi.tools.codelife.service.impl;
 
 import com.liuqi.tools.codelife.db.dao.ArticleDao;
 import com.liuqi.tools.codelife.db.dao.TopicDao;
+import com.liuqi.tools.codelife.db.dao.UserDao;
 import com.liuqi.tools.codelife.entity.*;
 import com.liuqi.tools.codelife.exceptions.RestException;
+import com.liuqi.tools.codelife.service.RoleService;
 import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.service.UserService;
 import org.slf4j.Logger;
@@ -34,7 +36,13 @@ public class TopicServiceImpl implements TopicService {
     private ArticleDao articleDao;
     
     @Autowired
+    private UserDao userDao;
+    
+    @Autowired
     private UserService userService;
+    
+    @Autowired
+    private RoleService roleService;
     
     @Value("${app.restrict.topic.maxTitleLength}")
     private String maxTitleLength;
@@ -53,6 +61,17 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public Collection<Topic> findAll() {
         return Optional.ofNullable(topicDao.findAll()).orElse(Collections.EMPTY_LIST);
+    }
+    
+    /**
+     * 获取指定用户未订阅的所有开放的专题清单
+     *
+     * @param user
+     * @return 如果无专题将返回空的List
+     */
+    @Override
+    public Collection<Topic> findUserNotSubscribed(User user) {
+        return Optional.ofNullable(topicDao.findUserNotSubscribed(user)).orElse(Collections.EMPTY_LIST);
     }
     
     /**
@@ -137,6 +156,28 @@ public class TopicServiceImpl implements TopicService {
         if (null == topic) {
             logger.error("Topic with the special id does not exist, id: " + id);
             throw new RestException("指定编号的专题不存在！");
+        }
+        
+        //如果管理员账号有变更，需要给新的专题管理员添加专题管理员角色；
+        if (topic.getAdmin().getId() != admin) {
+            User adminUser = userService.findById(admin);
+            Collection<Role> roles = roleService.findAllRoles();
+            Role findRole = null;
+            
+            for (Role role: roles) {
+                if (role.getName().equals("TOPIC_ADMIN")) {
+                    findRole = role;
+                    
+                    break;
+                }
+            }
+            
+            if (null == findRole) {
+                logger.error("Role with name TOPIC_ADMIN does not exist!");
+                throw new RestException("名称为TOPIC_ADMIN的角色不存在，请联系管理员添加！");
+            }
+            
+            userService.addRole(adminUser, findRole);
         }
         
         topic.setTitle(title);
@@ -261,6 +302,40 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public void deleteTopicArticle(Integer id, Integer articleId) {
         topicDao.deleteTopicArticle(id, articleId);
+    }
+    
+    @Override
+    public void updateStatus(Integer id, TopicStatus status) {
+        if (null == id || null == status) {
+            logger.warn("ID or status cannot be null!");
+            return;
+        }
+        topicDao.updateStatus(id, status);
+    }
+    
+    @Override
+    public Collection<Topic> findByAdmin(User loginUser) {
+        if (null == loginUser) {
+            logger.error("User cannot be null!");
+            return Collections.EMPTY_LIST;
+        }
+        
+        return topicDao.findByAdmin(loginUser);
+    }
+    
+    @Override
+    public Collection<User> getTopicUsers(Integer topicId) {
+        return userDao.getTopicUsers(topicId);
+    }
+    
+    @Override
+    public Collection<Topic> search(String key) {
+        if (null == key || "".equals(key.trim())) {
+            logger.warn("Key cannot be null!");
+            return Collections.EMPTY_LIST;
+        }
+        
+        return topicDao.search(key);
     }
     
     private void checkTopicId(Integer id) throws RestException {
