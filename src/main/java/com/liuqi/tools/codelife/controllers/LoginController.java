@@ -1,12 +1,16 @@
 package com.liuqi.tools.codelife.controllers;
 
 import com.liuqi.tools.codelife.entity.Article;
+import com.liuqi.tools.codelife.entity.Topic;
+import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.service.ArticleService;
+import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,6 +35,9 @@ public class LoginController {
     
     @Autowired
     private TopicService topicService;
+    
+    @Autowired
+    private AuthenticationService authenticationService;
     
     /**
      * 超时处理
@@ -67,9 +74,26 @@ public class LoginController {
             articles = Collections.EMPTY_LIST;
         }
         
+        //获取订阅专题
+        //获取用户订阅专题及其更新的文章
+        User loginUser = authenticationService.getLoginUser();
+        Collection<Topic> myTopics;
+        if (null != loginUser) {
+            myTopics = topicService.getUserTopics(loginUser.getId());
+        } else {
+            myTopics = Collections.EMPTY_LIST;
+        }
+        
         return ModelAndViewBuilder.of("index")
                 .setData("articles", articles)
                 .setData("topics", topicService.search(""))
+                .setData("myTopics", myTopics)
+                .build();
+    }
+    
+    @PostMapping("/search")
+    public ModelAndView search() {
+        return ModelAndViewBuilder.of("search")
                 .build();
     }
     

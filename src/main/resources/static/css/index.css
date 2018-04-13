@@ -40,3 +40,47 @@
     min-width: 100px;
     border-color: #AFEEEE;
 }
+
+.block {
+    border: 1px solid #B0E0E6;
+    padding: 0px;
+}
+
+.block-title {
+    font-size: 1em;
+    border-bottom: 1px solid #B0E0E6;
+    color: #4682B4;
+    background: #F0F8FF;
+    line-height: 2.4em;
+    padding-left: 10px;
+}
+
+.block-title-topic {
+    background: #F0FFFF;
+}
+
+.block-title-subscribed-topic {
+    background: #FFFAF0;
+}
+
+.article-item {
+    border-bottom: 1px dotted #efefef;
+    margin-top: 10px;
+    padding-left: 10px;
+}
+
+.article-item-title {
+    font-size: 1em;
+}
+
+.article-item-remark {
+    font-size: 0.8em;
+    margin-top: 4px;
+    color: #4682B4;
+}
+
+.article-item-info {
+    font-size: 0.4em;
+    color: #bbb;
+    margin-top: 10px;
+}
