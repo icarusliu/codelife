@@ -7,41 +7,11 @@
         layout:decorator="layout/layout">
 <head>
     <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="/css/index.css"/>
     <title>搜索</title>
-
-    <script th:inline="javascript">
-
-    </script>
 </head>
 <body>
 <div layout:fragment="content" class="container-fluid m-1 row">
-    <!-- 登录框 -->
-    <div class="col-sm-2 pl-0 ml-0" th:if="${#authentication.name eq 'anonymousUser'}">
-        <form class="form-group pt-2 pl-3"
-              th:action="@{/login}" method="POST"
-              style="border: 1px solid #f5f5f5; background: #f8f8f8; ">
-            <input class="form-control row mb-2" name="username" type="text"
-                   oninput="javascript: inputUsername(); "
-                   placeholder="用户名" required/>
-            <input class="form-control row mb-2" name="password" type="password" placeholder="密码" required/>
-            <div class="row">
-                <div class="col-4"></div>
-                <input type="button" class="btn col-3" value="注册" onclick="javascript: register(); "/>
-                <input type="submit" class="form-controller btn btn-primary col-3 pull-right mr-3 ml-2" value="登录"/>
-            </div>
-
-            <!-- 如果返回的链接中带有error参数，那么说明后台登录出现异常，可以通过Spring在Session中保存的异常变量获取异常信息并提示 -->
-            <div id="errorMessage" class="mt-1 text-danger"
-                 style="font-size: 12px;  ">
-                <!-- 登录失败的信息  -->
-                <div  th:if="${param.error}"
-                      th:text="${'登录失败：' + session.SPRING_SECURITY_LAST_EXCEPTION.message}">
-
-                </div>
-            </div>
-        </form>
-    </div>
-
     <div class="col-sm">
         <!--搜索操作-->
         <form method="get" th:action="@{/search}"
@@ -56,7 +26,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <div class="block">
-                    <h5 class="block-title">热门文章</h5>
+                    <h5 class="block-title">文章搜索结果</h5>
                     <div class="w-100"></div>
                     <div class="article-item" th:each="article: ${articles}">
                         <a th:text="${article.title}" class="article-item-title font-weight-bold"
@@ -73,18 +43,8 @@
             </div>
 
             <div class="col-sm">
-                <div class="block mb-2" th:if="${null != myTopics && myTopics.size() != 0}">
-                    <h5 class="block-title block-title-subscribed-topic">订阅专题</h5>
-                    <div class="w-100"></div>
-                    <div class="article-item" th:each="myTopic: ${myTopics}">
-                        <a th:text="${myTopic.title}" class="article-item-title font-weight-bold"
-                           th:href="@{/topic/detail} + '?id=' + ${myTopic.id}"></a>
-                        <p class="article-item-remark" th:text="${myTopic.introduction}"></p>
-                    </div>
-                </div>
-
                 <div class="block">
-                    <h5 class="block-title block-title-topic">热门专题</h5>
+                    <h5 class="block-title block-title-topic">专题搜索结果</h5>
                     <div class="w-100"></div>
                     <div class="article-item" th:each="topic: ${topics}">
                         <a th:text="${topic.title}" class="article-item-title font-weight-bold"

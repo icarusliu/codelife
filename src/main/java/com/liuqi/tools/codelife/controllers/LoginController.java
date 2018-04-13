@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -91,9 +92,21 @@ public class LoginController {
                 .build();
     }
     
-    @PostMapping("/search")
-    public ModelAndView search() {
+    /**
+     * 关键字搜索
+     * 目前通过SQL LIKE的方式搜索专题与文章
+     * TODO 通过Lucense来进行全文检索
+     * @param key
+     * @return
+     */
+    @GetMapping("/search")
+    public ModelAndView search(@RequestParam("key") String key) {
+        Collection<Topic> topics = topicService.search(key);
+        Collection<Article> articles = articleService.searchTitle(key);
+        
         return ModelAndViewBuilder.of("search")
+                .setData("articles", articles)
+                .setData("topics", topics)
                 .build();
     }
     
