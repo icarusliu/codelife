@@ -13,15 +13,18 @@
 
     <link rel="stylesheet" th:href="@{/css/article-detail.css}">
     <link rel="stylesheet" th:href="@{/js/highlight/styles/default.css}">
+    <link rel="stylesheet" th:href="@{/css/comment.css}">
 
     <script th:src="@{/js/highlight/highlight.pack.js}"></script>
     <script th:src="@{/js/markdown.js}"></script>
     <script th:src="@{/js/article-detail.js}"></script>
 
+
     <script th:inline="javascript">
         var article = [[${article}]];
 
         var praise = new Praise(article.id, 'praiseImg', 'praiseCount');
+        var replyId;
 
         $(function(){
             var html = article.content;
@@ -37,11 +40,43 @@
 
             //初始化点赞对象
              praise.init();
+
+             //初始化评论提交事件
+             $.formSubmit("commentForm", submitComment);
         });
 
         //点赞
         function doPraise() {
             praise.praise();
+        }
+
+        //发表评论
+        function submitComment() {
+            var commentContent = $("#commentContent").val();
+            var anonymos = $("#anonymos").val();
+
+            var data = new Object();
+            data.content = commentContent;
+            data.anonymos = 'on' == anonymos;
+            if (replyId) {
+                data.id = replyId;
+                data.type = 'comment';
+            } else {
+                data.id = article.id;
+                data.type='article';
+            }
+
+            post([[@{/comment/add}]], data, function() {
+                //提交成功
+                location.reload();
+            });
+        }
+
+        //答复评论
+        function replyComment(commentId) {
+            $("#commentContent").attr("placeholder", "答复评论");
+            $("#commentContent").focus();
+            replyId = commentId;
         }
     </script>
 </head>
@@ -87,6 +122,53 @@
                             onclick="javascript: doPraise(); ">
                         <img th:src="@{/icons/thumb-up-2x.png}" id="praiseImg"/>
                     </button>
+                </div>
+            </div>
+
+            <!--评论对话框-->
+            <form class="row m-2" method="post" id="commentForm">
+                <textarea class="col-sm mr-3 form-control" placeholder="评论内容" required
+                          id="commentContent"></textarea>
+                <div>
+                    <div class="row ml-1 text-center">
+                        <input class="mr-1" type="checkbox" id="anonymos" style="margin-top: 2px; "/>
+                        <label for="anonymos" style="line-height: 16px; ">匿名</label>
+                    </div>
+                    <div class="w-100"></div>
+                    <input class="btn btn-primary" type="submit" value="提交"/>
+                </div>
+            </form>
+
+            <!--评论内容-->
+            <div class="comment-list row">
+                <div class="comment-list-item col-sm-12" th:each="comment: ${comments}">
+                    <h6 class="comment-list-item-info">
+                        <span th:if="${comment.commentUser != null && comment.commentUser != ''}"
+                              th:text="${comment.commentUser.realName}"></span>
+                        <span th:if="${comment.commentUser == null || comment.commentUser == ''}">匿名用户</span>
+                        评论于<cite th:text="${comment.commentTime}"></cite>
+                    </h6>
+                    <p class="comment-list-item-content" th:text="${comment.content}"></p>
+
+                    <div class="comment-list-item-buttons row">
+                        <input class="btn btn-link" type="button" value="答复"
+                               th:onclick="'replyComment(' + ${comment.id} + ')'"/>
+                    </div>
+
+                    <!--子评论-->
+                    <div class="sub-comment-list comment-list row ml-0" th:if="${comment.children != null
+                        && comment.children.size() != 0}">
+                        <div class="comment-list-item col-sm-12" th:each="subComment: ${comment.children}">
+                            <h6 class="comment-list-item-info">
+                                <span th:if="${subComment.commentUser != null && subComment.commentUser != ''}"
+                                      th:text="${subComment.commentUser.realName}"></span>
+                                <span th:if="${subComment.commentUser == null || subComment.commentUser == ''}">匿名用户</span>
+                                评论于<cite th:text="${subComment.commentTime}"></cite>
+                            </h6>
+                            <p class="comment-list-item-content" th:text="${subComment.content}"></p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -64,15 +64,19 @@ public class ControllerAspect {
         //提交记录日志的请求到线程池中，由线程池来完成日志的存库处理
         logDBWriterService.log(joinPoint.toLongString());
         
+        Object result = "";
         try {
             //调用实际处理方法
-            return joinPoint.proceed();
+            result = joinPoint.proceed();
         } finally {
             //打印后置日志
             logger.info(spliter  + "End of processing request:" + infos
+                    + "\nresult: " + result
                     + "\nuse time: " + (System.currentTimeMillis() - startTime) + "ms"
                     + spliter);
         }
+        
+        return result;
     }
     
     private static final Logger logger = LoggerFactory.getLogger(ControllerAspect.class);

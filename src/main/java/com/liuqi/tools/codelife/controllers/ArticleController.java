@@ -2,10 +2,12 @@ package com.liuqi.tools.codelife.controllers;
 
 import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.ArticleType;
+import com.liuqi.tools.codelife.entity.CommentType;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.ArticleService;
 import com.liuqi.tools.codelife.service.AuthenticationService;
+import com.liuqi.tools.codelife.service.CommentService;
 import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import com.liuqi.tools.codelife.util.SessionProxy;
 import org.slf4j.Logger;
@@ -37,6 +39,9 @@ public class ArticleController {
     
     @Autowired
     private AuthenticationService authenticationService;
+    
+    @Autowired
+    private CommentService commentService;
     
     /**
      * 打开文章清单页面
@@ -120,6 +125,7 @@ public class ArticleController {
         return ModelAndViewBuilder.of("articleDetail")
                 .setData("types", articleService.findAllTypes())
                 .setData("article", article)
+                .setData("comments", commentService.findByDestination(CommentType.ARTICLE, id))
                 .build();
     }
     

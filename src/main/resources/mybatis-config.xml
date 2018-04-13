@@ -13,6 +13,7 @@
         <typeHandler handler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.UserStatusTypeHandler"/>
         <typeHandler handler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicStatusTypeHandler"/>
         <typeHandler handler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicTypeTypeHandler"/>
+        <typeHandler handler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.CommentTypeHandler"/>
     </typeHandlers>
 
     <mappers>
@@ -21,5 +22,6 @@
         <mapper resource="mybatis/userLogMapper.xml"/>
         <mapper resource="mybatis/roleMapper.xml"/>
         <mapper resource="mybatis/topicMapper.xml"/>
+        <mapper resource="mybatis/commentMapper.xml"/>
     </mappers>
 </configuration>
