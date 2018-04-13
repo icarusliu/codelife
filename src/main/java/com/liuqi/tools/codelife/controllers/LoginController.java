@@ -2,6 +2,7 @@ package com.liuqi.tools.codelife.controllers;
 
 import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.service.ArticleService;
+import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,9 @@ import java.util.Collections;
 public class LoginController {
     @Autowired
     private ArticleService articleService;
+    
+    @Autowired
+    private TopicService topicService;
     
     /**
      * 超时处理
@@ -65,7 +69,13 @@ public class LoginController {
         
         return ModelAndViewBuilder.of("index")
                 .setData("articles", articles)
+                .setData("topics", topicService.search(""))
                 .build();
+    }
+    
+    @RequestMapping("/about")
+    public String about(){
+        return "about";
     }
     
     @GetMapping("/test")

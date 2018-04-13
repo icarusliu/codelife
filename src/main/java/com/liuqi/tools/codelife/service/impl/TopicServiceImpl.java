@@ -330,7 +330,7 @@ public class TopicServiceImpl implements TopicService {
     
     @Override
     public Collection<Topic> search(String key) {
-        if (null == key || "".equals(key.trim())) {
+        if (null == key) {
             logger.warn("Key cannot be null!");
             return Collections.EMPTY_LIST;
         }
