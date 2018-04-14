@@ -45,8 +45,6 @@ body {
 /*右侧内容区域样式调整*/
 .right-content {
     border: 1px solid #AFEEEE;
-    border-right: none;
-    border-bottom: none;
 }
 
 /*底部*/

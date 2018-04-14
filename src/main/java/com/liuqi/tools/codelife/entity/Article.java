@@ -10,7 +10,8 @@ import java.io.Serializable;
  * @Created: 2018/3/26 16:12
  * @Version: V1.0
  **/
-public class Article implements Serializable {
+public class
+Article implements Serializable {
     private int id;
     private String title;
     private ArticleType articleType;

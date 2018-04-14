@@ -1,10 +1,22 @@
 /*文章清单样式*/
+.article-tool-bar a {
+    font-size: 0.8em;
+}
+
+.article-list,.article-tool-bar {
+    border-bottom: 1px solid #efefef;
+}
+
 .article-list-group {
-    background: -moz-linear-gradient(top, #fefefe, #fafafa);
-    background: -moz-linear-gradient(to bottom, #fefefe, #fafafa);
-    background: -ms-linear-gradient(top, #fefefe, #fafafa);
-    background: -o-linear-gradient(top, #fefefe, #fafafa);
-    background: -webkit-linear-gradient(top, #fefefe, #fafafa);
+    border-bottom: 1px solid #efffff;
+}
+
+.article-list-group:nth-child(even){
+    background: #FaFFFF;
+}
+
+.article-list-group:nth-child(odd){
+    background: #fff;
 }
 
 .article-list-group:hover {
@@ -23,4 +35,11 @@
 .article-list-item-info {
     color: #aaa;
     font-size: 0.8em;
+}
+
+.article-list-item-buttons .btn {
+    font-size: 0.8em;
+    line-height: 1em;
+    margin: 0px;
+    padding: 0px;
 }

@@ -30,20 +30,36 @@
 </head>
 <body>
 <div layout:fragment="subContent">
-    <div class="row article-list-group pb-2 pt-2 mt-0" th:each="article: ${articles}">
-        <div class="col">
-            <a th:text="${article.title}" class="article-list-item-title font-weight-bold"
-               th:href="@{'/articleDetail?id=' + ${article.id}}"></a>
-            <div th:text="${article.remark}" class="mt-2 mb-2 article-list-item-remark"></div>
-            <div class="article-list-item-info">
-                <span th:text="${article.authorName}" class="mr-4"></span>
-                发表于：<cite th:text="${article.createDate}" class="mr-5"></cite>
-                阅读次数：<cite th:text="${article.readCount}" class="mr-5"></cite>
-                点赞数：<cite th:text="${article.praiseCount}"></cite>
+    <div class="article-tool-bar col-sm-12 text-right m-0">
+        <div class="btn btn-link"
+             th:if="${#authentication.name != 'anonymousUser'}">
+            <a th:href="@{/articleManager/newArticle}" target="_blank">新建</a>
+        </div>
+    </div>
+
+    <div class="article-list">
+        <div class="row article-list-group pt-2" th:each="article: ${articles}">
+            <div class="col">
+                <a th:text="${article.title}" class="article-list-item-title font-weight-bold"
+                   th:href="@{'/articleDetail?id=' + ${article.id}}"></a>
+                <div th:text="${article.remark}" class="mt-2 mb-2 article-list-item-remark"></div>
+                <div class="row pt-3">
+                    <div class="article-list-item-info col-sm-10">
+                        <span th:text="${article.authorName}" class="mr-4"></span>
+                        发表于：<cite th:text="${article.createDate}" class="mr-5"></cite>
+                        阅读次数：<cite th:text="${article.readCount}" class="mr-5"></cite>
+                        点赞数：<cite th:text="${article.praiseCount}"></cite>
+                    </div>
+                    <div class="article-list-item-buttons col-sm-2 text-right" >
+                        <div class="btn btn-link mb-2" th:if="${#authentication.name != 'anonymousUser' && #authentication.details.user.id == article.authorID}">
+                            <a th:href="@{/articleManager/newArticle} + '?id=' + ${article.id}" target="_blank">编辑</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <nav class="row mt-2 ml-2  justify-content-center">
+    <nav class="page-bar row mt-2 justify-content-center pt-2">
         <ul class="pagination" id="pager">
         </ul>
     </nav>
