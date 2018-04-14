@@ -59,8 +59,8 @@ public class MyBatisArticleDao implements ArticleDao{
     }
     
     @Override
-    public void save(Article article) {
-        articleMapper.save(article);
+    public Integer save(Article article) {
+        return articleMapper.save(article);
     }
     
     @Override

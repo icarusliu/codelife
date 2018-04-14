@@ -10,7 +10,8 @@ import java.util.Collection;
  * @Created: 2018/4/2 17:03
  * @Version: V1.0
  **/
-public class Topic implements Serializable {
+public class
+Topic implements Serializable {
     private int id;
     
     /**

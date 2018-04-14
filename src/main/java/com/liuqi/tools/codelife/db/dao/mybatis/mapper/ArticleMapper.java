@@ -67,7 +67,7 @@ public interface ArticleMapper {
      *
      * @param article 需要保存的文章
      */
-    void save(Article article);
+    Integer save(Article article);
     
     /**
      * 保存文章分类

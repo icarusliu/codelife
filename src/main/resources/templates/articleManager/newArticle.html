@@ -25,6 +25,8 @@
     <script th:inline="javascript">
         //@grant window.close
         var converter = new showdown.Converter();
+        var article = [[${article}]];
+
         $(function(){
             var editor = new SimpleMDE({
                 element: $("#editor")[0]
@@ -34,7 +36,6 @@
             });
 
             //如果是编辑某个文章，则设置标题、分类等
-            var article = [[${article}]];
             if (undefined != article) {
                 $("#title").val(article.title);
                 $("#type").val(article.articleType.id);
@@ -83,13 +84,18 @@
                        name="title" id="title"
                        class="form-control" placeholder="标题" required/>
             </div>
-            <div class="col-1">
+            <div class="col-2">
                 <select name="type" class="form-control" id="type">
-                    <option
-                            th:value="${type.id}"  th:each="type: ${types}" th:text="${type.name}"></option>
+                    <option th:value="${type.id}"  th:each="type: ${types}" th:text="${type.name}"></option>
                 </select>
             </div>
-            <div class="col-3">
+            <div class="col-2" th:if="${null == article}">
+                <select name="topic" class="form-control" id="topic">
+                    <option value="0">不发表到专题</option>
+                    <option th:each="topic: ${myTopics}" th:value="${topic.id}" th:text="${topic.title}"></option>
+                </select>
+            </div>
+            <div class="col-2">
                 <button type="submit" class="btn btn-primary">提交</button>
             </div>
         </div>

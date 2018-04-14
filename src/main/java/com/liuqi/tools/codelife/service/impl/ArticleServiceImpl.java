@@ -9,6 +9,7 @@ import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.ArticleService;
 import com.liuqi.tools.codelife.service.AuthenticationService;
+import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.service.UserService;
 import com.liuqi.tools.codelife.util.ArticleBuilder;
 import com.liuqi.tools.codelife.util.FileUtils;
@@ -19,11 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * 文章服务类的实现类
@@ -42,6 +41,9 @@ public class ArticleServiceImpl implements ArticleService {
     
     @Autowired
     private AuthenticationService authenticationService;
+    
+    @Autowired
+    private TopicService topicService;
     
     @Value("${app.file.savePath}")
     private String contentFilePath;
@@ -90,7 +92,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
     
     @Override
-    public void saveArticle(String title, String content, int type) throws RestException {
+    public void saveArticle(String title, String content, int type, Integer topicId) throws RestException {
         User user = authenticationService.getLoginUser();
         
         Article article = ArticleBuilder.of(title)
@@ -98,7 +100,12 @@ public class ArticleServiceImpl implements ArticleService {
                 .setContent(content, contentFilePath)
                 .setAuthor(user)
                 .build();
-        articleDao.save(article);
+        Integer articleId = articleDao.save(article);
+        
+        //将文章添加到专题
+        if (null != topicId && 0 != topicId) {
+            topicService.addTopicArticls(topicId, List.of(articleId));
+        }
     }
     
     @Override

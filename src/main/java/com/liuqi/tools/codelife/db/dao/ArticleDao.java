@@ -57,7 +57,7 @@ public interface ArticleDao {
      *
      * @param article 需要保存的文章对象
      */
-    void save(Article article);
+    Integer save(Article article);
     
     /**
      * 通过分类查找该分类下的所有文章

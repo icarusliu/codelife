@@ -48,12 +48,12 @@ public interface ArticleService {
     
     /**
      * 保存文章
-     *
-     * @param title 文章标题
+     *  @param title 文章标题
      * @param content 文章内容
      * @param type 文章类型
+     * @param topicId
      */
-    void saveArticle(String title, String content, int type) throws RestException;
+    void saveArticle(String title, String content, int type, Integer topicId) throws RestException;
     
     /**
      * 通过类型查找类型下的所有文章

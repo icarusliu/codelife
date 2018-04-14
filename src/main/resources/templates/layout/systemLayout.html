@@ -20,10 +20,10 @@
             var as = $("#navUl>a");
 
             //如果页面是system/结束时加载第一个页面
-            if ('system/' == page.substring(page.length - 7, page.length)) {
-                $(as[0]).attr("class", "list-group-item active");
-                return;
-            }
+            <!--if ('system/' == page.substring(page.length - 7, page.length)) {-->
+                <!--$(as[0]).attr("class", "list-group-item active");-->
+                <!--return;-->
+            <!--}-->
 
             //否则根据页面比较看加载哪个页面
             for (var i = 0; i < as.length; i++) {

@@ -6,6 +6,7 @@ import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.ArticleService;
 import com.liuqi.tools.codelife.service.AuthenticationService;
+import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,9 @@ public class ArticleManagerController {
     
     @Autowired
     private AuthenticationService authenticationService;
+    
+    @Autowired
+    private TopicService topicService;
     
     /**
      * 打开文章管理页面
@@ -72,9 +76,13 @@ public class ArticleManagerController {
      * @return
      */
     @GetMapping("/newArticle")
+    @PreAuthorize("isAuthenticated()")
     public ModelAndView newArticle(@RequestParam(name = "id",  required = false) Integer id) {
+        User loginUser = authenticationService.getLoginUser();
+        
         ModelAndViewBuilder builder = ModelAndViewBuilder.of("articleManager/newArticle")
-                .setData("types", articleService.findAllTypes());
+                .setData("types", articleService.findAllTypes())
+                .setData("myTopics", topicService.getUserTopics(loginUser.getId()));
         
         if (null != id) {
             Article article = null;
@@ -107,9 +115,10 @@ public class ArticleManagerController {
     @ResponseBody
     public String saveArticle(@RequestParam("title") String title, @RequestParam("type") Integer type,
                               @RequestParam("content") String content,
+                              @RequestParam(value = "topic", required = false) Integer topicId,
                               @RequestParam(name = "id", required = false) Integer id) throws RestException {
         if (null == id) {
-            articleService.saveArticle(title, content, type);
+            articleService.saveArticle(title, content, type, topicId);
         } else {
             //判断登录用户是否是作者，如果不是则不能进行保存
             User loginUser = authenticationService.getLoginUser();
