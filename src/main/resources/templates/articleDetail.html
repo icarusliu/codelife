@@ -140,11 +140,12 @@
 
             <!--评论内容-->
             <div class="comment-list row">
-                <div class="comment-list-item col-sm-12" th:each="comment: ${comments}">
+                <div class="comment-list-item col-sm-12" th:each="comment, commentStat: ${comments}">
                     <h6 class="comment-list-item-info">
-                        <span th:if="${comment.commentUser != null && comment.commentUser != ''}"
-                              th:text="${comment.commentUser.realName}"></span>
-                        <span th:if="${comment.commentUser == null || comment.commentUser == ''}">匿名用户</span>
+                        <span th:text="${commentStat.index + 1} + '楼'" class="mr-2"></span>
+                        <span th:text="${comment.commentUser != null && comment.commentUser.id == article.authorID}
+                            ? '题主' : (${comment.commentUser != null} ? ${comment.commentUser.realName} : '匿名用户')"
+                            class="mr-2"></span>
                         评论于<cite th:text="${comment.commentTime}"></cite>
                     </h6>
                     <p class="comment-list-item-content" th:text="${comment.content}"></p>
@@ -159,9 +160,11 @@
                         && comment.children.size() != 0}">
                         <div class="comment-list-item col-sm-12" th:each="subComment: ${comment.children}">
                             <h6 class="comment-list-item-info">
-                                <span th:if="${subComment.commentUser != null && subComment.commentUser != ''}"
-                                      th:text="${subComment.commentUser.realName}"></span>
-                                <span th:if="${subComment.commentUser == null || subComment.commentUser == ''}">匿名用户</span>
+                                 <span th:text="${subComment.commentUser != null
+                                            && subComment.commentUser.id == article.authorID}
+                                     ? '题主' : (${subComment.commentUser != null}
+                                                    ? ${subComment.commentUser.realName} : '匿名用户')"
+                                       class="mr-2"></span>
                                 评论于<cite th:text="${subComment.commentTime}"></cite>
                             </h6>
                             <p class="comment-list-item-content" th:text="${subComment.content}"></p>

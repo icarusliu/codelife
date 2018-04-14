@@ -1,11 +1,12 @@
 package com.liuqi.tools.codelife.service;
 
+import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * 文章服务类
@@ -19,8 +20,10 @@ public interface ArticleService {
      * 查找所有文章
      *
      * @return
+     * @param nowPage
+     * @param pageSize
      */
-    Collection<Article> findAll();
+    PageInfo<Article> findAll(int nowPage, int pageSize);
     
     /**
      * 通过ID查找文章内容并返回
@@ -34,7 +37,7 @@ public interface ArticleService {
      *
      * @return
      */
-    Collection<ArticleType> findAllTypes();
+    List<ArticleType> findAllTypes();
     
     /**
      * 通过ID获取Type
@@ -55,10 +58,12 @@ public interface ArticleService {
     /**
      * 通过类型查找类型下的所有文章
      *
-     * @param typeId 文章分类编号
+     *
+     * @param id
+     * @param nowPage
      * @return 该分类下的所有文章
      */
-    Collection<Article> findByType(Integer typeId);
+    PageInfo<Article> findByType(Integer id, int nowPage, Integer pageSize);
     
     /**
      * 保存文件类型
@@ -105,7 +110,7 @@ public interface ArticleService {
       * @param i 需要返回的文章个数
      * @return 返回获取的文章清单
      */
-    Collection<Article> findTopArticleNoContent(int i);
+    List<Article> findTopArticleNoContent(int i);
     
     /**
      * 对文章进行点赞
@@ -127,7 +132,7 @@ public interface ArticleService {
      * @param user
      * @return
      */
-    Collection<Article> findByAuthor(User user) throws RestException;
+    PageInfo<Article> findByAuthor(User user, int nowPage, int pageSize) throws RestException;
     
     /**
      * 通过标题关键字进行搜索
@@ -135,5 +140,5 @@ public interface ArticleService {
      * @param key
      * @return
      */
-    Collection<Article> searchTitle(String key);
+    PageInfo<Article> searchTitle(String key, int nowPage, int pageSize);
 }

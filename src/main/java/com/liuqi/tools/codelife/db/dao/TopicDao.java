@@ -18,7 +18,7 @@ public interface TopicDao {
      *
      * @return
      */
-    Collection<Topic> findAll();
+    List<Topic> findAll();
     
     /**
      * 查找用户订阅的所有专题
@@ -26,7 +26,7 @@ public interface TopicDao {
      * @param id 用户编号
      * @return
      */
-    Collection<Topic> findByUser(Integer id);
+    List<Topic> findByUser(Integer id);
     
     /**
      * 通过标题查找Topic
@@ -115,7 +115,7 @@ public interface TopicDao {
      * @param user
      * @return
      */
-    Collection<Topic> findUserNotSubscribed(User user);
+    List<Topic> findUserNotSubscribed(User user);
     
     /**
      * 更新专题状态
@@ -131,7 +131,7 @@ public interface TopicDao {
      * @param loginUser
      * @return
      */
-    Collection<Topic> findByAdmin(User loginUser);
+    List<Topic> findByAdmin(User loginUser);
     
     /**
      * 根据关键字搜索专题
@@ -139,5 +139,5 @@ public interface TopicDao {
      * @param key
      * @return
      */
-    Collection<Topic> search(String key);
+    List<Topic> search(String key);
 }

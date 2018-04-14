@@ -11,10 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * MyBatis的文章操作实现类
@@ -42,17 +39,17 @@ public class MyBatisArticleDao implements ArticleDao{
     }
     
     @Override
-    public Collection<Article> findByAuthor(int authorId) {
+    public List<Article> findByAuthor(int authorId) {
         return Optional.ofNullable(articleMapper.findByAuthor(authorId)).orElse(new ArrayList<>());
     }
     
     @Override
-    public Collection<Article> findAll() {
+    public List<Article> findAll() {
         return Optional.ofNullable(articleMapper.findAll()).orElse(new ArrayList<>());
     }
     
     @Override
-    public Collection<ArticleType> findAllTypes() {
+    public List<ArticleType> findAllTypes() {
         return Optional.ofNullable(articleMapper.findAllTypes()).orElse(new ArrayList<>());
     }
     
@@ -67,7 +64,7 @@ public class MyBatisArticleDao implements ArticleDao{
     }
     
     @Override
-    public Collection<Article> findByType(Integer typeId) {
+    public List<Article> findByType(Integer typeId) {
         return Optional.ofNullable(articleMapper.findByType(typeId)).orElse(new ArrayList<>());
     }
     
@@ -108,7 +105,7 @@ public class MyBatisArticleDao implements ArticleDao{
      * @return 获取的文章清单，如果无则返回空的List
      */
     @Override
-    public Collection<Article> findTopArticles(int i) {
+    public List<Article> findTopArticles(int i) {
         return Optional.ofNullable(articleMapper.findTopArticles(i)).orElse(Collections.EMPTY_LIST);
     }
     
@@ -131,12 +128,12 @@ public class MyBatisArticleDao implements ArticleDao{
      * @return
      */
     @Override
-    public Collection<Article> findByTopic(Integer id) {
+    public List<Article> findByTopic(Integer id) {
         return articleMapper.findByTopic(id);
     }
     
     @Override
-    public Collection<Article> searchByTitleKey(String key) {
+    public List<Article> searchByTitleKey(String key) {
         return Optional.ofNullable(articleMapper.searchByTitleKey(key)).orElse(Collections.EMPTY_LIST);
     }
 }

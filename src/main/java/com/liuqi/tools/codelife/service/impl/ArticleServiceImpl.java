@@ -1,5 +1,7 @@
 package com.liuqi.tools.codelife.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.db.dao.ArticleDao;
 import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.ArticleType;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -44,9 +47,12 @@ public class ArticleServiceImpl implements ArticleService {
     private String contentFilePath;
     
     @Override
-    public Collection<Article> findAll() {
-        Collection<Article> articles = articleDao.findAll();
-        return articles.stream().map(article -> {
+    public PageInfo<Article> findAll(int nowPage, int pageSize) {
+        PageHelper.startPage(nowPage, pageSize);
+        
+        List<Article> articles = articleDao.findAll();
+        
+        articles.stream().map(article -> {
             try {
                 article.setContent(FileUtils.getFileContent(article.getContentUrl(), contentFilePath));
             } catch (RestException e) {
@@ -54,7 +60,9 @@ public class ArticleServiceImpl implements ArticleService {
                 logger.error("Get file content failed!", e);
             }
             return article;
-        }).collect(Collectors.toList());
+        });
+        
+        return new PageInfo(articles);
     }
     
     @Override
@@ -66,7 +74,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
     
     @Override
-    public Collection<ArticleType> findAllTypes() {
+    public List<ArticleType> findAllTypes() {
         return articleDao.findAllTypes();
     }
     
@@ -94,8 +102,10 @@ public class ArticleServiceImpl implements ArticleService {
     }
     
     @Override
-    public Collection<Article> findByType(Integer typeId) {
-        return articleDao.findByType(typeId);
+    public PageInfo<Article> findByType(Integer id, int nowPage, Integer pageSize) {
+        PageHelper.startPage(nowPage, pageSize);
+    
+        return new PageInfo(articleDao.findByType(id));
     }
     
     /**
@@ -167,7 +177,7 @@ public class ArticleServiceImpl implements ArticleService {
      * @return 如果没有一个文章则返回一个空的清单
      */
     @Override
-    public Collection<Article> findTopArticleNoContent(int i) {
+    public List<Article> findTopArticleNoContent(int i) {
         Assert.assertNotEquals(0, i);
         
         return Optional.ofNullable(articleDao.findTopArticles(i)).orElse(Collections.EMPTY_LIST);
@@ -194,21 +204,24 @@ public class ArticleServiceImpl implements ArticleService {
      * @return 如果未发表过文章时返回空的List
      */
     @Override
-    public Collection<Article> findByAuthor(User user) throws RestException {
+    public PageInfo<Article> findByAuthor(User user, int nowPage, int pageSize) throws RestException {
+        PageHelper.startPage(nowPage, pageSize);
         if (null == user || 0 == user.getId()) {
             logger.error("User or the id of user is null!");
             throw new RestException("用户或用户编号为空！");
         }
         
-        return articleDao.findByAuthor(user.getId());
+        return PageInfo.of(articleDao.findByAuthor(user.getId()));
     }
     
     @Override
-    public Collection<Article> searchTitle(String key) {
+    public PageInfo<Article> searchTitle(String key, int nowPage, int pageSize) {
+        PageHelper.startPage(nowPage, pageSize);
+        
         if (null == key) {
-            return Collections.EMPTY_LIST;
+            return new PageInfo(Collections.EMPTY_LIST);
         }
-        return articleDao.searchByTitleKey(key);
+        return new PageInfo(articleDao.searchByTitleKey(key));
     }
     
     private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);

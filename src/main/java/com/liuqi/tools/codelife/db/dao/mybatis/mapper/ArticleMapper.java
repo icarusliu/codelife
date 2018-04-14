@@ -23,7 +23,7 @@ public interface ArticleMapper {
      *
      * @return
      */
-    Collection<Article> findAll();
+    List<Article> findAll();
     
     /**
      * 通过分类查找分类下的所有文章
@@ -31,7 +31,7 @@ public interface ArticleMapper {
      * @param typeId
      * @return
      */
-    Collection<Article> findByType(int typeId);
+    List<Article> findByType(int typeId);
     
     /**
      * 通过ID获取文章对象
@@ -47,14 +47,14 @@ public interface ArticleMapper {
      * @param authorID 用户ID
      * @return 返回该用户下的文章清单
      */
-    Collection<Article> findByAuthor(int authorID);
+    List<Article> findByAuthor(int authorID);
     
     /**
      * 返回所有文章分类
      *
      * @return
      */
-    Collection<ArticleType> findAllTypes();
+    List<ArticleType> findAllTypes();
     
     /**
      * 根据Type的ID获取Type
@@ -118,7 +118,7 @@ public interface ArticleMapper {
      * @param i 需要返回的文章数
      * @return 获取的文章清单，如果无则返回空的List
      */
-    Collection<Article> findTopArticles(int i);
+    List<Article> findTopArticles(int i);
     
     /**
      * 点赞
@@ -135,7 +135,7 @@ public interface ArticleMapper {
      * @param id 专题编号
      * @return
      */
-    Collection<Article> findByTopic(@Param("id") Integer id);
+    List<Article> findByTopic(@Param("id") Integer id);
     
     /**
      * 通过标题关键字搜索文章
@@ -143,5 +143,5 @@ public interface ArticleMapper {
      * @param key
      * @return
      */
-    Collection<Article> searchByTitleKey(@Param("key") String key);
+    List<Article> searchByTitleKey(@Param("key") String key);
 }

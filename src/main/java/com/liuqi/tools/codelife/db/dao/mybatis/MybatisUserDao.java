@@ -59,7 +59,7 @@ public class MybatisUserDao implements UserDao{
     }
     
     @Override
-    public Collection<User> search(String key) {
+    public List<User> search(String key) {
         return Optional.ofNullable(userMapper.search(key)).orElse(Collections.EMPTY_LIST);
     }
     
@@ -69,7 +69,7 @@ public class MybatisUserDao implements UserDao{
     }
     
     @Override
-    public Collection<User> getTopicUsers(Integer topicId) {
+    public List<User> getTopicUsers(Integer topicId) {
         return userMapper.getTopicUsers(topicId);
     }
     

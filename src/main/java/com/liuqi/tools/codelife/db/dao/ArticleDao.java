@@ -6,6 +6,7 @@ import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 文章操作Dao
@@ -29,20 +30,20 @@ public interface ArticleDao {
      * @param authorId 用户编号
      * @return 返回查找的所有文章，如果无则返回空的List对象
      */
-    Collection<Article> findByAuthor(int authorId);
+    List<Article> findByAuthor(int authorId);
     
     /**
      * 查找所有的文章
      * @return 返回查找的所有文章，如果无则返回空的List对象
      */
-    Collection<Article> findAll();
+    List<Article> findAll();
     
     /**
      * 查找所有文章分类
      *
      * @return 返回所有文章分类，如果无则返回空的List对象
      */
-    Collection<ArticleType> findAllTypes();
+    List<ArticleType> findAllTypes();
     
     /**
      * 根据ID查找文章分类
@@ -64,7 +65,7 @@ public interface ArticleDao {
      * @param typeId
      * @return 当没有数据时返回空的ArrayList对象
      */
-    Collection<Article> findByType(Integer typeId);
+    List<Article> findByType(Integer typeId);
     
     /**
      * 保存文章分类
@@ -118,7 +119,7 @@ public interface ArticleDao {
      * @param i 需要返回的文章数
      * @return 查找的文章清单，如果无文章将返回一个空的List
      */
-    Collection<Article> findTopArticles(int i);
+    List<Article> findTopArticles(int i);
     
     /**
      * 为文章的点赞数增加一个值
@@ -135,7 +136,7 @@ public interface ArticleDao {
       * @param id
      * @return
      */
-    Collection<Article> findByTopic(Integer id);
+    List<Article> findByTopic(Integer id);
     
     /**
      * 通过标题关键字搜索文章
@@ -143,5 +144,5 @@ public interface ArticleDao {
      * @param key
      * @return
      */
-    Collection<Article> searchByTitleKey(String key);
+    List<Article> searchByTitleKey(String key);
 }

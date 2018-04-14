@@ -1,5 +1,6 @@
 package com.liuqi.tools.codelife.controllers;
 
+import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.Topic;
 import com.liuqi.tools.codelife.entity.User;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * 登录处理Controller
@@ -87,7 +89,7 @@ public class LoginController {
         
         return ModelAndViewBuilder.of("index")
                 .setData("articles", articles)
-                .setData("topics", topicService.search(""))
+                .setData("topics", topicService.search("", 1, 20).getList())
                 .setData("myTopics", myTopics)
                 .build();
     }
@@ -100,13 +102,22 @@ public class LoginController {
      * @return
      */
     @GetMapping("/search")
-    public ModelAndView search(@RequestParam("key") String key) {
-        Collection<Topic> topics = topicService.search(key);
-        Collection<Article> articles = articleService.searchTitle(key);
+    public ModelAndView search(@RequestParam("key") String key,
+                               @RequestParam(value = "nowPage", required = false) Integer nowPage,
+                               @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+        nowPage = null == nowPage ? 1 : nowPage;
+        pageSize = null == pageSize ? 20 : pageSize;
+        
+        //专题最多搜索10个
+        PageInfo<Topic> topics = topicService.search(key, 1, 10);
+        PageInfo<Article> articles = articleService.searchTitle(key, nowPage, pageSize);
         
         return ModelAndViewBuilder.of("search")
-                .setData("articles", articles)
-                .setData("topics", topics)
+                .setData("articles", articles.getList())
+                .setData("nowPage", (nowPage))
+                .setData("pages", articles.getPages())
+                .setData("topics", topics.getList())
+                .setData("key", key)
                 .build();
     }
     

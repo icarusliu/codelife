@@ -1,5 +1,6 @@
 package com.liuqi.tools.codelife.controllers;
 
+import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.Topic;
 import com.liuqi.tools.codelife.entity.User;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * 专题控制器
@@ -61,7 +63,7 @@ public class TopicController {
         }
         
         //获取所有的未订阅并且类型是开放的专题，私有的专题不能直接展现
-        Collection<Topic> topics = topicService.findUserNotSubscribed(loginUser);
+        List<Topic> topics = topicService.findUserNotSubscribed(loginUser, 1, 20).getList();
         
         return ModelAndViewBuilder.of("topic")
                 .setData("myTopics", myTopics)
@@ -150,11 +152,19 @@ public class TopicController {
      * @return
      */
     @GetMapping("/search")
-    public ModelAndView search(@RequestParam("key") String key) {
-        Collection<Topic> topics = topicService.search(key);
+    public ModelAndView search(@RequestParam("key") String key,
+                               @RequestParam(value = "nowPage", required = false) Integer nowPage,
+                               @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+        nowPage = null == nowPage ? 1 : nowPage;
+        pageSize = null == pageSize ? 20 : pageSize;
+        
+        PageInfo<Topic> topics = topicService.search(key, nowPage, pageSize);
         
         return ModelAndViewBuilder.of("topicSearch")
-                .setData("topics", topics)
+                .setData("topics", topics.getList())
+                .setData("nowPage", nowPage)
+                .setData("pages", topics.getPages())
+                .setData("key", key)
                 .build();
     }
     

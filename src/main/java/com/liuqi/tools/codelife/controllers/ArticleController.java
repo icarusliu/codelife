@@ -1,5 +1,6 @@
 package com.liuqi.tools.codelife.controllers;
 
+import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.CommentType;
@@ -13,17 +14,15 @@ import com.liuqi.tools.codelife.util.SessionProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 文章控制器
@@ -51,19 +50,27 @@ public class ArticleController {
      * @return
      */
     @GetMapping("/articles")
-    public ModelAndView articles(@RequestParam(name = "typeId", required = false) Integer typeId) {
+    public ModelAndView articles(@RequestParam(name = "typeId", required = false) Integer typeId,
+                                 @RequestParam(value = "nowPage", required = false) Integer nowPage,
+                                 @RequestParam(value = "pageSize", required = false) Integer pageSize) {
         Collection<ArticleType> types = articleService.findAllTypes();
-        Collection<Article> articles;
+        PageInfo<Article> pageInfo;
+        nowPage = null == nowPage ? 1 : nowPage;
+        pageSize = null == pageSize ? 20 : pageSize;
+        
         if (null != typeId) {
-            articles = articleService.findByType(typeId);
+            pageInfo = articleService.findByType(typeId, nowPage, pageSize);
         } else {
-            articles = articleService.findAll();
+            pageInfo = articleService.findAll(nowPage, pageSize);
         }
 
         return ModelAndViewBuilder.of("articles")
                 .setData("types", types)
                 .setData("typeId", typeId)
-                .setData("articles", articles)
+                .setData("articles", pageInfo.getList())
+                .setData("pages", pageInfo.getPages())
+                .setData("typeId", typeId)
+                .setData("nowPage", nowPage)
                 .build();
     }
     
@@ -80,8 +87,9 @@ public class ArticleController {
      */
     @GetMapping("/getAllArticles")
     @ResponseBody
-    public Collection<Article> getAllArticles() {
-        return articleService.findAll();
+    public List<Article> getAllArticles(@RequestParam(value = "nowPage", required = false) Integer nowPage,
+                                              @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+        return articleService.findAll(null == nowPage ? 1 : nowPage, null == pageSize ? 20 : pageSize).getList();
     }
     
     /**
@@ -92,17 +100,28 @@ public class ArticleController {
      */
     @GetMapping("/getArticlesByAuthor")
     @ResponseBody
-    public Collection<Article> getArticlesByAuthor() throws RestException {
+    public Map<String, Object> getArticlesByAuthor(@RequestParam(value = "offset", required = false) Integer offset,
+                                                   @RequestParam(value = "limit", required = false) Integer pageSize)
+            throws RestException {
+        
+        //offset与limit为datastrap table的分页参数
+        int nowPage = (null == offset ? 0 : offset) / pageSize + 1;
+        pageSize = null == pageSize ? 20 : pageSize;
+        
         //用户只能看自己的文章，而管理员可以看所有的文章
         User user = authenticationService.getLoginUser();
-        Collection<Article> articles;
+        PageInfo<Article> pageInfo;
         if (user.isSystemAdmin()) {
-            articles = articleService.findAll();
+            pageInfo = articleService.findAll(nowPage, pageSize);
         } else {
-            articles = articleService.findByAuthor(user);
+            pageInfo = articleService.findByAuthor(user, nowPage, pageSize);
         }
         
-        return articles;
+        Map<String, Object> map = new HashMap<>();
+        map.put("rows", pageInfo.getList());
+        map.put("total", pageInfo.getTotal());
+        
+        return map;
     }
     
     /**
@@ -160,8 +179,8 @@ public class ArticleController {
      */
     @PostMapping("/searchArticleByTitle")
     @ResponseBody
-    public Collection<Article> searchTitle(@RequestParam("key") String key) {
-        return articleService.searchTitle(key);
+    public List<Article> searchTitle(@RequestParam("key") String key) {
+        return articleService.searchTitle(key, 0, 20).getList();
     }
     
     private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);

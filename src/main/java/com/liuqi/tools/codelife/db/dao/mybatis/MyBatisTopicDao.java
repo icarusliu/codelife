@@ -26,12 +26,12 @@ public class MyBatisTopicDao implements TopicDao {
     private TopicMapper topicMapper;
     
     @Override
-    public Collection<Topic> findAll() {
+    public List<Topic> findAll() {
         return topicMapper.findAll();
     }
     
     @Override
-    public Collection<Topic> findByUser(Integer id) {
+    public List<Topic> findByUser(Integer id) {
         return topicMapper.findByUser(id);
     }
     
@@ -91,7 +91,7 @@ public class MyBatisTopicDao implements TopicDao {
     }
     
     @Override
-    public Collection<Topic> findUserNotSubscribed(User user) {
+    public List<Topic> findUserNotSubscribed(User user) {
         return topicMapper.findUserNotSubscribed(user);
     }
     
@@ -101,12 +101,12 @@ public class MyBatisTopicDao implements TopicDao {
     }
     
     @Override
-    public Collection<Topic> findByAdmin(User loginUser) {
+    public List<Topic> findByAdmin(User loginUser) {
         return Optional.ofNullable(topicMapper.findByAdmin(loginUser.getId())).orElse(Collections.EMPTY_LIST);
     }
     
     @Override
-    public Collection<Topic> search(String key) {
+    public List<Topic> search(String key) {
         return Optional.ofNullable(topicMapper.search(key)).orElse(Collections.EMPTY_LIST);
     }
 }

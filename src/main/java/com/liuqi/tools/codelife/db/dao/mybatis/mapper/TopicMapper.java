@@ -17,9 +17,9 @@ import java.util.List;
  **/
 @Mapper
 public interface TopicMapper {
-    Collection<Topic> findAll();
+    List<Topic> findAll();
     
-    Collection<Topic> findByUser(@Param("id") Integer id);
+    List<Topic> findByUser(@Param("id") Integer id);
     
     Topic findByTitle(@Param("title") String title);
     
@@ -63,7 +63,7 @@ public interface TopicMapper {
      * @param user
      * @return
      */
-    Collection<Topic> findUserNotSubscribed(User user);
+    List<Topic> findUserNotSubscribed(User user);
     
     /**
      * 更新专题状态
@@ -79,7 +79,7 @@ public interface TopicMapper {
      * @param id 用户编号
      * @return
      */
-    Collection<Topic> findByAdmin(@Param("userId") int id);
+    List<Topic> findByAdmin(@Param("userId") int id);
     
     /**
      * 根据关键字搜索专题
@@ -87,5 +87,5 @@ public interface TopicMapper {
      * @param key
      * @return
      */
-    Collection<Topic> search(@Param("key") String key);
+    List<Topic> search(@Param("key") String key);
 }

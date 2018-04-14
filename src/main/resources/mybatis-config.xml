@@ -16,6 +16,13 @@
         <typeHandler handler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.CommentTypeHandler"/>
     </typeHandlers>
 
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库-->
+            <property name="helperDialect" value="mysql"/>
+        </plugin>
+    </plugins>
+
     <mappers>
         <mapper resource="mybatis/userMapper.xml"/>
         <mapper resource="mybatis/articleMapper.xml"/>
@@ -24,4 +31,5 @@
         <mapper resource="mybatis/topicMapper.xml"/>
         <mapper resource="mybatis/commentMapper.xml"/>
     </mappers>
+
 </configuration>

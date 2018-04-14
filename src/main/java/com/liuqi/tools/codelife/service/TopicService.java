@@ -1,5 +1,6 @@
 package com.liuqi.tools.codelife.service;
 
+import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.*;
 import com.liuqi.tools.codelife.exceptions.RestException;
 
@@ -15,7 +16,7 @@ public interface TopicService {
      *
      * @return
      */
-    Collection<Topic> findAll();
+    PageInfo<Topic> findAll(int nowPage, int pageSize);
     
     /**
      * 获取用户未订阅的所有开放的专题
@@ -23,7 +24,7 @@ public interface TopicService {
      * @param user
      * @return
      */
-    Collection<Topic> findUserNotSubscribed(User user);
+    PageInfo<Topic> findUserNotSubscribed(User user, int nowPage, int pageSize);
     
     /**
      * 获取专题下的所有文章清单
@@ -31,7 +32,7 @@ public interface TopicService {
      * @param id
      * @return
      */
-    Collection<Article> getTopicArticles(Integer id);
+    List<Article> getTopicArticles(Integer id);
     
     /**
      * 获取用户所订阅的专题
@@ -39,7 +40,7 @@ public interface TopicService {
      * @param id
      * @return
      */
-    Collection<Topic> getUserTopics(Integer id);
+    List<Topic> getUserTopics(Integer id);
     
     /**
      * 通过标题获取专题
@@ -126,7 +127,7 @@ public interface TopicService {
      * @param loginUser
      * @return
      */
-    Collection<Topic> findByAdmin(User loginUser);
+    List<Topic> findByAdmin(User loginUser);
     
     /**
      * 获取专题订阅用户列表
@@ -134,7 +135,7 @@ public interface TopicService {
      * @param topicId
      * @return
      */
-    Collection<User> getTopicUsers(Integer topicId);
+    List<User> getTopicUsers(Integer topicId);
     
     /**
      * 根据关键字搜索专题
@@ -142,5 +143,5 @@ public interface TopicService {
      * @param key
      * @return
      */
-    Collection<Topic> search(String key);
+    PageInfo<Topic> search(String key, int nowPage, int pageSize);
 }

@@ -16,7 +16,18 @@
         }
     </style>
 
+    <script th:src="@{/js/pager.js}"></script>
+
     <script th:inline="javascript">
+        var nowPage = [[${nowPage}]];
+        var pages = [[${pages}]];
+        var key = [[${key}]];
+
+        $(function(){
+            var pageUrl = [[@{/topic/search}]] + '?key=' + (null == key ? '' : key);
+
+            new Pager("pager", pageUrl, nowPage, pages);
+        });
     </script>
 </head>
 <body>
@@ -48,6 +59,12 @@
                     th:src="@{/topic/getImg} + '?fileName=' + ${topic.img}" height="100px"/>
             </div>
         </div>
+
+        <!--分页工具栏-->
+        <nav class="row mt-2 ml-2  justify-content-center">
+            <ul class="pagination" id="pager">
+            </ul>
+        </nav>
     </div>
 </body>
 </html>

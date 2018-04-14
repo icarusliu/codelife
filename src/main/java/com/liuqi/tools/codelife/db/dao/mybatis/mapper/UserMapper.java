@@ -65,7 +65,7 @@ public interface UserMapper {
      * @param key
      * @return
      */
-    Collection<User> search(@Param("key") String key);
+    List<User> search(@Param("key") String key);
     
     /**
      * 给用户添加权限
@@ -80,5 +80,5 @@ public interface UserMapper {
      * @param topicId
      * @return
      */
-    Collection<User> getTopicUsers(@Param("topicId") Integer topicId);
+    List<User> getTopicUsers(@Param("topicId") Integer topicId);
 }

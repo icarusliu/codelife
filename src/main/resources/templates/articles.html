@@ -11,13 +11,20 @@
 
     <link th:href="@{/css/article.css}" type="text/css" rel="stylesheet">
     <script th:src="@{/js/showdown/showdown.min.js}"></script>
+    <script th:src="@{/js/pager.js}"></script>
 
-    <script>
+    <script th:inline="javascript">
         var converter = new showdown.Converter();
+        var nowPage = [[${nowPage}]];
+        var pages = [[${pages}]];
+        var typeId = [[${typeId}]];
 
         $(function(){
-            var html = $("#contentInput").val();
-            $("#content").html(converter.makeHtml(html));
+            $("#content").html(converter.makeHtml($("#contentInput").val()));
+
+            var pageUrl = [[@{/articles}]] + '?typeId=' + (null == typeId ? '' : typeId);
+
+            new Pager("pager", pageUrl, nowPage, pages);
         });
     </script>
 </head>
@@ -36,6 +43,10 @@
             </div>
         </div>
     </div>
+    <nav class="row mt-2 ml-2  justify-content-center">
+        <ul class="pagination" id="pager">
+        </ul>
+    </nav>
 </div>
 </body>
 </html>

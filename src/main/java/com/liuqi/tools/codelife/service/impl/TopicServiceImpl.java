@@ -1,5 +1,7 @@
 package com.liuqi.tools.codelife.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.db.dao.ArticleDao;
 import com.liuqi.tools.codelife.db.dao.TopicDao;
 import com.liuqi.tools.codelife.db.dao.UserDao;
@@ -59,8 +61,9 @@ public class TopicServiceImpl implements TopicService {
      * @return 如果没有专题返回的将是空的List
      */
     @Override
-    public Collection<Topic> findAll() {
-        return Optional.ofNullable(topicDao.findAll()).orElse(Collections.EMPTY_LIST);
+    public PageInfo<Topic> findAll(int nowPage, int pageSize) {
+        PageHelper.startPage(nowPage, pageSize);
+        return PageInfo.of(Optional.ofNullable(topicDao.findAll()).orElse(Collections.EMPTY_LIST));
     }
     
     /**
@@ -70,8 +73,9 @@ public class TopicServiceImpl implements TopicService {
      * @return 如果无专题将返回空的List
      */
     @Override
-    public Collection<Topic> findUserNotSubscribed(User user) {
-        return Optional.ofNullable(topicDao.findUserNotSubscribed(user)).orElse(Collections.EMPTY_LIST);
+    public PageInfo<Topic> findUserNotSubscribed(User user, int nowPage, int pageSize) {
+        PageHelper.startPage(nowPage, pageSize);
+        return PageInfo.of(Optional.ofNullable(topicDao.findUserNotSubscribed(user)).orElse(Collections.EMPTY_LIST));
     }
     
     /**
@@ -80,7 +84,7 @@ public class TopicServiceImpl implements TopicService {
      * @return 如果没有文章将返回空的List
      */
     @Override
-    public Collection<Article> getTopicArticles(Integer id) {
+    public List<Article> getTopicArticles(Integer id) {
         return Optional.ofNullable(articleDao.findByTopic(id)).orElse(Collections.EMPTY_LIST);
     }
     
@@ -91,7 +95,7 @@ public class TopicServiceImpl implements TopicService {
      * @return 如果未订阅返回空的List
      */
     @Override
-    public Collection<Topic> getUserTopics(Integer id) {
+    public List<Topic> getUserTopics(Integer id) {
         return Optional.ofNullable(topicDao.findByUser(id)).orElse(Collections.EMPTY_LIST);
     }
     
@@ -314,7 +318,7 @@ public class TopicServiceImpl implements TopicService {
     }
     
     @Override
-    public Collection<Topic> findByAdmin(User loginUser) {
+    public List<Topic> findByAdmin(User loginUser) {
         if (null == loginUser) {
             logger.error("User cannot be null!");
             return Collections.EMPTY_LIST;
@@ -324,18 +328,20 @@ public class TopicServiceImpl implements TopicService {
     }
     
     @Override
-    public Collection<User> getTopicUsers(Integer topicId) {
+    public List<User> getTopicUsers(Integer topicId) {
         return userDao.getTopicUsers(topicId);
     }
     
     @Override
-    public Collection<Topic> search(String key) {
+    public PageInfo<Topic> search(String key, int nowPage, int pageSize) {
         if (null == key) {
             logger.warn("Key cannot be null!");
-            return Collections.EMPTY_LIST;
+            return new PageInfo(Collections.EMPTY_LIST);
         }
-        
-        return topicDao.search(key);
+    
+        PageHelper.startPage(nowPage, pageSize);
+    
+        return PageInfo.of(topicDao.search(key));
     }
     
     private void checkTopicId(Integer id) throws RestException {

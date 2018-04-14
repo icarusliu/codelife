@@ -50,10 +50,11 @@ public class TopicManagerController {
     @RequestMapping("/getAll")
     @ResponseBody
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TOPIC_ADMIN')")
-    public Collection<Topic> getAll() {
+    public List<Topic> getAll(@RequestParam(value = "nowPage", required = false) Integer nowPage,
+                                    @RequestParam(value = "pageSize", required = false) Integer pageSize) {
         User loginUser = authenticationService.getLoginUser();
         if (loginUser.isSystemAdmin()) {
-            return topicService.findAll();
+            return topicService.findAll(null == nowPage ? 1 : nowPage, null == pageSize ? 20 : pageSize).getList();
         }
         
         return topicService.findByAdmin(loginUser);

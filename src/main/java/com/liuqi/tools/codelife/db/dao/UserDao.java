@@ -67,7 +67,7 @@ public interface UserDao {
      * @param key
      * @return
      */
-    Collection<User> search(String key);
+    List<User> search(String key);
     
     /**
      * 给用户添加角色
@@ -83,5 +83,5 @@ public interface UserDao {
      * @param topicId
      * @return
      */
-    Collection<User> getTopicUsers(Integer topicId);
+    List<User> getTopicUsers(Integer topicId);
 }
