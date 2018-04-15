@@ -2,6 +2,11 @@
     padding-top: 10px;
 }
 
+.login-form {
+    background: #fafafa;
+    border: 1px solid #f3f3f3;
+}
+
 /*文章列表*/
 .article-list-title {
     font-size: 0.9em;
