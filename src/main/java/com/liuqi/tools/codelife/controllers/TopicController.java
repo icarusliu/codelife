@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -48,7 +49,7 @@ public class TopicController {
      *
      * @return
      */
-    @RequestMapping
+    @RequestMapping("/explorer")
     public ModelAndView topic() {
         //获取用户订阅专题及其更新的文章
         User loginUser = authenticationService.getLoginUser();
@@ -127,7 +128,7 @@ public class TopicController {
      * @return
      */
     @GetMapping("/detail")
-    public ModelAndView detail(@RequestParam("id") Integer topicId) {
+    public ModelAndView detail(@RequestParam(value = "id", required = false) Integer topicId) {
         //获取用户订阅专题
         User loginUser = authenticationService.getLoginUser();
         Collection<Topic> myTopics;
@@ -137,12 +138,37 @@ public class TopicController {
             myTopics = Collections.EMPTY_LIST;
         }
         
+        //如果专题编号未传入，且用户已经登录，则获取用户订阅的第一个专题进行展示
+        Topic topic = null;
+        if (null == topicId && null != loginUser) {
+            List<Topic> topics = topicService.getUserTopics(loginUser.getId());
+            if (null != topics && 0 < topics.size()) {
+                topic = topics.get(0);
+                topicId = topic.getId();
+            }
+        } else {
+            topic = topicService.findById(topicId);
+        }
+        
         //获取专题订阅用户清单
-        List<User> userList = topicService.getTopicUsers(topicId);
+        List<User> userList;
+        if (null != topicId) {
+            userList = topicService.getTopicUsers(topicId);
+        } else {
+            userList = Collections.EMPTY_LIST;
+        }
+        
+        //获取专题文章清单
+        List<Article> articleList;
+        if (null != topicId) {
+            articleList = topicService.getTopicArticles(topicId);
+        } else {
+            articleList = Collections.EMPTY_LIST;
+        }
         
         return ModelAndViewBuilder.of("topicDetail")
-                .setData("topic", topicService.findById(topicId))
-                .setData("articles", topicService.getTopicArticles(topicId))
+                .setData("topic", topic)
+                .setData("articles", articleList)
                 .setData("myTopics", myTopics)
                 .setData("userList", userList)
                 .build();

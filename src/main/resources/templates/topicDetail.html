@@ -24,9 +24,7 @@
         }
 
         .user-group {
-            border: 1px solid #AFEEEE;
-            border-bottom: none;
-            border-top: none;
+            border-left: 1px solid #AFEEEE;
             padding-bottom: 1em;
         }
 
@@ -60,67 +58,97 @@
         var topic = [[${topic}]];
 
         $(function(){
-            //左侧我的订阅专题列表选中状态控制
+            initNav();
+        });
+
+        //左侧我的订阅专题列表选中状态控制
+        function initNav() {
+             if (!topic) {
+                return;
+            }
+
             var as = $("#topicList>a");
             var length = as.length;
             for (var i = 0; i < length; i++) {
-                var title = $(as[i]).text();
-                if (title == topic.title) {
+                var href = $(as[i]).attr("href");
+                var id = href.substring(href.indexOf("id=") + 3);
+
+                if (id == topic.id) {
                     $(as[i]).addClass("active");
                 } else {
                     $(as[i]).removeClass("active");
                 }
             }
-        });
+        }
     </script>
 </head>
 <body>
-<div layout:fragment="content" class="p-2 row">
-    <!--我的专题列表-->
-    <div class="col-sm-2">
-        <h5 class="text-primary left-nav-title">我订阅的专题</h5>
-        <div class="list-group" id="topicList">
-                <a class="list-group-item"
-                        th:each="topic: ${myTopics}"
-                        th:href="@{/topic/detail} + '?id=' + ${topic.id}" th:text="${topic.title}"></a>
-        </div>
+<div layout:fragment="content" class="container-fluid">
+    <div th:if="${topic == null}"
+        class="row ml-4">
+        您尚未订阅任何专题，请访问<a th:href="@{/topic/explorer}">专题浏览</a>进行订阅。
     </div>
 
-    <div class="col-sm-10 topic-detail-panel">
-    <!--上面专题信息-->
-        <section class="row topic-detail-panel-info">
-            <h1 class="col-sm-8" th:text="${topic.title}"></h1>
-            <div class="w-100 mb-2"></div>
-            <p class="col-sm-8" th:text="${topic.introduction}"></p>
-            <img class="col-sm-3" height="200px"
-                 th:src="@{/topic/getImg} + '?fileName=' + ${topic.img}" id="img"/>
-        </section>
+    <div  th:if="${topic != null}"
+          class="p-2 row">
+        <!--我的专题列表-->
+        <div class="col-sm-2">
+            <h5 class="text-primary left-nav-title">
+                我订阅的专题
+            </h5>
+            <div class="list-group" id="topicList">
+                <a class="row list-group-item ml-2 mr-2"
+                   th:each="topic: ${myTopics}"
+                        th:href="@{/topic/detail} + '?id=' + ${topic.id}">
+                    <span  th:text="${topic.title}"></span>
+                    <sup th:if="${topic.admin.id == #authentication.details.user.id}"
+                         style="color: red;">管理员</sup>
+                </a>
+            </div>
+        </div>
 
-        <!--下面文章清单-->
-        <div class="row">
-            <div class="col-sm">
-                <h6 class="group-title article-group-title row mb-0">文章清单</h6>
-                <div class="row article-list-group pb-2 pt-2 mt-0" th:each="article: ${articles}">
-                    <div class="col">
-                        <a th:text="${article.title}" class="article-list-item-title font-weight-bold"
-                           th:href="@{'/articleDetail?id=' + ${article.id}}"></a>
-                        <div th:text="${article.remark}" class="mt-2 mb-2 article-list-item-remark"></div>
-                        <div class="article-list-item-info">
-                            <span th:text="${article.authorName}" class="mr-4"></span>
-                            发表于：<cite th:text="${article.createDate}" class="mr-5"></cite>
-                            阅读次数：<cite th:text="${article.readCount}" class="mr-5"></cite>
-                            点赞数：<cite th:text="${article.praiseCount}"></cite>
+        <div class="col-sm topic-detail-panel mr-4">
+        <!--上面专题信息-->
+            <section class="row topic-detail-panel-info">
+                <h1 class="col-sm">
+                    <span  th:text="${topic.title}"></span>
+                    <sub><a th:if="${topic.admin.id == #authentication.details.user.id}"
+                            th:href="@{/system/topicManager/edit} + '?id=' + ${topic.id}"
+                            target="_blank">(编辑)</a></sub>
+                </h1>
+
+                <div class="w-100 mb-2"></div>
+                <p class="col-sm-8" th:text="${topic.introduction}"></p>
+                <img class="col-sm-3" height="200px"
+                     th:src="@{/topic/getImg} + '?fileName=' + ${topic.img}" id="img"/>
+            </section>
+
+            <!--下面文章清单-->
+            <div class="row">
+                <div class="col-sm">
+                    <h6 class="group-title article-group-title row mb-0">文章清单</h6>
+                    <div class="row article-list-group pb-2 pt-2 mt-0" th:each="article: ${articles}">
+                        <div class="col">
+                            <a th:text="${article.title}" class="article-list-item-title font-weight-bold"
+                               th:href="@{'/articleDetail?id=' + ${article.id}}"></a>
+                            <div th:text="${article.remark}" class="mt-2 mb-2 article-list-item-remark"></div>
+                            <div class="article-list-item-info">
+                                <span th:text="${article.authorName}" class="mr-4"></span>
+                                发表于：<cite th:text="${article.createDate}" class="mr-5"></cite>
+                                阅读次数：<cite th:text="${article.readCount}" class="mr-5"></cite>
+                                点赞数：<cite th:text="${article.praiseCount}"></cite>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!--订阅用户清单-->
-            <div class="user-group col-sm-2"
-                 th:if="${null != userList && 0 != userList.size()}">
-                <h6 class="group-title user-group-title row">订阅用户清单</h6>
-                <span class="user-group-item row" th:each="user: ${userList}"
-                        th:text="${user.realName}"></span>
+                <!--订阅用户清单-->
+                <div class="user-group col-sm-2"
+                     th:if="${null != userList && 0 != userList.size()}">
+                    <h6 class="group-title user-group-title row">订阅用户清单</h6>
+                    <span class="user-group-item row" th:each="user: ${userList}"
+                            th:text="${user.realName}"></span>
+                </div>
             </div>
         </div>
     </div>
