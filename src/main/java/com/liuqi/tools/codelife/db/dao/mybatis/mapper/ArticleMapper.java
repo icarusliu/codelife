@@ -144,4 +144,12 @@ public interface ArticleMapper {
      * @return
      */
     List<Article> searchByTitleKey(@Param("key") String key);
+    
+    /**
+     * 修改文件是否置顶
+     *
+     * @param id
+     * @param fixTop
+     */
+    void updateFixTop(@Param("id") Integer id, @Param("fixTop") boolean fixTop);
 }

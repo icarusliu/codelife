@@ -136,4 +136,9 @@ public class MyBatisArticleDao implements ArticleDao{
     public List<Article> searchByTitleKey(String key) {
         return Optional.ofNullable(articleMapper.searchByTitleKey(key)).orElse(Collections.EMPTY_LIST);
     }
+    
+    @Override
+    public void updateFixTop(Integer id, boolean fixTop) {
+        articleMapper.updateFixTop(id, fixTop);
+    }
 }

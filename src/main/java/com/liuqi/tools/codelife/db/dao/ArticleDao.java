@@ -145,4 +145,12 @@ public interface ArticleDao {
      * @return
      */
     List<Article> searchByTitleKey(String key);
+    
+    /**
+     * 文章置顶及取消置顶
+     *
+     * @param id
+     * @param fixTop
+     */
+    void updateFixTop(Integer id, boolean fixTop);
 }

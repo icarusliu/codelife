@@ -141,4 +141,17 @@ public interface ArticleService {
      * @return
      */
     PageInfo<Article> searchTitle(String key, int nowPage, int pageSize);
+    
+    /**
+     * 文章置顶
+     *
+     * @param id
+     */
+    void fixTop(Integer id);
+    
+    /**
+     *
+     * @param id
+     */
+    void unFixTop(Integer id);
 }

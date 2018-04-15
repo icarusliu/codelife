@@ -10,8 +10,7 @@ import java.io.Serializable;
  * @Created: 2018/3/26 16:12
  * @Version: V1.0
  **/
-public class
-Article implements Serializable {
+public class Article implements Serializable {
     private int id;
     private String title;
     private ArticleType articleType;
@@ -22,6 +21,10 @@ Article implements Serializable {
     private String contentUrl;
     private String content;
     private String remark;
+    /**
+     * 是否置顶
+     */
+    private boolean fixTop;
     
     /**
      * 阅读次数
@@ -127,5 +130,14 @@ Article implements Serializable {
     
     public void setPraiseCount(int praiseCount) {
         this.praiseCount = praiseCount;
+    }
+    
+    
+    public boolean isFixTop() {
+        return fixTop;
+    }
+    
+    public void setFixTop(boolean fixTop) {
+        this.fixTop = fixTop;
     }
 }

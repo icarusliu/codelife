@@ -15,6 +15,7 @@
         <result property="remark" column="remark"/>
         <result property="readCount" column="read_count"/>
         <result property="praiseCount" column="praise_count"/>
+        <result property="fixTop" column="fix_top"/>
         <association property="articleType" column="type" select="findTypeById"
                      javaType="com.liuqi.tools.codelife.entity.ArticleType"/>
     </resultMap>
@@ -57,12 +58,17 @@
             t1.content_url as content_url,
             t1.remark as remark,
             t1.read_count as read_count,
-            t1.praise_count as praise_count
+            t1.praise_count as praise_count,
+            t1.fix_top as fix_top
         from article t1
         left join user t2
             on t1.author = t2.id
         left join article_type t3
             on t1.type = t3.id
+    </sql>
+
+    <sql id="orderBy">
+        order by t1.fix_top desc, create_date desc
     </sql>
 
     <!--查找专题下的文章-->
@@ -82,6 +88,7 @@
     <select id="searchByTitleKey" resultMap="articleResult">
         <include refid="selectArticle"/>
         where t1.title like concat('%', concat(#{key}, '%'))
+        <include refid="orderBy"/>
     </select>
 
     <!-- 通过用户ID查找文章 -->
@@ -92,17 +99,18 @@
 
     <select id="findAll" resultMap="articleResult">
         <include refid="selectArticle"/>
+        <include refid="orderBy"/>
     </select>
 
     <select id="findByType" resultMap="articleResult">
         <include refid="selectArticle"/>
-
         where t1.type=#{typeId}
+        <include refid="orderBy"/>
     </select>
 
     <select id="findTopArticles" resultMap="articleResult">
         <include refid="selectArticle"/>
-        order by read_count desc, create_date desc
+        order by fix_top desc, read_count desc, create_date desc
         limit #{i}
     </select>
 
@@ -140,5 +148,9 @@
 
     <update id="addPraiseCount">
         update article set praise_count = praise_count + #{count} where id=#{id}
+    </update>
+
+    <update id="updateFixTop">
+        update article set fix_top = #{fixTop} where id=#{id}
     </update>
 </mapper>

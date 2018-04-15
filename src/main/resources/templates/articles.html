@@ -40,6 +40,7 @@
     <div class="article-list">
         <div class="row article-list-group pt-2" th:each="article: ${articles}">
             <div class="col">
+                <sup th:if="${article.fixTop}" style="color: red; ">[置顶]</sup>
                 <a th:text="${article.title}" class="article-list-item-title font-weight-bold"
                    th:href="@{'/articleDetail?id=' + ${article.id}}"></a>
                 <div th:text="${article.remark}" class="mt-2 mb-2 article-list-item-remark"></div>

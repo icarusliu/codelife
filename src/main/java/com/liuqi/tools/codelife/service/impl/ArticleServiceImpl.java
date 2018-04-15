@@ -54,15 +54,15 @@ public class ArticleServiceImpl implements ArticleService {
         
         List<Article> articles = articleDao.findAll();
         
-        articles.stream().map(article -> {
-            try {
-                article.setContent(FileUtils.getFileContent(article.getContentUrl(), contentFilePath));
-            } catch (RestException e) {
-                //对于获取内容失败的文章不返回
-                logger.error("Get file content failed!", e);
-            }
-            return article;
-        });
+//        articles.stream().map(article -> {
+//            try {
+//                article.setContent(FileUtils.getFileContent(article.getContentUrl(), contentFilePath));
+//            } catch (RestException e) {
+//                //对于获取内容失败的文章不返回
+//                logger.error("Get file content failed!", e);
+//            }
+//            return article;
+//        });
         
         return new PageInfo(articles);
     }
@@ -229,6 +229,16 @@ public class ArticleServiceImpl implements ArticleService {
             return new PageInfo(Collections.EMPTY_LIST);
         }
         return new PageInfo(articleDao.searchByTitleKey(key));
+    }
+    
+    @Override
+    public void fixTop(Integer id) {
+        articleDao.updateFixTop(id, true);
+    }
+    
+    @Override
+    public void unFixTop(Integer id) {
+        articleDao.updateFixTop(id, false);
     }
     
     private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);

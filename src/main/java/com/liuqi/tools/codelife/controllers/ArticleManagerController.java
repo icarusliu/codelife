@@ -174,6 +174,27 @@ public class ArticleManagerController {
         }
     }
     
+    /**
+     * 文章置顶
+     * @param id
+     */
+    @PostMapping("/fixTop")
+    @ResponseBody
+    @PreAuthorize("hasAuthentication('ADMIN')")
+    public void fixTop(@RequestParam("id") Integer id) {
+        articleService.fixTop(id);
+    }
+    
+    /**
+     * 文章取消置顶
+     * @param id
+     */
+    @PostMapping("/unFixTop")
+    @ResponseBody
+    @PreAuthorize("hasAuthentication('ADMIN')")
+    public void unFixTop(@RequestParam("id") Integer id) {
+        articleService.unFixTop(id);
+    }
     
     private static final Logger logger = LoggerFactory.getLogger(ArticleManagerController.class);
 }

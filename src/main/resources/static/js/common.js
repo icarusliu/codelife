@@ -109,19 +109,25 @@ function ajaxSuccess(data, success) {
 
 
 //数据表格的使用
-function DataTable(tableId, dataUrl, toolbarId) {
+function DataTable(tableId, dataUrl, toolbarId, extraParams) {
     this.tableId = tableId;
-    this.dataUrl = dataUrl;
-    this.toolbarId = toolbarId;
+
+    var params = new Object();
+    params.url = dataUrl;
+    params.search = true;
+    params.smartDisplay = true;
+    params.rowStyle = rowStyle;
+    params.toolbar = "#" + toolbarId;
+    params.pagination = true;
+
+    if (extraParams) {
+        for (var i in extraParams) {
+            params[i] = extraParams[i];
+        }
+    }
 
     //初始化表格
-    $("#" + tableId).bootstrapTable({
-        url: dataUrl,
-        search: true,
-        smartDisplay: true,
-        rowStyle: rowStyle,
-        toolbar: "#" + toolbarId
-    });
+    $("#" + tableId).bootstrapTable(params);
 
     //刷新表格
     this.refresh = function() {
@@ -132,6 +138,16 @@ function DataTable(tableId, dataUrl, toolbarId) {
     this.getData = function() {
         return $("#" + tableId).bootstrapTable("getData");
     };
+
+    //更新表格
+    this.updateRow = function(index, row) {
+        $("#" + tableId).bootstrapTable("updateRow", index, row);
+    };
+
+    //根据ID删除一行
+    this.removeById = function(id) {
+        $("#" + tableId).bootstrapTable("removeByUniqueId", id);
+    }
 }
 
 //表格的样式
