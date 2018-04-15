@@ -7,6 +7,10 @@ import org.springframework.util.ClassUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -162,19 +166,18 @@ public final class FileUtils {
             filePath = filePath + "/";
         }
         
-        File file = new File(filePath + fileName);
-        FileWriter fileWriter = null;
+        BufferedWriter writer = null;
         try {
-            fileWriter = new FileWriter(file, false);
-            fileWriter.write(content);
-            fileWriter.flush();
+            writer = Files.newBufferedWriter(Paths.get(filePath + fileName), StandardCharsets.UTF_8);
+            writer.write(content);
+            writer.flush();
         } catch (IOException e) {
             logger.error("Write file failed!", e);
             throw new RestException("服务器写文件失败，请联系管理员！", e);
         } finally {
-            if (null != fileWriter) {
+            if (null != writer) {
                 try {
-                    fileWriter.close();
+                    writer.close();
                 } catch (IOException e) {
                     logger.error("Close fileWriter failed!", e);
                 }
@@ -194,38 +197,23 @@ public final class FileUtils {
             filePath = filePath + "/";
         }
         
-        File file = new File(filePath + fileName);
-        FileReader reader = null;
+        BufferedReader reader;
         try {
-            reader = new FileReader(file);
-        } catch (FileNotFoundException e) {
+            reader = Files.newBufferedReader(Paths.get(filePath + fileName), StandardCharsets.UTF_8);
+        } catch (IOException e) {
             logger.error("File does not exist!", e);
             throw new RestException("文章内容不存在！");
         }
-        BufferedReader bufferedReader = new BufferedReader(reader);
         
-        StringBuffer result = new StringBuffer();
-        String line = null;
         try {
-            line = bufferedReader.readLine();
-            while (null != line) {
-                result.append(line).append('\n');
-                line = bufferedReader.readLine();
-            }
-        } catch (IOException e) {
-            logger.error("Read file failed!", e);
-            throw new RestException("读取文件内容失败，请联系管理员！");
+            return reader.lines().reduce((s1, s2) -> s1 + "\n" + s2).get();
         } finally {
-            if (null != reader) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    logger.error("Close file failed!");
-                }
+            try {
+                reader.close();
+            } catch (IOException e) {
+                logger.error("Close reader failed!", e);
             }
         }
-       
-        return result.toString();
     }
     
     

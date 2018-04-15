@@ -100,7 +100,7 @@
             class="btn btn-primary"/>
     </form>
 
-    <div class="row topic-list">
+    <div class="row topic-list" th:if="${#authentication.name != 'anonymousUser'}">
         <!--我订阅的专题-->
         <div class="topic-title-main col-12 mb-2">已订阅专题</div>
         <div class="col-sm-6" th:each="topic: ${myTopics}">
