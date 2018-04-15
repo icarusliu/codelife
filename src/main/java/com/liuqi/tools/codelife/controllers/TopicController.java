@@ -137,10 +137,14 @@ public class TopicController {
             myTopics = Collections.EMPTY_LIST;
         }
         
+        //获取专题订阅用户清单
+        List<User> userList = topicService.getTopicUsers(topicId);
+        
         return ModelAndViewBuilder.of("topicDetail")
                 .setData("topic", topicService.findById(topicId))
                 .setData("articles", topicService.getTopicArticles(topicId))
                 .setData("myTopics", myTopics)
+                .setData("userList", userList)
                 .build();
     }
     

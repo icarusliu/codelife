@@ -13,14 +13,46 @@
 
     <style>
         .topic-detail-panel {
-            border: 1px solid #efefef;
+            border: 1px solid #AFEEEE;
         }
 
         .topic-detail-panel-info {
-            border-bottom: 1px solid #efefef;
+            border-bottom: 1px solid #AFEEEE;
             padding-bottom: 4px;
             padding-top: 10px;
             background: #Fafafa;
+        }
+
+        .user-group {
+            border: 1px solid #AFEEEE;
+            border-bottom: none;
+            border-top: none;
+            padding-bottom: 1em;
+        }
+
+        .group-title {
+            font-weight: bold;
+            font-size: 0.8em;
+            border-bottom: 1px solid #AFEEEE;
+            line-height: 3em;
+            color: #483D8B;
+            padding-left: 1em;
+        }
+
+        .article-group-title {
+            background: #F0F8FF;
+        }
+
+        .user-group-title {
+            background: #F0FFFF;
+        }
+
+        .user-group-item {
+            font-size: 0.6em;
+            margin-left: 1em;
+            color: blue;
+            line-height: 2.4em;
+            background: #fff;
         }
     </style>
 
@@ -64,18 +96,31 @@
                  th:src="@{/topic/getImg} + '?fileName=' + ${topic.img}" id="img"/>
         </section>
 
-    <!--下面文章清单-->
-        <div class="row article-list-group pb-2 pt-2 mt-0" th:each="article: ${articles}">
-            <div class="col">
-                <a th:text="${article.title}" class="article-list-item-title font-weight-bold"
-                   th:href="@{'/articleDetail?id=' + ${article.id}}"></a>
-                <div th:text="${article.remark}" class="mt-2 mb-2 article-list-item-remark"></div>
-                <div class="article-list-item-info">
-                    <span th:text="${article.authorName}" class="mr-4"></span>
-                    发表于：<cite th:text="${article.createDate}" class="mr-5"></cite>
-                    阅读次数：<cite th:text="${article.readCount}" class="mr-5"></cite>
-                    点赞数：<cite th:text="${article.praiseCount}"></cite>
+        <!--下面文章清单-->
+        <div class="row">
+            <div class="col-sm">
+                <h6 class="group-title article-group-title row mb-0">文章清单</h6>
+                <div class="row article-list-group pb-2 pt-2 mt-0" th:each="article: ${articles}">
+                    <div class="col">
+                        <a th:text="${article.title}" class="article-list-item-title font-weight-bold"
+                           th:href="@{'/articleDetail?id=' + ${article.id}}"></a>
+                        <div th:text="${article.remark}" class="mt-2 mb-2 article-list-item-remark"></div>
+                        <div class="article-list-item-info">
+                            <span th:text="${article.authorName}" class="mr-4"></span>
+                            发表于：<cite th:text="${article.createDate}" class="mr-5"></cite>
+                            阅读次数：<cite th:text="${article.readCount}" class="mr-5"></cite>
+                            点赞数：<cite th:text="${article.praiseCount}"></cite>
+                        </div>
+                    </div>
                 </div>
+            </div>
+
+            <!--订阅用户清单-->
+            <div class="user-group col-sm-2"
+                 th:if="${null != userList && 0 != userList.size()}">
+                <h6 class="group-title user-group-title row">订阅用户清单</h6>
+                <span class="user-group-item row" th:each="user: ${userList}"
+                        th:text="${user.realName}"></span>
             </div>
         </div>
     </div>
