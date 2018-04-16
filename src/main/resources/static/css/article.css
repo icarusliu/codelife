@@ -2,8 +2,7 @@
 .article-tool-bar a {
     font-size: 0.8em;
 }
-
-.article-list,.article-tool-bar {
+.article-tool-bar {
     border-bottom: 1px solid #efefef;
 }
 

@@ -163,7 +163,7 @@ public class TopicServiceImpl implements TopicService {
         }
         
         //如果管理员账号有变更，需要给新的专题管理员添加专题管理员角色；
-        if (topic.getAdmin().getId() != admin) {
+        if (null != admin && topic.getAdmin().getId() != admin) {
             User adminUser = userService.findById(admin);
             Collection<Role> roles = roleService.findAllRoles();
             Role findRole = null;

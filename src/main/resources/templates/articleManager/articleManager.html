@@ -11,6 +11,7 @@
 
     <script th:inline="javascript">
         var table;
+        var isSystemAdmin = [[${#authentication.details.user.isSystemAdmin()}]];
 
         $(function(){
             table = new DataTable("articleTable", [[@{/getArticlesByAuthor}]], "toolBar",
@@ -27,6 +28,10 @@
 
         //转换是否置顶
         function formatFixTop(value, row, index, field){
+            if (isSystemAdmin) {
+                return row.recommended ? '是': '否';
+            }
+
             return row.fixTop ? '是' : '否';
         }
 
@@ -34,11 +39,10 @@
         function addButtons(value, row, index, field) {
             var authorId = row.authorID;
             var loginUserId = [[${#authentication.details.user.id}]];
-            var isSystemAdmin = [[${#authentication.details.user.isSystemAdmin()}]];
 
             var viewButton = '<button id="viewButton" type="button" class="btn btn-sm mr-1">查看</button>';
             var fixTopButton = '<button id="fixTopButton" type="button" class="btn btn-sm mr-1">'
-                + (row.fixTop ? "取消置顶" : "置顶")
+                + (isSystemAdmin ? (row.recommended ? "取消置顶" : "置顶") : (row.fixTop ? "取消置顶" : "置顶"))
                 + '</button>';
             var editButton = '<button id="editButton" type="button" class="btn btn-sm mr-1">编辑</button>';
             var deleteButton = '<button id="deleteButton" type="button" class="btn btn-sm mr-1">删除</button>';
@@ -46,10 +50,7 @@
             var array = new Array();
             array.push(viewButton);
 
-            //置顶功能只有管理员才能处理
-            if (isSystemAdmin) {
-                array.push(fixTopButton);
-            }
+            array.push(fixTopButton);
 
             //只有登录用户是作者时才能进行编辑
             if (authorId == loginUserId) {
@@ -68,13 +69,19 @@
                 window.open([[@{/articleDetail}]] + '?id=' + id, '_blank');
             },
             "click #fixTopButton": function(e, value, row, index) {
-                var url = [[@{/article/fixTop}]];
-                if (row.fixTop) {
-                    url = [[@{/article/unFixTop}]];
+                var url = [[@{/articleManager/fixTop}]];
+                if ((!isSystemAdmin && row.fixTop)
+                    || (isSystemAdmin && row.recommended)) {
+                    url = [[@{/articleManager/unFixTop}]];
                 }
 
                 post(url, {id: row.id}, function() {
-                    row.fixTop = !row.fixTop;
+                    if (isSystemAdmin) {
+                        row.recommended = !row.recommended;
+                    } else {
+                        row.fixTop = !row.fixTop;
+                    }
+
                     table.updateRow(index, row);
                 });
             },
@@ -113,7 +120,8 @@
 
             <!-- 工具栏 -->
             <div id="toolBar">
-                <input type="button" class="btn" value="新增" onclick="javascript: newArticle(); "/>
+                <input type="button" class="btn" value="新增" onclick="javascript: newArticle(); "
+                       th:if="${null != #authentication.details.user && !#authentication.details.user.isSystemAdmin()}"/>
                 <input type="button" class="btn" value="刷新" onclick="javascript: table.refresh(); "/>
             </div>
         </div>

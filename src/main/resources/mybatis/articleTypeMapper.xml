@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleTypeMapper">
+    <resultMap id="articleResult" type="com.liuqi.tools.codelife.entity.ArticleType">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="userId" column="userId"/>
+        <result property="articleCount" column="articleCount"/>
+    </resultMap>
+
+    <sql id="selectType">
+        select
+            id as id,
+            user as userId,
+            name as name,
+            article_count as articleCount
+        from
+            article_type
+    </sql>
+
+    <!-- 通过类型ID查找类型 -->
+    <select id="findById" resultType="com.liuqi.tools.codelife.entity.ArticleType">
+        <include refid="selectType"/>
+        where id = #{id}
+    </select>
+
+    <select id="findByName" resultType="com.liuqi.tools.codelife.entity.ArticleType">
+        <include refid="selectType"/>
+        where name = #{name}
+    </select>
+
+    <select id="findByUser" resultType="ArticleType">
+        <include refid="selectType"/>
+        where user = #{userId}
+    </select>
+
+    <!-- 新增文章分类对象 -->
+    <insert id="add" parameterType="com.liuqi.tools.codelife.entity.ArticleType">
+        insert into article_type(name, user) values(#{name}, #{userId})
+    </insert>
+
+    <update id="rename">
+        update article_type set name = #{name} where id=#{id}
+    </update>
+
+    <update id="addArticleCount">
+        update article_type set article_count = article_count + 1 where id=#{id}
+    </update>
+
+    <update id="deduceArticleCount">
+        update article_type set article_count = max(0, article_count - 1) where id=#{id}
+    </update>
+</mapper>

@@ -40,6 +40,10 @@
                 var href = $(a).attr("href");
                 var li = $(a).parent();
 
+                if (-1 != href.indexOf("?")) {
+                    href = href.substring(0, href.indexOf("?"));
+                }
+
                 if (0 == url.indexOf(href)) {
                    $(li).attr("class", "nav-item active");
                 } else {
@@ -61,18 +65,28 @@
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto" id="mainNavUl">
-            <li class="nav-item text-center">
+            <li class="nav-item text-center"
+                th:if="${'anonymousUser' == #authentication.name || !#authentication.details.user.isSystemAdmin()}">
                 <a class="nav-link text-center font-weight-bold" th:href="@{/}">首页<span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item"
+                th:if="${'anonymousUser' == #authentication.name || !#authentication.details.user.isSystemAdmin()}">
                 <a class="nav-link text-center font-weight-bold" th:href="@{/articles}">文章浏览<span class="sr-only">(current)</span></a>
             </li>
 
-            <li class="nav-item" sec:authorize="isAuthenticated()">
+            <li class="nav-item"  sec:authorize="isAuthenticated()"
+                th:if="${'anonymousUser' == #authentication.name || !#authentication.details.user.isSystemAdmin()}">
+                <a class="nav-link text-center font-weight-bold"
+                   th:href="@{/userIndex} + '?userId=' + ${#authentication.details.user.id}">个人主页</a>
+            </li>
+
+            <li class="nav-item" sec:authorize="isAuthenticated()"
+                th:if="${'anonymousUser' == #authentication.name || !#authentication.details.user.isSystemAdmin()}">
                 <a class="nav-link text-center font-weight-bold" th:href="@{/topic/detail}">我的专题<span class="sr-only">(current)</span></a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item"
+                th:if="${'anonymousUser' == #authentication.name || !#authentication.details.user.isSystemAdmin()}">
                 <a class="nav-link text-center font-weight-bold" th:href="@{/topic/explorer}">专题浏览</a>
             </li>
 
@@ -86,7 +100,8 @@
                 <a class="nav-link text-center font-weight-bold" th:href="@{/system/}">系统管理</a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item"
+                th:if="${'anonymousUser' == #authentication.name || !#authentication.details.user.isSystemAdmin()}">
                 <a class="nav-link text-center font-weight-bold" th:href="@{/about}">关于</a>
             </li>
             <!--<li class="nav-item dropdown">-->

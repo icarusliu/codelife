@@ -13,7 +13,22 @@ import java.io.Serializable;
 public class Article implements Serializable {
     private int id;
     private String title;
+    
+    /**
+     * 用户定制的文章分类
+     */
     private ArticleType articleType;
+    
+    /**
+     * 系统版块
+     */
+    private ArticleType forum;
+    
+    /**
+     * 是否推荐
+     */
+    private boolean recommended;
+    
     private int authorID;
     private String authorName;
     private String createDate;
@@ -139,5 +154,21 @@ public class Article implements Serializable {
     
     public void setFixTop(boolean fixTop) {
         this.fixTop = fixTop;
+    }
+    
+    public ArticleType getForum() {
+        return forum;
+    }
+    
+    public void setForum(ArticleType forum) {
+        this.forum = forum;
+    }
+    
+    public boolean isRecommended() {
+        return recommended;
+    }
+    
+    public void setRecommended(boolean recommended) {
+        this.recommended = recommended;
     }
 }

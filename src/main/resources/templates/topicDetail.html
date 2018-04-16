@@ -46,7 +46,7 @@
         }
 
         .user-group-item {
-            font-size: 0.6em;
+            font-size: 0.8em;
             margin-left: 1em;
             color: blue;
             line-height: 2.4em;
@@ -146,8 +146,8 @@
                 <div class="user-group col-sm-2"
                      th:if="${null != userList && 0 != userList.size()}">
                     <h6 class="group-title user-group-title row">订阅用户清单</h6>
-                    <span class="user-group-item row" th:each="user: ${userList}"
-                            th:text="${user.realName}"></span>
+                    <a class="user-group-item row" th:each="user: ${userList}"
+                            th:text="${user.realName}" th:href="@{/userIndex} + '?userId=' + ${user.id}"></a>
                 </div>
             </div>
         </div>

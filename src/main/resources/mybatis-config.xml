@@ -30,6 +30,7 @@
         <mapper resource="mybatis/roleMapper.xml"/>
         <mapper resource="mybatis/topicMapper.xml"/>
         <mapper resource="mybatis/commentMapper.xml"/>
+        <mapper resource="mybatis/articleTypeMapper.xml"/>
     </mappers>
 
 </configuration>

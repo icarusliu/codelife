@@ -1,11 +1,8 @@
 package com.liuqi.tools.codelife.db.dao;
 
 import com.liuqi.tools.codelife.entity.Article;
-import com.liuqi.tools.codelife.entity.ArticleType;
-import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -28,30 +25,17 @@ public interface ArticleDao {
      * 查找某个用户所写的所有文章
      *
      * @param authorId 用户编号
+     * @param typeId
      * @return 返回查找的所有文章，如果无则返回空的List对象
      */
-    List<Article> findByAuthor(int authorId);
+    List<Article> findByAuthor(int authorId, Integer typeId);
     
     /**
      * 查找所有的文章
      * @return 返回查找的所有文章，如果无则返回空的List对象
      */
     List<Article> findAll();
-    
-    /**
-     * 查找所有文章分类
-     *
-     * @return 返回所有文章分类，如果无则返回空的List对象
-     */
-    List<ArticleType> findAllTypes();
-    
-    /**
-     * 根据ID查找文章分类
-     *
-     * @return 返回查找的文章分类 如果未找着会返回空值
-     */
-    ArticleType findTypeById(int id);
-    
+
     /**
      * 保存文章对象
      *
@@ -65,22 +49,7 @@ public interface ArticleDao {
      * @param typeId
      * @return 当没有数据时返回空的ArrayList对象
      */
-    List<Article> findByType(Integer typeId);
-    
-    /**
-     * 保存文章分类
-     *
-     * @param type
-     */
-    void saveType(ArticleType type);
-    
-    /**
-     * 通过分类名称查找分类
-     *
-     * @param typeName 分类名称
-     * @return 返回查找到的分类对象，如果没有返回为空
-     */
-    ArticleType findTypeByName(String typeName);
+    List<Article> findByForum(Integer typeId);
     
     /**
      * 对应ID的文章的阅读次数加1
@@ -98,20 +67,13 @@ public interface ArticleDao {
     
     /**
      * 更新文章
-     *
-     * @param id
+     *  @param id
      * @param title
      * @param type
+     * @param forumId
      */
-    void updateArticle(Integer id, String title, Integer type);
+    void updateArticle(Integer id, String title, Integer type, Integer forumId);
     
-    /**
-     * 重命名分类
-     *
-     * @param id
-     * @param name
-     */
-    void renameType(Integer id, String name);
     
     /**
      * 按ReadCount及CreateDate排序返回前指定个数和文章
@@ -153,4 +115,12 @@ public interface ArticleDao {
      * @param fixTop
      */
     void updateFixTop(Integer id, boolean fixTop);
+    
+    /**
+     * 设置文章是否推荐
+     *
+     * @param id
+     * @param b
+     */
+    void updateRecommended(Integer id, boolean b);
 }

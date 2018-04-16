@@ -158,8 +158,9 @@
         }
 
         //根据关键字搜索用户
-        function searchUser() {
+        function searchUser1() {
             var key = $("#adminKeyWord").val();
+
             if ("" == key) {
                 $("#adminFormErrorMessage").text("未输入关键字");
                 $("#adminFormErrorMessage").show();
@@ -262,7 +263,7 @@
                                    placeholder="关键字"
                                    maxlength="100" autofocus
                                    required/>
-                            <input type="button" class="btn" value="搜索" onclick="searchUser()"/>
+                            <input type="button" class="btn" value="搜索" onclick="javascript: searchUser1(); "/>
                         </div>
 
                         <select class="row form-control mt-2"

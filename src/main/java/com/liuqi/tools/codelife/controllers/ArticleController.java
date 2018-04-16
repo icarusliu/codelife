@@ -1,14 +1,9 @@
 package com.liuqi.tools.codelife.controllers;
 
 import com.github.pagehelper.PageInfo;
-import com.liuqi.tools.codelife.entity.Article;
-import com.liuqi.tools.codelife.entity.ArticleType;
-import com.liuqi.tools.codelife.entity.CommentType;
-import com.liuqi.tools.codelife.entity.User;
+import com.liuqi.tools.codelife.entity.*;
 import com.liuqi.tools.codelife.exceptions.RestException;
-import com.liuqi.tools.codelife.service.ArticleService;
-import com.liuqi.tools.codelife.service.AuthenticationService;
-import com.liuqi.tools.codelife.service.CommentService;
+import com.liuqi.tools.codelife.service.*;
 import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import com.liuqi.tools.codelife.util.SessionProxy;
 import org.slf4j.Logger;
@@ -42,6 +37,12 @@ public class ArticleController {
     @Autowired
     private CommentService commentService;
     
+    @Autowired
+    private ArticleTypeService typeService;
+    
+    @Autowired
+    private UserService userService;
+    
     /**
      * 打开文章清单页面
      * 同时获取所有文章分类、所有文章
@@ -50,34 +51,39 @@ public class ArticleController {
      * @return
      */
     @GetMapping("/articles")
-    public ModelAndView articles(@RequestParam(name = "typeId", required = false) Integer typeId,
+    public ModelAndView articles(@RequestParam(name = "forumId", required = false) Integer forumId,
                                  @RequestParam(value = "nowPage", required = false) Integer nowPage,
                                  @RequestParam(value = "pageSize", required = false) Integer pageSize) {
-        Collection<ArticleType> types = articleService.findAllTypes();
+        Collection<ArticleType> forums = typeService.findSystemTypes();
         PageInfo<Article> pageInfo;
         nowPage = null == nowPage ? 1 : nowPage;
         pageSize = null == pageSize ? 20 : pageSize;
         
-        if (null != typeId) {
-            pageInfo = articleService.findByType(typeId, nowPage, pageSize);
+        if (null != forumId) {
+            pageInfo = articleService.findByForum(forumId, nowPage, pageSize);
         } else {
             pageInfo = articleService.findAll(nowPage, pageSize);
         }
 
         return ModelAndViewBuilder.of("articles")
-                .setData("types", types)
-                .setData("typeId", typeId)
+                .setData("forums", forums)
+                .setData("forumId", forumId)
                 .setData("articles", pageInfo.getList())
                 .setData("pages", pageInfo.getPages())
-                .setData("typeId", typeId)
                 .setData("nowPage", nowPage)
                 .build();
     }
     
     @GetMapping("/getAllTypes")
     @ResponseBody
-    public Collection<ArticleType> getAllTypes() {
-        return articleService.findAllTypes();
+    public Collection<ArticleType> getAllTypes(@RequestParam(value = "userId", required = false) Integer userId) throws RestException {
+        User user;
+        if (null != userId) {
+            user = userService.findById(userId);
+        } else {
+            user = authenticationService.getLoginUser();
+        }
+        return typeService.findByUser(user);
     }
     
     /**
@@ -114,7 +120,7 @@ public class ArticleController {
         if (user.isSystemAdmin()) {
             pageInfo = articleService.findAll(nowPage, pageSize);
         } else {
-            pageInfo = articleService.findByAuthor(user, nowPage, pageSize);
+            pageInfo = articleService.findByAuthor(user, nowPage, pageSize, null);
         }
         
         Map<String, Object> map = new HashMap<>();
@@ -142,7 +148,6 @@ public class ArticleController {
         }
         
         return ModelAndViewBuilder.of("articleDetail")
-                .setData("types", articleService.findAllTypes())
                 .setData("article", article)
                 .setData("comments", commentService.findByDestination(CommentType.ARTICLE, id))
                 .build();

@@ -17,12 +17,12 @@
         var converter = new showdown.Converter();
         var nowPage = [[${nowPage}]];
         var pages = [[${pages}]];
-        var typeId = [[${typeId}]];
+        var forumId = [[${forumId}]];
 
         $(function(){
             $("#content").html(converter.makeHtml($("#contentInput").val()));
 
-            var pageUrl = [[@{/articles}]] + '?typeId=' + (null == typeId ? '' : typeId);
+            var pageUrl = [[@{/articles}]] + '?forumId=' + (null == forumId ? '' : forumId);
 
             new Pager("pager", pageUrl, nowPage, pages);
         });
@@ -40,7 +40,7 @@
     <div class="article-list">
         <div class="row article-list-group pt-2" th:each="article: ${articles}">
             <div class="col">
-                <sup th:if="${article.fixTop}" style="color: red; ">[置顶]</sup>
+                <sup th:if="${article.recommended}" style="color: red; ">[置顶]</sup>
                 <a th:text="${article.title}" class="article-list-item-title font-weight-bold"
                    th:href="@{'/articleDetail?id=' + ${article.id}}"></a>
                 <div th:text="${article.remark}" class="mt-2 mb-2 article-list-item-remark"></div>

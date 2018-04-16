@@ -90,6 +90,16 @@ public final class ArticleBuilder {
     }
     
     /**
+     * 设置文章所在版块
+     * @param forum
+     * @return
+     */
+    public ArticleBuilder setForum(ArticleType forum) {
+        article.setForum(forum);
+        return this;
+    }
+    
+    /**
      * 生成文章对象
      *
      * @return

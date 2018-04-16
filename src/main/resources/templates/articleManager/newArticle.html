@@ -47,8 +47,9 @@
                 var title = $("#title").val();
                 var type = $("#type").val();
                 var content = editor.value();
+                var forumId = $("#forum").val();
 
-                var data = {title: title, type: type, content: content};
+                var data = {title: title, type: type, content: content, forumId: forumId};
                 if (undefined != article) {
                     data.id = article.id;
                 }
@@ -78,25 +79,30 @@
 <body>
     <form class="container-fluid" id="form">
         <input type="text" id="formSubmitUrl" th:value="@{/articleManager/saveArticle}" hidden/>
-        <div class="row pt-1 pb-1 toolbar">
-            <div class="col-6 ml-0">
-                <input type="text" size="50"
-                       name="title" id="title"
-                       class="form-control" placeholder="标题" required/>
-            </div>
-            <div class="col-2">
-                <select name="type" class="form-control" id="type">
-                    <option th:value="${type.id}"  th:each="type: ${types}" th:text="${type.name}"></option>
-                </select>
-            </div>
-            <div class="col-2" th:if="${null == article}">
-                <select name="topic" class="form-control" id="topic">
-                    <option value="0">不发表到专题</option>
-                    <option th:each="topic: ${myTopics}" th:value="${topic.id}" th:text="${topic.title}"></option>
-                </select>
-            </div>
-            <div class="col-2">
-                <button type="submit" class="btn btn-primary">提交</button>
+        <div class="row mt-1">
+            <label class="col-sm-1 text-right mt-2">标题：</label>
+            <input type="text" size="50"
+                   name="title" id="title"
+                   class="col-sm-5 form-control mb-2" placeholder="标题" required/>
+        </div>
+
+        <div class="row mb-2">
+            <label class="col-sm-1 text-right mt-2">分类：</label>
+            <select name="type" class="col-sm-2 form-control" id="type">
+                <option th:value="${type.id}"  th:each="type: ${types}" th:text="${type.name}"></option>
+            </select>
+            <label class="col-sm-1 text-right mt-2">版块：</label>
+            <select name="forumId" class="col-sm-2 form-control" id="forum" required>
+                <option th:value="${forum.id}"  th:each="forum: ${forums}" th:text="${forum.name}"></option>
+            </select>
+            <label class="col-sm-1 text-right mt-2">专题：</label>
+            <select name="topic" id="topic"
+                    class="col-sm-2 form-control"  th:if="${null == article}">
+                <option value="0">不发表到专题</option>
+                <option th:each="topic: ${myTopics}" th:value="${topic.id}" th:text="${topic.title}"></option>
+            </select>
+            <div class="col-sm-1">
+                <button type="submit" class="btn btn-primary">发表</button>
             </div>
         </div>
         <div class="row">

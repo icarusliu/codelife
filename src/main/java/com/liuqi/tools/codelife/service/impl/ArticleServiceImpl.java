@@ -7,10 +7,7 @@ import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
-import com.liuqi.tools.codelife.service.ArticleService;
-import com.liuqi.tools.codelife.service.AuthenticationService;
-import com.liuqi.tools.codelife.service.TopicService;
-import com.liuqi.tools.codelife.service.UserService;
+import com.liuqi.tools.codelife.service.*;
 import com.liuqi.tools.codelife.util.ArticleBuilder;
 import com.liuqi.tools.codelife.util.FileUtils;
 import org.junit.Assert;
@@ -48,21 +45,14 @@ public class ArticleServiceImpl implements ArticleService {
     @Value("${app.file.savePath}")
     private String contentFilePath;
     
+    @Autowired
+    private ArticleTypeService articleTypeService;
+    
     @Override
     public PageInfo<Article> findAll(int nowPage, int pageSize) {
         PageHelper.startPage(nowPage, pageSize);
         
         List<Article> articles = articleDao.findAll();
-        
-//        articles.stream().map(article -> {
-//            try {
-//                article.setContent(FileUtils.getFileContent(article.getContentUrl(), contentFilePath));
-//            } catch (RestException e) {
-//                //对于获取内容失败的文章不返回
-//                logger.error("Get file content failed!", e);
-//            }
-//            return article;
-//        });
         
         return new PageInfo(articles);
     }
@@ -76,31 +66,19 @@ public class ArticleServiceImpl implements ArticleService {
     }
     
     @Override
-    public List<ArticleType> findAllTypes() {
-        return articleDao.findAllTypes();
-    }
-    
-    @Override
-    public ArticleType findTypeById(int id) throws RestException {
-        ArticleType type = articleDao.findTypeById(id);
-        if (null == type) {
-            logger.error("Type does not exist, id: {}!", id);
-            throw new RestException("类型不存在，类型ID：" + id);
-        }
-        
-        return type;
-    }
-    
-    @Override
-    public void saveArticle(String title, String content, int type, Integer topicId) throws RestException {
+    public void saveArticle(String title, String content, int type, Integer topicId, Integer forumId) throws RestException {
         User user = authenticationService.getLoginUser();
         
         Article article = ArticleBuilder.of(title)
-                .setType(findTypeById(type))
+                .setType(articleTypeService.findById(type))
                 .setContent(content, contentFilePath)
+                .setForum(articleTypeService.findById(forumId))
                 .setAuthor(user)
                 .build();
         Integer articleId = articleDao.save(article);
+        
+        //文章分类对象中文章数目加1
+        articleTypeService.addArticleCount(topicId);
         
         //将文章添加到专题
         if (null != topicId && 0 != topicId) {
@@ -109,32 +87,10 @@ public class ArticleServiceImpl implements ArticleService {
     }
     
     @Override
-    public PageInfo<Article> findByType(Integer id, int nowPage, Integer pageSize) {
+    public PageInfo<Article> findByForum(Integer id, int nowPage, Integer pageSize) {
         PageHelper.startPage(nowPage, pageSize);
     
-        return new PageInfo(articleDao.findByType(id));
-    }
-    
-    /**
-     * 保存文章分类
-     *
-     * @param name
-     * @throws RestException
-     */
-    @Override
-    public void saveType(String name) throws RestException {
-        //先检查同名的Type是否存在，如果存在则抛出异常
-        ArticleType type = articleDao.findTypeByName(name);
-        if (null != type) {
-            logger.error("Article type with the same name exists already, name: " + name);
-            throw new RestException("相同名称的分类已经存在，请确认！");
-        }
-        
-        //不存在时增加
-        type = new ArticleType();
-        type.setName(name);
-        type.setUserId(authenticationService.getLoginUser().getId());
-        articleDao.saveType(type);
+        return new PageInfo(articleDao.findByForum(id));
     }
     
     @Override
@@ -150,30 +106,35 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void deleteArticle(Integer id) {
         articleDao.deleteArticle(id);
+        
+        //分类中文章数目减1
+        articleTypeService.deduceArticleCount(id);
     }
     
     /**
      * 更新文章
-     *
-     * @param id
+     *  @param id
      * @param title
      * @param content
      * @param type
+     * @param forumId
      */
     @Override
-    public void updateArticle(Integer id, String title, String content, Integer type) throws RestException {
+    public void updateArticle(Integer id, String title, String content, Integer type, Integer forumId) throws RestException {
         Article article = articleDao.findById(id);
+        ArticleType oldType = article.getArticleType();
         
         //更新文件内容
         FileUtils.saveToFile(content, contentFilePath, article.getContentUrl());
         
         //更新数据库信息
-        articleDao.updateArticle(id, title, type);
-    }
-    
-    @Override
-    public void saveType(Integer id, String name) {
-        articleDao.renameType(id, name);
+        articleDao.updateArticle(id, title, type, forumId);
+        
+        //如果分类有修改，则修改两个分类下的文章数目
+        if (null != type && oldType.getId() != type) {
+            articleTypeService.deduceArticleCount(oldType.getId());
+            articleTypeService.addArticleCount(type);
+        }
     }
     
     /**
@@ -208,17 +169,18 @@ public class ArticleServiceImpl implements ArticleService {
      * 通过用户查找它所发表的所有文章
      *
      * @param user
+     * @param typeId
      * @return 如果未发表过文章时返回空的List
      */
     @Override
-    public PageInfo<Article> findByAuthor(User user, int nowPage, int pageSize) throws RestException {
+    public PageInfo<Article> findByAuthor(User user, int nowPage, int pageSize, Integer typeId) throws RestException {
         PageHelper.startPage(nowPage, pageSize);
         if (null == user || 0 == user.getId()) {
             logger.error("User or the id of user is null!");
             throw new RestException("用户或用户编号为空！");
         }
         
-        return PageInfo.of(articleDao.findByAuthor(user.getId()));
+        return PageInfo.of(articleDao.findByAuthor(user.getId(), typeId));
     }
     
     @Override
@@ -239,6 +201,16 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void unFixTop(Integer id) {
         articleDao.updateFixTop(id, false);
+    }
+    
+    @Override
+    public void recommend(Integer id) {
+        articleDao.updateRecommended(id, true);
+    }
+    
+    @Override
+    public void unRecommend(Integer id) {
+        articleDao.updateRecommended(id, false);
     }
     
     private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);

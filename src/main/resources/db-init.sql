@@ -188,7 +188,7 @@ INSERT INTO `role` VALUES (1,'ADMIN',NULL),(2,'USER',NULL);
 
 -- V1.1 增加用户注册时间
 -- V1.2 增加专题
-alter table user add column register_time varchar(12) comment '注册时间';
+alter table user add column register_time varchar(20) comment '注册时间';
 
 -- 创建topic表
 create table topic(
@@ -237,3 +237,12 @@ create table comment(
     destination integer not null comment '评论对象，如某个专题或者某个文章或者某个评论',
     primary key (id)
 );
+
+-- 增加文章置顶功能
+alter table article add column fix_top tinyint default 0 comment '是否置顶：0：不置顶，1：置顶';
+
+alter table article add column forum Integer ;
+
+insert into role(name, remark) values('TOPIC_ADMIN', '专题管理员');
+
+alter table article add column recommended tinyint default 0 comment '是否推荐，0：未推荐；1：已推荐';

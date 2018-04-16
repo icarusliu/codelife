@@ -2,7 +2,6 @@ package com.liuqi.tools.codelife.service;
 
 import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.Article;
-import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
 
@@ -32,19 +31,7 @@ public interface ArticleService {
      */
     Article findById(int id) throws RestException;
     
-    /**
-     * 查找所有类型
-     *
-     * @return
-     */
-    List<ArticleType> findAllTypes();
-    
-    /**
-     * 通过ID获取Type
-     * @param id Type的ID
-     * @return 返回获取的Type对象
-     */
-    ArticleType findTypeById(int id) throws RestException;
+
     
     /**
      * 保存文章
@@ -53,7 +40,7 @@ public interface ArticleService {
      * @param type 文章类型
      * @param topicId
      */
-    void saveArticle(String title, String content, int type, Integer topicId) throws RestException;
+    void saveArticle(String title, String content, int type, Integer topicId, Integer forumId) throws RestException;
     
     /**
      * 通过类型查找类型下的所有文章
@@ -63,14 +50,7 @@ public interface ArticleService {
      * @param nowPage
      * @return 该分类下的所有文章
      */
-    PageInfo<Article> findByType(Integer id, int nowPage, Integer pageSize);
-    
-    /**
-     * 保存文件类型
-     *
-     * @param name
-     */
-    void saveType(String name) throws RestException;
+    PageInfo<Article> findByForum(Integer id, int nowPage, Integer pageSize);
     
     /**
      * 对应文章的阅读次数加1
@@ -87,21 +67,13 @@ public interface ArticleService {
     
     /**
      * 更新文章
-     *
-     * @param id
+     *  @param id
      * @param title
      * @param content
      * @param type
+     * @param forumId
      */
-    void updateArticle(Integer id, String title, String content, Integer type) throws RestException;
-    
-    /**
-     * 重命名分类
-     *
-     * @param id 分类ID
-     * @param name 新的分类名称
-     */
-    void saveType(Integer id, String name);
+    void updateArticle(Integer id, String title, String content, Integer type, Integer forumId) throws RestException;
     
     /**
      * 查找指定个数的文章并返回
@@ -130,9 +102,10 @@ public interface ArticleService {
      * 通过用户查找其所有文章清单
      *
      * @param user
+     * @param typeId
      * @return
      */
-    PageInfo<Article> findByAuthor(User user, int nowPage, int pageSize) throws RestException;
+    PageInfo<Article> findByAuthor(User user, int nowPage, int pageSize, Integer typeId) throws RestException;
     
     /**
      * 通过标题关键字进行搜索
@@ -154,4 +127,18 @@ public interface ArticleService {
      * @param id
      */
     void unFixTop(Integer id);
+    
+    /**
+     * 文章推荐
+     * 推荐的文章将会在首页以及文章浏览中显示在前面
+     *
+     * @param id
+     */
+    void recommend(Integer id);
+    
+    /**
+     * 文章取消推荐
+     * @param id
+     */
+    void unRecommend(Integer id);
 }

@@ -28,10 +28,10 @@ public interface ArticleMapper {
     /**
      * 通过分类查找分类下的所有文章
      *
-     * @param typeId
+     * @param forumId
      * @return
      */
-    List<Article> findByType(int typeId);
+    List<Article> findByForum(@Param("forumId")int forumId);
     
     /**
      * 通过ID获取文章对象
@@ -45,22 +45,10 @@ public interface ArticleMapper {
      * 通过用户查找文章清单
      *
      * @param authorID 用户ID
+     * @param typeId 可为空
      * @return 返回该用户下的文章清单
      */
-    List<Article> findByAuthor(int authorID);
-    
-    /**
-     * 返回所有文章分类
-     *
-     * @return
-     */
-    List<ArticleType> findAllTypes();
-    
-    /**
-     * 根据Type的ID获取Type
-     * @return 返回获取的Type
-     */
-    ArticleType findTypeById(int id);
+    List<Article> findByAuthor(@Param("authorId") int authorID, @Param("typeId") Integer typeId);
     
     /**
      * 保存文章
@@ -75,12 +63,6 @@ public interface ArticleMapper {
      * @param type
      */
     void saveType(ArticleType type);
-    
-    /**
-     * 通过分类名称查找分类
-     * @param typeName
-     */
-    ArticleType findTypeByName(String typeName);
     
     /**
      * 对应文章的阅读次数加1
@@ -98,19 +80,12 @@ public interface ArticleMapper {
     
     /**
      * 更新文章标题、分类等信息
-     *
-     * @param id
+     *  @param id
      * @param title
      * @param type
      */
-    void updateArticle(@Param("id") Integer id, @Param("title") String title, @Param("type") Integer type);
-    
-    /**
-     * 重命名分类
-     * @param id 分类ID
-     * @param name 分类名称
-     */
-    void renameType(@Param("id") Integer id, @Param("name") String name);
+    void updateArticle(@Param("id") Integer id, @Param("title") String title, @Param("type") Integer type,
+                       @Param("forumId") Integer forumId);
     
     /**
      * 按ReadCount及CreateDate排序返回前指定个数的文章
@@ -152,4 +127,12 @@ public interface ArticleMapper {
      * @param fixTop
      */
     void updateFixTop(@Param("id") Integer id, @Param("fixTop") boolean fixTop);
+    
+    /**
+     * 更新文章是否推荐
+     *
+     * @param id
+     * @param isRecommended
+     */
+    void updateRecommended(@Param("id") Integer id, @Param("recommended") boolean isRecommended);
 }

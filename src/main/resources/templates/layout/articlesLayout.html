@@ -12,13 +12,13 @@
     <script th:inline="javascript">
         //加载完成后设置哪个分类被选中
         $(function(){
-            var typeId = [[${typeId}]];
-            if (undefined != typeId  && null != typeId) {
+            var forumId = [[${forumId}]];
+            if (undefined != forumId  && null != forumId) {
                 var as = $("#navUl>a");
                 for (var i = 0; i < as.length; i++) {
                     var a = as[i];
                     var url = $(a).attr("href");
-                    var urlTypeId = $.getUrlVar("typeId", url);
+                    var urlTypeId = $.getUrlVar("forumId", url);
 
                     if (urlTypeId == typeId) {
                         $(a).attr("class", "list-group-item active");
@@ -36,8 +36,9 @@
         <!-- 左侧导航页面 -->
         <div class="col-sm-3 col-md-2 hidden-xs-down sidebar">
             <div class="list-group" id="navUl" >
-                <a class="list-group-item active" th:href="@{/articles}">所有分类</a>
-                <a class="list-group-item"  th:each="type: ${types}" th:href="@{'/articles?typeId=' + ${type.id}}" th:text="${type.name}">
+                <a class="list-group-item active" th:href="@{/articles}">所有版块</a>
+                <a class="list-group-item"  th:each="forum: ${forums}" th:href="@{'/articles?forumId=' + ${forum.id}}"
+                   th:text="${forum.name}">
                 </a>
             </div>
         </div>

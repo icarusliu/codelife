@@ -14,6 +14,11 @@ public class ArticleType {
     private int userId;
     private String name;
     
+    /**
+     * 每个分类下有多少文章
+     */
+    private int articleCount;
+    
     public int getId() {
         return id;
     }
@@ -36,5 +41,13 @@ public class ArticleType {
     
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public int getArticleCount() {
+        return articleCount;
+    }
+    
+    public void setArticleCount(int articleCount) {
+        this.articleCount = articleCount;
     }
 }

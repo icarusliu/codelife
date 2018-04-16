@@ -32,7 +32,6 @@
             <div class="list-group flex-column">
                 <a class="list-group-item" id="articleManager" th:href="@{/articleManager/}">文章管理</a>
                 <a class="list-group-item" id="typeManager"
-                   sec:authorize="hasAuthority('ADMIN')"
                    th:href="@{/articleManager/typeManager}">分类管理</a>
             </div>
         </div>

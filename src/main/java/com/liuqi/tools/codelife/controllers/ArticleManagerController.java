@@ -5,6 +5,7 @@ import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.ArticleService;
+import com.liuqi.tools.codelife.service.ArticleTypeService;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
@@ -27,6 +28,7 @@ import java.util.Collection;
  **/
 @Controller
 @RequestMapping("/articleManager")
+@PreAuthorize("isAuthenticated()")
 public class ArticleManagerController {
     @Autowired
     private ArticleService articleService;
@@ -36,6 +38,9 @@ public class ArticleManagerController {
     
     @Autowired
     private TopicService topicService;
+    
+    @Autowired
+    private ArticleTypeService typeService;
     
     /**
      * 打开文章管理页面
@@ -47,26 +52,7 @@ public class ArticleManagerController {
      */
     @GetMapping("/")
     public ModelAndView articleManager() throws RestException {
-        Collection<ArticleType> types = articleService.findAllTypes();
-        
         return ModelAndViewBuilder.of("articleManager/articleManager")
-                .setData("types", types)
-                .build();
-    }
-    
-    /**
-     * 打开文章分类管理页面
-     * 只有登录用户才能访问
-     * 暂只有管理员才能进行分类管理，后续可考虑支持每个人定制自己的分类
-     *
-     * @return
-     */
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/typeManager")
-    public ModelAndView typeManager() {
-        Collection<ArticleType> types = articleService.findAllTypes();
-        return ModelAndViewBuilder.of("articleManager/typeManager")
-                .setData("types", types)
                 .build();
     }
     
@@ -76,12 +62,12 @@ public class ArticleManagerController {
      * @return
      */
     @GetMapping("/newArticle")
-    @PreAuthorize("isAuthenticated()")
     public ModelAndView newArticle(@RequestParam(name = "id",  required = false) Integer id) {
         User loginUser = authenticationService.getLoginUser();
         
         ModelAndViewBuilder builder = ModelAndViewBuilder.of("articleManager/newArticle")
-                .setData("types", articleService.findAllTypes())
+                .setData("types", typeService.findByUser(loginUser))
+                .setData("forums", typeService.findSystemTypes())
                 .setData("myTopics", topicService.getUserTopics(loginUser.getId()));
         
         if (null != id) {
@@ -116,9 +102,10 @@ public class ArticleManagerController {
     public String saveArticle(@RequestParam("title") String title, @RequestParam("type") Integer type,
                               @RequestParam("content") String content,
                               @RequestParam(value = "topic", required = false) Integer topicId,
+                              @RequestParam("forumId") Integer forumId,
                               @RequestParam(name = "id", required = false) Integer id) throws RestException {
         if (null == id) {
-            articleService.saveArticle(title, content, type, topicId);
+            articleService.saveArticle(title, content, type, topicId, forumId);
         } else {
             //判断登录用户是否是作者，如果不是则不能进行保存
             User loginUser = authenticationService.getLoginUser();
@@ -129,7 +116,7 @@ public class ArticleManagerController {
                 throw new RestException("只能修改自己发布的文章！");
             }
             
-            articleService.updateArticle(id, title, content, type);
+            articleService.updateArticle(id, title, content, type, forumId);
         }
         
         return "succeed";
@@ -155,34 +142,20 @@ public class ArticleManagerController {
     }
     
     /**
-     * 保存分类
-     * 如果ID不为空则是进行更新
-     * 只能由系统管理员进行管理
-     *
-     * @param name
-     * @param id 可能为空，不为空时是更新；为空时是新增
-     */
-    @PostMapping("/saveType")
-    @ResponseBody
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public void saveType(@RequestParam("typeName") String name,
-                         @RequestParam(value = "id", required = false) Integer id) throws RestException {
-        if (null == id) {
-            articleService.saveType(name);
-        } else {
-            articleService.saveType(id, name);
-        }
-    }
-    
-    /**
      * 文章置顶
      * @param id
      */
     @PostMapping("/fixTop")
     @ResponseBody
-    @PreAuthorize("hasAuthentication('ADMIN')")
     public void fixTop(@RequestParam("id") Integer id) {
-        articleService.fixTop(id);
+        //如果是管理员进行操作，则是进行推荐；否则是进行置顶（只会在用户页面中显示在前列）
+        User user = authenticationService.getLoginUser();
+        
+        if (user.isSystemAdmin()) {
+            articleService.recommend(id);
+        } else {
+            articleService.fixTop(id);
+        }
     }
     
     /**
@@ -191,9 +164,14 @@ public class ArticleManagerController {
      */
     @PostMapping("/unFixTop")
     @ResponseBody
-    @PreAuthorize("hasAuthentication('ADMIN')")
     public void unFixTop(@RequestParam("id") Integer id) {
-        articleService.unFixTop(id);
+        User user = authenticationService.getLoginUser();
+    
+        if (user.isSystemAdmin()) {
+            articleService.unRecommend(id);
+        } else {
+            articleService.unFixTop(id);
+        }
     }
     
     private static final Logger logger = LoggerFactory.getLogger(ArticleManagerController.class);

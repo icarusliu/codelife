@@ -1,17 +1,24 @@
 package com.liuqi.tools.codelife.controllers;
 
+import com.github.pagehelper.PageInfo;
+import com.liuqi.tools.codelife.entity.Article;
+import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
+import com.liuqi.tools.codelife.service.ArticleService;
+import com.liuqi.tools.codelife.service.ArticleTypeService;
+import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.service.UserService;
+import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collector;
 
 /**
  * 用户Controller
@@ -24,6 +31,15 @@ import java.util.Collection;
 public class UserController {
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private TopicService topicService;
+    
+    @Autowired
+    private ArticleService articleService;
+    
+    @Autowired
+    private ArticleTypeService typeService;
     
     @PostMapping("/user/search")
     @ResponseBody
@@ -62,5 +78,41 @@ public class UserController {
         userService.register(username, password, realName);
         
         return "success";
+    }
+    
+    /**
+     * 用户首页
+     * 显示用户的文章等信息
+     *
+     * @return
+     */
+    @GetMapping("/userIndex")
+    public ModelAndView userIndex(@RequestParam(value = "userId") Integer userId,
+                                  @RequestParam(value = "typeId", required = false) Integer typeId,
+                                  @RequestParam(value = "nowPage", required = false) Integer nowPage,
+                                  @RequestParam(value = "pageSize", required = false) Integer pageSize) throws RestException {
+        nowPage = null == nowPage ? 1 : nowPage;
+        pageSize = null == pageSize ? 20 : pageSize;
+        
+        User user = userService.findById(userId);
+        
+        PageInfo<Article> articlePageInfo = articleService.findByAuthor(user, nowPage, pageSize, typeId);
+    
+        //查找所有用户分类并计算所有分类的文章总数
+        List<ArticleType> types = typeService.findByUser(user);
+        int totalArticles = types.parallelStream().map(t -> t.getArticleCount())
+                .reduce((t1, t2) -> t1 + t2).orElse(0);
+        
+        return ModelAndViewBuilder.of("userIndex")
+                .setData("types", typeService.findByUser(user))
+                .setData("articles", articlePageInfo.getList())
+                .setData("totalArticles", totalArticles)
+                .setData("pages", articlePageInfo.getPages())
+                .setData("nowPage", nowPage)
+                .setData("pageSize", pageSize)
+                .setData("typeId", typeId)
+                .setData("realName", user.getRealName())
+                .setData("userId", userId)
+                .build();
     }
 }

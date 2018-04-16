@@ -3,8 +3,6 @@ package com.liuqi.tools.codelife.db.dao.mybatis;
 import com.liuqi.tools.codelife.db.dao.ArticleDao;
 import com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleMapper;
 import com.liuqi.tools.codelife.entity.Article;
-import com.liuqi.tools.codelife.entity.ArticleType;
-import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +37,8 @@ public class MyBatisArticleDao implements ArticleDao{
     }
     
     @Override
-    public List<Article> findByAuthor(int authorId) {
-        return Optional.ofNullable(articleMapper.findByAuthor(authorId)).orElse(new ArrayList<>());
+    public List<Article> findByAuthor(int authorId, Integer typeId) {
+        return Optional.ofNullable(articleMapper.findByAuthor(authorId, typeId)).orElse(new ArrayList<>());
     }
     
     @Override
@@ -49,33 +47,13 @@ public class MyBatisArticleDao implements ArticleDao{
     }
     
     @Override
-    public List<ArticleType> findAllTypes() {
-        return Optional.ofNullable(articleMapper.findAllTypes()).orElse(new ArrayList<>());
-    }
-    
-    @Override
-    public ArticleType findTypeById(int id) {
-        return articleMapper.findTypeById(id);
-    }
-    
-    @Override
     public Integer save(Article article) {
         return articleMapper.save(article);
     }
     
     @Override
-    public List<Article> findByType(Integer typeId) {
-        return Optional.ofNullable(articleMapper.findByType(typeId)).orElse(new ArrayList<>());
-    }
-    
-    @Override
-    public void saveType(ArticleType type) {
-        articleMapper.saveType(type);
-    }
-    
-    @Override
-    public ArticleType findTypeByName(String typeName) {
-        return articleMapper.findTypeByName(typeName);
+    public List<Article> findByForum(Integer forumId) {
+        return Optional.ofNullable(articleMapper.findByForum(forumId)).orElse(new ArrayList<>());
     }
     
     @Override
@@ -89,13 +67,8 @@ public class MyBatisArticleDao implements ArticleDao{
     }
     
     @Override
-    public void updateArticle(Integer id, String title, Integer type) {
-        articleMapper.updateArticle(id, title, type);
-    }
-    
-    @Override
-    public void renameType(Integer id, String name) {
-        articleMapper.renameType(id, name);
+    public void updateArticle(Integer id, String title, Integer type, Integer forumId) {
+        articleMapper.updateArticle(id, title, type, forumId);
     }
     
     /**
@@ -140,5 +113,10 @@ public class MyBatisArticleDao implements ArticleDao{
     @Override
     public void updateFixTop(Integer id, boolean fixTop) {
         articleMapper.updateFixTop(id, fixTop);
+    }
+    
+    @Override
+    public void updateRecommended(Integer id, boolean b) {
+        articleMapper.updateRecommended(id, b);
     }
 }
