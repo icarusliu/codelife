@@ -1,13 +1,12 @@
 package com.liuqi.tools.codelife.db.dao.mybatis.mapper;
 
-import com.liuqi.tools.codelife.entity.Article;
-import com.liuqi.tools.codelife.entity.ArticleType;
-import com.liuqi.tools.codelife.entity.User;
+import com.liuqi.tools.codelife.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 文章Mapper
@@ -49,6 +48,14 @@ public interface ArticleMapper {
      * @return 返回该用户下的文章清单
      */
     List<Article> findByAuthor(@Param("authorId") int authorID, @Param("typeId") Integer typeId);
+    
+    /**
+     * 根据用户统计相关数据
+     * 包含：用户文章的阅读总数、用户文章的点赞数
+     * @param authorId
+     * @return
+     */
+    UserArticleStatInfo getStatisticInfoByAuthor(@Param("authorId") int authorId);
     
     /**
      * 保存文章

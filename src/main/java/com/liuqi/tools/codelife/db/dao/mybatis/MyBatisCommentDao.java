@@ -41,4 +41,9 @@ public class MyBatisCommentDao implements CommentDao {
     public void update(Integer id, String content) {
         commentMapper.update(id, content);
     }
+    
+    @Override
+    public int getCommentCountByAuthor(Integer authorId) {
+        return commentMapper.getCommentCountByAuthor(authorId);
+    }
 }

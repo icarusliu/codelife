@@ -246,3 +246,5 @@ alter table article add column forum Integer ;
 insert into role(name, remark) values('TOPIC_ADMIN', '专题管理员');
 
 alter table article add column recommended tinyint default 0 comment '是否推荐，0：未推荐；1：已推荐';
+
+alter table article_type add column article_count Integer not null default 0 comment '该分类下的文章数目';

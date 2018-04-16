@@ -75,5 +75,10 @@ public class CommentServiceImpl implements CommentService {
         return commentDao.getByDestination(commentType, id);
     }
     
+    @Override
+    public int getCommentCountByAuthor(Integer authorId) {
+        return commentDao.getCommentCountByAuthor(authorId);
+    }
+    
     private static final Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
 }

@@ -112,7 +112,8 @@
             <section class="row topic-detail-panel-info">
                 <h1 class="col-sm">
                     <span  th:text="${topic.title}"></span>
-                    <sub><a th:if="${topic.admin.id == #authentication.details.user.id}"
+                    <sub><a th:if="${#authentication.name != 'anonymousUser'
+                                && topic.admin.id == #authentication.details.user.id}"
                             th:href="@{/system/topicManager/edit} + '?id=' + ${topic.id}"
                             target="_blank">(编辑)</a></sub>
                 </h1>

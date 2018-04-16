@@ -101,6 +101,15 @@
         limit #{i}
     </select>
 
+    <select id="getStatisticInfoByAuthor" resultType="UserArticleStatInfo">
+        select
+            sum(read_count) as readCount,
+            sum(praise_count) as praiseCount
+        from
+            article
+        where author = #{authorId}
+    </select>
+
     <!-- 新增Article对象   -->
     <insert id="save" parameterType="com.liuqi.tools.codelife.entity.Article">
         <selectKey resultType="Integer" keyColumn="id" order="AFTER" keyProperty="id">

@@ -1,1 +1,0 @@
-alter table article_type add column article_count Integer not null default 0 comment '该分类下的文章数目';

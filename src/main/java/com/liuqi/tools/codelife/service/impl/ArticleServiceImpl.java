@@ -6,6 +6,7 @@ import com.liuqi.tools.codelife.db.dao.ArticleDao;
 import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.User;
+import com.liuqi.tools.codelife.entity.UserArticleStatInfo;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.*;
 import com.liuqi.tools.codelife.util.ArticleBuilder;
@@ -211,6 +212,11 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void unRecommend(Integer id) {
         articleDao.updateRecommended(id, false);
+    }
+    
+    @Override
+    public UserArticleStatInfo getStatisticInfoByAuthor(int authorId) {
+        return articleDao.getStatisticInfoByAuthor(authorId);
     }
     
     private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);

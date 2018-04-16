@@ -4,11 +4,9 @@ import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.User;
+import com.liuqi.tools.codelife.entity.UserArticleStatInfo;
 import com.liuqi.tools.codelife.exceptions.RestException;
-import com.liuqi.tools.codelife.service.ArticleService;
-import com.liuqi.tools.codelife.service.ArticleTypeService;
-import com.liuqi.tools.codelife.service.TopicService;
-import com.liuqi.tools.codelife.service.UserService;
+import com.liuqi.tools.codelife.service.*;
 import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,6 +38,9 @@ public class UserController {
     
     @Autowired
     private ArticleTypeService typeService;
+    
+    @Autowired
+    private CommentService commentService;
     
     @PostMapping("/user/search")
     @ResponseBody
@@ -103,6 +104,9 @@ public class UserController {
         int totalArticles = types.parallelStream().map(t -> t.getArticleCount())
                 .reduce((t1, t2) -> t1 + t2).orElse(0);
         
+        //获取用户的评论数、点赞数等数据
+        UserArticleStatInfo statInfo = articleService.getStatisticInfoByAuthor(userId);
+        
         return ModelAndViewBuilder.of("userIndex")
                 .setData("types", typeService.findByUser(user))
                 .setData("articles", articlePageInfo.getList())
@@ -113,6 +117,8 @@ public class UserController {
                 .setData("typeId", typeId)
                 .setData("realName", user.getRealName())
                 .setData("userId", userId)
+                .setData("statInfo", statInfo)
+                .setData("commentCount", commentService.getCommentCountByAuthor(userId))
                 .build();
     }
 }

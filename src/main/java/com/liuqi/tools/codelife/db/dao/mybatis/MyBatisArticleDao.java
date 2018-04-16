@@ -3,6 +3,7 @@ package com.liuqi.tools.codelife.db.dao.mybatis;
 import com.liuqi.tools.codelife.db.dao.ArticleDao;
 import com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleMapper;
 import com.liuqi.tools.codelife.entity.Article;
+import com.liuqi.tools.codelife.entity.UserArticleStatInfo;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,5 +119,10 @@ public class MyBatisArticleDao implements ArticleDao{
     @Override
     public void updateRecommended(Integer id, boolean b) {
         articleMapper.updateRecommended(id, b);
+    }
+    
+    @Override
+    public UserArticleStatInfo getStatisticInfoByAuthor(int authorId) {
+        return articleMapper.getStatisticInfoByAuthor(authorId);
     }
 }

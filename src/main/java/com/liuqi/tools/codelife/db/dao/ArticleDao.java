@@ -1,7 +1,9 @@
 package com.liuqi.tools.codelife.db.dao;
 
 import com.liuqi.tools.codelife.entity.Article;
+import com.liuqi.tools.codelife.entity.UserArticleStatInfo;
 import com.liuqi.tools.codelife.exceptions.RestException;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -123,4 +125,12 @@ public interface ArticleDao {
      * @param b
      */
     void updateRecommended(Integer id, boolean b);
+    
+    /**
+     * 根据用户统计相关数据
+     * 包含：用户文章的阅读总数、用户文章的点赞数
+     * @param authorId
+     * @return
+     */
+    UserArticleStatInfo getStatisticInfoByAuthor(int authorId);
 }

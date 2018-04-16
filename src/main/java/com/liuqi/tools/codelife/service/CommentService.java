@@ -4,6 +4,7 @@ import com.liuqi.tools.codelife.entity.Comment;
 import com.liuqi.tools.codelife.entity.CommentType;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Collection;
 
@@ -30,4 +31,12 @@ public interface CommentService {
      * @return
      */
     Collection<Comment> findByDestination(CommentType commentType, Integer id);
+    
+    /**
+     * 根据作者获取它的文章的评论总数
+     *
+     * @param authorId
+     * @return
+     */
+    int getCommentCountByAuthor(Integer authorId);
 }

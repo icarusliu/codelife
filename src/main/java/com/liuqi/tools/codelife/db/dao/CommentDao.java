@@ -37,5 +37,13 @@ public interface CommentDao {
      * @param id
      * @param content
      */
-    void update(@Param("id") Integer id, @Param("content") String content);
+    void update(@Param("id") Integer id, String content);
+    
+    /**
+     * 根据作者获取它的文章的评论总数
+     *
+     * @param authorId
+     * @return
+     */
+    int getCommentCountByAuthor(Integer authorId);
 }

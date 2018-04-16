@@ -66,4 +66,14 @@
         where t1.type = #{type, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.CommentTypeHandler}
             and t1.destination=#{destination}
     </select>
+
+    <select id="getCommentCountByAuthor" resultType="Integer">
+        select
+            count(t2.id) as commentCount
+        from
+            article t1
+        inner join comment t2
+        on t1.id = t2.destination
+        where t1.author = #{authorId}
+    </select>
 </mapper>
