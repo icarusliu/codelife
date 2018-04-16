@@ -48,8 +48,9 @@
                 var type = $("#type").val();
                 var content = editor.value();
                 var forumId = $("#forum").val();
+                var topic = $("#topic").val();
 
-                var data = {title: title, type: type, content: content, forumId: forumId};
+                var data = {title: title, type: type, content: content, forumId: forumId, topic: topic};
                 if (undefined != article) {
                     data.id = article.id;
                 }
@@ -91,13 +92,14 @@
             <select name="type" class="col-sm-2 form-control" id="type">
                 <option th:value="${type.id}"  th:each="type: ${types}" th:text="${type.name}"></option>
             </select>
-            <label class="col-sm-1 text-right mt-2">版块：</label>
-            <select name="forumId" class="col-sm-2 form-control" id="forum" required>
+            <label class="col-sm-1 text-right mt-2"  th:if="${null == article}">版块：</label>
+            <select name="forumId" class="col-sm-2 form-control" id="forum" required th:if="${null == article}">
                 <option th:value="${forum.id}"  th:each="forum: ${forums}" th:text="${forum.name}"></option>
             </select>
-            <label class="col-sm-1 text-right mt-2">专题：</label>
+            <label class="col-sm-1 text-right mt-2" th:if="${null == article}">专题：</label>
             <select name="topic" id="topic"
                     class="col-sm-2 form-control"  th:if="${null == article}">
+                <!--编辑文章时，不能修改发表的专题-->
                 <option value="0">不发表到专题</option>
                 <option th:each="topic: ${myTopics}" th:value="${topic.id}" th:text="${topic.title}"></option>
             </select>

@@ -76,14 +76,14 @@ public class ArticleServiceImpl implements ArticleService {
                 .setForum(articleTypeService.findById(forumId))
                 .setAuthor(user)
                 .build();
-        Integer articleId = articleDao.save(article);
+        articleDao.save(article);
         
         //文章分类对象中文章数目加1
         articleTypeService.addArticleCount(topicId);
         
         //将文章添加到专题
         if (null != topicId && 0 != topicId) {
-            topicService.addTopicArticls(topicId, List.of(articleId));
+            topicService.addTopicArticls(topicId, List.of(article.getId()));
         }
     }
     
