@@ -19,6 +19,58 @@
         function register() {
             window.open([[@{/register}]], "_blank");
         }
+
+        var isLoading = false;
+        var nowPage = 1;
+        var pageSize = 20;
+        var detailUrl = [[@{/article/detail}]];
+        var noMoreData = false;
+
+        $(function(){
+            $("#loadingInfo").hide();
+
+            $(window).scroll(function(){
+                if ($(window).scrollTop() + 20 >= $(document).height() - $(window).height()) {
+                    //继续加载文档数据
+                    if (isLoading || noMoreData) {
+                        return;
+                    }
+                    isLoading = true;
+                    $("#loadingInfo").show();
+                    post([[@{/article/getForExplorer}]], {nowPage: nowPage + 1, pageSize: pageSize}, function(data) {
+                        if (data && 0 != data.length) {
+                            for (var i = 0, length = data.length; i < length; i++) {
+                                var article = data[i];
+
+                                var html = '<div class="article-item">';
+                                if (article.recommended) {
+                                    html += '<sup style="color: red; ">[置顶]</sup>';
+                                }
+                                html += '<a class="article-item-title font-weight-bold" href="'
+                                    + detailUrl + '?id=' + article.id + '">' + article.title + '</a>';
+
+                                html += '<p class="article-item-remark">' + article.remark + '</p>'
+                                    + '<div class="article-item-info">'
+                                    + '<span class="mr-4">' + article.authorName + '</span>'
+                                    + '发表于：<cite class="mr-5">' + article.createDate + '</cite>'
+                                    + '阅读次数：<cite class="mr-5">' + article.readCount + '</cite>'
+                                    + '点赞数：<cite' + article.praiseCount + '</cite></div></div>';
+
+                                $("#articleList").append(html);
+                            }
+
+                            nowPage++;
+                        } else {
+                            noMoreData = true;
+                            $("#noMoreDataInfo").show();
+                        }
+
+                        isLoading = false;
+                        $("#loadingInfo").hide();
+                    });
+                }
+            });
+        });
     </script>
 </head>
 <body>
@@ -62,7 +114,7 @@
 
             <div class="row">
                 <div class="col-sm-8">
-                    <div class="block">
+                    <div class="block" id="articleList">
                         <h5 class="block-title">热门文章</h5>
                         <div class="w-100"></div>
                         <div class="article-item" th:each="article: ${articles}">
@@ -78,6 +130,13 @@
                                 点赞数：<cite th:text="${article.praiseCount}"></cite>
                             </div>
                         </div>
+                    </div>
+                    <div class="article-item text-center hidden" id="loadingInfo">
+                        <p class="article-item-remark">加载中...</p>
+                    </div>
+
+                    <div class="article-item text-center hidden" id="noMoreDataInfo">
+                        <p class="article-item-remark">无更多数据</p>
                     </div>
                 </div>
 

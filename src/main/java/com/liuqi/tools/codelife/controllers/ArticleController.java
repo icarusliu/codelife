@@ -75,6 +75,13 @@ public class ArticleController {
                 .build();
     }
     
+    @PostMapping("/getForExplorer")
+    @ResponseBody
+    public List<Article> getForExplorer(@RequestParam("nowPage") Integer nowPage,
+                                                @RequestParam("pageSize") Integer pageSize) {
+        return articleService.findForExplorer(nowPage, pageSize).getList();
+    }
+    
     /**
      * 获取文章详细页面
      *
