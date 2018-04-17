@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Collection;
 
 /**
+ * 文章分类控制器
+ *
  * @Author: LiuQI
  * @Created: 2018/4/17 21:36
  * @Version: V1.0

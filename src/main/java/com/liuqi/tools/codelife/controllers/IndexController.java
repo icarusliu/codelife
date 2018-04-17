@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * 登录处理Controller
+ * 首页处理控制器
  *
  * @Author: LiuQI
  * @Created: 2018/3/27 21:09
