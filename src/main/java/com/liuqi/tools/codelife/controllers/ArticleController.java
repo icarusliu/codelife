@@ -27,6 +27,7 @@ import java.util.Map;
  * @Version: V1.0
  **/
 @Controller
+@RequestMapping("/article")
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
@@ -74,52 +75,12 @@ public class ArticleController {
                 .build();
     }
     
-    @GetMapping("/getAllTypes")
-    @ResponseBody
-    public Collection<ArticleType> getAllTypes(@RequestParam(value = "userId", required = false) Integer userId) throws RestException {
-        User user;
-        if (null != userId) {
-            user = userService.findById(userId);
-        } else {
-            user = authenticationService.getLoginUser();
-        }
-        return typeService.findByUser(user);
-    }
-    
-    /**
-     * 获取用于管理的文章清单
-     * 根据当前登录用户获取其有权限管理的文章清单
-     *
-     * @return
-     * @throws RestException 如果用户不存在时抛出异常；实际上已经登录时理论上不会出现这种情况
-     */
-    @GetMapping("/getArticlesForManager")
-    @ResponseBody
-    public Map<String, Object> getArticlesForManager(@RequestParam(value = "offset", required = false) Integer offset,
-                                                     @RequestParam(value = "limit", required = false) Integer pageSize)
-            throws RestException {
-        
-        //offset与limit为datastrap table的分页参数
-        int nowPage = (null == offset ? 0 : offset) / pageSize + 1;
-        pageSize = null == pageSize ? 20 : pageSize;
-        
-        //用户只能看自己的文章，而管理员可以看所有的文章
-        User user = authenticationService.getLoginUser();
-        PageInfo<Article> pageInfo = articleService.findForManager(user, nowPage, pageSize);
-        
-        Map<String, Object> map = new HashMap<>();
-        map.put("rows", pageInfo.getList());
-        map.put("total", pageInfo.getTotal());
-        
-        return map;
-    }
-    
     /**
      * 获取文章详细页面
      *
      * @return
      */
-    @GetMapping("/articleDetail")
+    @GetMapping("/detail")
     public ModelAndView articleDetail(@RequestParam("id") Integer id, HttpSession session) throws RestException {
         Article article = articleService.findById(id);
         
@@ -142,7 +103,7 @@ public class ArticleController {
      *
      * @param id 文章编号
      */
-    @PostMapping("/praiseArticle")
+    @PostMapping("/praise")
     @ResponseBody
     public String praise(@RequestParam("id") Integer id) {
         articleService.praise(id);
@@ -154,21 +115,21 @@ public class ArticleController {
      *
      * @param id 文章编号
      */
-    @PostMapping("/unpraiseArticle")
+    @PostMapping("/unpraise")
     @ResponseBody
     public void unpraise(@RequestParam("id") Integer id) {
         articleService.unpraise(id);
     }
     
     /**
-     * 根据标题关键字进行搜索
+     * 根据关键字进行搜索
      *
      * @param key
      * @return
      */
-    @PostMapping("/searchArticleByTitle")
+    @PostMapping("/search")
     @ResponseBody
-    public List<Article> searchTitle(@RequestParam("key") String key) {
+    public List<Article> search(@RequestParam("key") String key) {
         return articleService.search(key, 0, 20).getList();
     }
     

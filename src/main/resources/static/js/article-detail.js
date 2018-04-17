@@ -2,8 +2,8 @@ function Praise(id, imgId, countId) {
     this.id = id;
     this.imgId = imgId;
     this.countId = countId;
-    this.praiseUrl = "/praiseArticle";
-    this.unpraiseUrl = "/unpraiseArticle";
+    this.praiseUrl = "/article/praise";
+    this.unpraiseUrl = "/article/unpraise";
 
     this.init = function() {
         //如果已经点过赞了，点赞按钮变成取消点赞按钮

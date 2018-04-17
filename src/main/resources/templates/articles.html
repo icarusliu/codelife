@@ -42,7 +42,7 @@
             <div class="col">
                 <sup th:if="${article.recommended}" style="color: red; ">[置顶]</sup>
                 <a th:text="${article.title}" class="article-list-item-title font-weight-bold"
-                   th:href="@{'/articleDetail?id=' + ${article.id}}"></a>
+                   th:href="@{'/article/detail?id=' + ${article.id}}"></a>
                 <div th:text="${article.remark}" class="mt-2 mb-2 article-list-item-remark"></div>
                 <div class="row pt-3">
                     <div class="article-list-item-info col-sm-10">

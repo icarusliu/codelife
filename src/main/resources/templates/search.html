@@ -40,7 +40,7 @@
                     <div class="w-100"></div>
                     <div class="article-item" th:each="article: ${articles}">
                         <a th:text="${article.title}" class="article-item-title font-weight-bold"
-                           th:href="@{'/articleDetail?id=' + ${article.id}}"></a>
+                           th:href="@{'/article/detail?id=' + ${article.id}}"></a>
                         <p class="article-item-remark" th:text="${article.remark}"></p>
                         <div class="article-item-info">
                             <span th:text="${article.authorName}" class="mr-4"></span>

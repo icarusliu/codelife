@@ -206,7 +206,7 @@ public final class FileUtils {
         }
         
         try {
-            return reader.lines().reduce((s1, s2) -> s1 + "\n" + s2).get();
+            return reader.lines().reduce((s1, s2) -> s1 + "\n" + s2).orElse("");
         } finally {
             try {
                 reader.close();

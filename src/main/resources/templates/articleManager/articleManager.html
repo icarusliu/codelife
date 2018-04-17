@@ -14,7 +14,7 @@
         var isSystemAdmin = [[${#authentication.details.user.isSystemAdmin()}]];
 
         $(function(){
-            table = new DataTable("articleTable", [[@{/getArticlesForManager}]], "toolBar",
+            table = new DataTable("articleTable", [[@{/system/articleManager/getArticlesForManager}]], "toolBar",
                 {sidePagination: "server", pagination: true});
         });
 
@@ -66,7 +66,7 @@
         window.operateEvent = {
             "click #viewButton": function(e, value, row, index) {
                 var id = row.id;
-                window.open([[@{/articleDetail}]] + '?id=' + id, '_blank');
+                window.open([[@{/article/detail}]] + '?id=' + id, '_blank');
             },
             "click #fixTopButton": function(e, value, row, index) {
                 var url = [[@{/system/articleManager/fixTop}]];

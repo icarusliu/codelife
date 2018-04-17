@@ -131,7 +131,7 @@
                     <div class="row article-list-group pb-2 pt-2 mt-0" th:each="article: ${articles}">
                         <div class="col">
                             <a th:text="${article.title}" class="article-list-item-title font-weight-bold"
-                               th:href="@{'/articleDetail?id=' + ${article.id}}"></a>
+                               th:href="@{'/article/detail?id=' + ${article.id}}"></a>
                             <div th:text="${article.remark}" class="mt-2 mb-2 article-list-item-remark"></div>
                             <div class="article-list-item-info">
                                 <span th:text="${article.authorName}" class="mr-4"></span>

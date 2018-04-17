@@ -1,5 +1,6 @@
 package com.liuqi.tools.codelife.controllers;
 
+import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.User;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 文章管理Controller
@@ -54,6 +57,34 @@ public class ArticleManagerController {
     public ModelAndView articleManager() throws RestException {
         return ModelAndViewBuilder.of("articleManager/articleManager")
                 .build();
+    }
+    
+    /**
+     * 获取用于管理的文章清单
+     * 根据当前登录用户获取其有权限管理的文章清单
+     *
+     * @return
+     * @throws RestException 如果用户不存在时抛出异常；实际上已经登录时理论上不会出现这种情况
+     */
+    @GetMapping("/getArticlesForManager")
+    @ResponseBody
+    public Map<String, Object> getArticlesForManager(@RequestParam(value = "offset", required = false) Integer offset,
+                                                     @RequestParam(value = "limit", required = false) Integer pageSize)
+            throws RestException {
+        
+        //offset与limit为datastrap table的分页参数
+        int nowPage = (null == offset ? 0 : offset) / pageSize + 1;
+        pageSize = null == pageSize ? 20 : pageSize;
+        
+        //用户只能看自己的文章，而管理员可以看所有的文章
+        User user = authenticationService.getLoginUser();
+        PageInfo<Article> pageInfo = articleService.findForManager(user, nowPage, pageSize);
+        
+        Map<String, Object> map = new HashMap<>();
+        map.put("rows", pageInfo.getList());
+        map.put("total", pageInfo.getTotal());
+        
+        return map;
     }
     
     /**

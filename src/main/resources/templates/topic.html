@@ -120,7 +120,7 @@
 
                         <ul class="col-sm-12">
                             <li th:each="article: ${topic.articles}">
-                                <a th:href="@{/articleDetail} + '?id=' + ${article.id}" th:text="${article.title}"></a>
+                                <a th:href="@{/article/detail} + '?id=' + ${article.id}" th:text="${article.title}"></a>
                             </li>
                         </ul>
                     </div>
@@ -156,7 +156,7 @@
 
                 <ul class="col-12">
                     <li th:each="article: ${topic.articles}">
-                        <a th:href="@{/articleDetail} + '?id=' + ${article.id}" th:text="${article.title}"></a>
+                        <a th:href="@{/article/detail} + '?id=' + ${article.id}" th:text="${article.title}"></a>
                     </li>
                 </ul>
                 <span class="offset-md-9"><a th:href="@{/topic/detail} + '?id=' + ${topic.id}">>>查看更多</a></span>
