@@ -60,9 +60,9 @@ public class ArticleController {
         pageSize = null == pageSize ? 20 : pageSize;
         
         if (null != forumId) {
-            pageInfo = articleService.findByForum(forumId, nowPage, pageSize);
+            pageInfo = articleService.findForExplorer(forumId, nowPage, pageSize);
         } else {
-            pageInfo = articleService.findAll(nowPage, pageSize);
+            pageInfo = articleService.findForExplorer(nowPage, pageSize);
         }
 
         return ModelAndViewBuilder.of("articles")
@@ -87,27 +87,16 @@ public class ArticleController {
     }
     
     /**
-     * 获取所有文章清单
-     *
-     * @return 返回所有文章清单
-     */
-    @GetMapping("/getAllArticles")
-    @ResponseBody
-    public List<Article> getAllArticles(@RequestParam(value = "nowPage", required = false) Integer nowPage,
-                                              @RequestParam(value = "pageSize", required = false) Integer pageSize) {
-        return articleService.findAll(null == nowPage ? 1 : nowPage, null == pageSize ? 20 : pageSize).getList();
-    }
-    
-    /**
+     * 获取用于管理的文章清单
      * 根据当前登录用户获取其有权限管理的文章清单
      *
      * @return
      * @throws RestException 如果用户不存在时抛出异常；实际上已经登录时理论上不会出现这种情况
      */
-    @GetMapping("/getArticlesByAuthor")
+    @GetMapping("/getArticlesForManager")
     @ResponseBody
-    public Map<String, Object> getArticlesByAuthor(@RequestParam(value = "offset", required = false) Integer offset,
-                                                   @RequestParam(value = "limit", required = false) Integer pageSize)
+    public Map<String, Object> getArticlesForManager(@RequestParam(value = "offset", required = false) Integer offset,
+                                                     @RequestParam(value = "limit", required = false) Integer pageSize)
             throws RestException {
         
         //offset与limit为datastrap table的分页参数
@@ -116,12 +105,7 @@ public class ArticleController {
         
         //用户只能看自己的文章，而管理员可以看所有的文章
         User user = authenticationService.getLoginUser();
-        PageInfo<Article> pageInfo;
-        if (user.isSystemAdmin()) {
-            pageInfo = articleService.findAll(nowPage, pageSize);
-        } else {
-            pageInfo = articleService.findByAuthor(user, nowPage, pageSize, null);
-        }
+        PageInfo<Article> pageInfo = articleService.findForManager(user, nowPage, pageSize);
         
         Map<String, Object> map = new HashMap<>();
         map.put("rows", pageInfo.getList());
@@ -185,7 +169,7 @@ public class ArticleController {
     @PostMapping("/searchArticleByTitle")
     @ResponseBody
     public List<Article> searchTitle(@RequestParam("key") String key) {
-        return articleService.searchTitle(key, 0, 20).getList();
+        return articleService.search(key, 0, 20).getList();
     }
     
     private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);

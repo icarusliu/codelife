@@ -1,6 +1,5 @@
 package com.liuqi.tools.codelife.service.impl;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.db.dao.ArticleDao;
 import com.liuqi.tools.codelife.entity.Article;
@@ -11,7 +10,6 @@ import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.*;
 import com.liuqi.tools.codelife.util.ArticleBuilder;
 import com.liuqi.tools.codelife.util.FileUtils;
-import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 文章服务类的实现类
@@ -50,20 +47,76 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleTypeService articleTypeService;
     
     @Override
-    public PageInfo<Article> findAll(int nowPage, int pageSize) {
-        PageHelper.startPage(nowPage, pageSize);
-        
-        List<Article> articles = articleDao.findAll();
-        
-        return new PageInfo(articles);
-    }
-    
-    @Override
     public Article findById(int id) throws RestException {
         Article article = articleDao.findById(id);
         article.setContent(FileUtils.getFileContent(article.getContentUrl(), contentFilePath));
         
         return article;
+    }
+    
+    /**
+     * 查找文章用于展现用
+     * 按是否置顶等顺序进行排序
+     *
+     * @param nowPage
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PageInfo<Article> findForExplorer(int nowPage, int pageSize) {
+        return PageInfo.of(articleDao.findForExplorerOrderByRecommended(null));
+    }
+    
+    @Override
+    public PageInfo<Article> findForExplorer(Integer forumId, int nowPage, int pageSize) {
+        return PageInfo.of(articleDao.findForExplorerOrderByRecommended(forumId));
+    }
+    
+    @Override
+    public PageInfo<Article> findByAuthorForExplorer(User user, int nowPage, int pageSize) throws RestException {
+        if (null == user) {
+            logger.error("User cannot be null!");
+            throw new RestException("作者不能为空！");
+        }
+        return PageInfo.of(articleDao.findForExplorerOrderByFixTop(user.getId(), null));
+    }
+    
+    @Override
+    public PageInfo<Article> findByAuthorForExplorer(User user, Integer typeId, int nowPage, int pageSize) throws RestException {
+        if (null == user) {
+            logger.error("User cannot be null!");
+            throw new RestException("作者不能为空！");
+        }
+        
+        return PageInfo.of(articleDao.findForExplorerOrderByFixTop(user.getId(), typeId));
+    }
+    
+    @Override
+    public PageInfo<Article> findForManager(User user, int nowPage, int pageSize) {
+        if (null != user && user.isSystemAdmin()) {
+            //如果是系统管理员，则能看到所有文章
+            user = null;
+        }
+        
+        return PageInfo.of(articleDao.findForManager(null == user ? null : user.getId(), null));
+    }
+    
+    @Override
+    public PageInfo<Article> findForManager(User user, Integer typeId, int nowPage, int pageSize) {
+        if (null != user && user.isSystemAdmin()) {
+            //如果是系统管理员，则能看到所有文章
+            user = null;
+        }
+        
+        return PageInfo.of(articleDao.findForManager(null == user ? null : user.getId(), typeId));
+    }
+    
+    @Override
+    public PageInfo<Article> search(String key, int nowPage, int pageSize) {
+        if (null == key) {
+            return new PageInfo(Collections.EMPTY_LIST);
+        }
+        return new PageInfo(articleDao.search(key));
     }
     
     @Override
@@ -85,13 +138,6 @@ public class ArticleServiceImpl implements ArticleService {
         if (null != topicId && 0 != topicId) {
             topicService.addTopicArticls(topicId, List.of(article.getId()));
         }
-    }
-    
-    @Override
-    public PageInfo<Article> findByForum(Integer id, int nowPage, Integer pageSize) {
-        PageHelper.startPage(nowPage, pageSize);
-    
-        return new PageInfo(articleDao.findByForum(id));
     }
     
     @Override
@@ -138,20 +184,6 @@ public class ArticleServiceImpl implements ArticleService {
         }
     }
     
-    /**
-     * 按ReadCount及CreateDate排序返回指定个数的文章清单
-     * 不包含有文件内容
-     *
-     * @param i 需要返回的文章个数
-     * @return 如果没有一个文章则返回一个空的清单
-     */
-    @Override
-    public List<Article> findTopArticleNoContent(int i) {
-        Assert.assertNotEquals(0, i);
-        
-        return Optional.ofNullable(articleDao.findTopArticles(i)).orElse(Collections.EMPTY_LIST);
-    }
-    
     @Override
     public void praise(int id) {
         //不检查文章是否存在
@@ -164,34 +196,6 @@ public class ArticleServiceImpl implements ArticleService {
         //不检查文章是否存在
         //更新失败对用户无影响
         articleDao.addPraiseCount(id, -1);
-    }
-    
-    /**
-     * 通过用户查找它所发表的所有文章
-     *
-     * @param user
-     * @param typeId
-     * @return 如果未发表过文章时返回空的List
-     */
-    @Override
-    public PageInfo<Article> findByAuthor(User user, int nowPage, int pageSize, Integer typeId) throws RestException {
-        PageHelper.startPage(nowPage, pageSize);
-        if (null == user || 0 == user.getId()) {
-            logger.error("User or the id of user is null!");
-            throw new RestException("用户或用户编号为空！");
-        }
-        
-        return PageInfo.of(articleDao.findByAuthor(user.getId(), typeId));
-    }
-    
-    @Override
-    public PageInfo<Article> searchTitle(String key, int nowPage, int pageSize) {
-        PageHelper.startPage(nowPage, pageSize);
-        
-        if (null == key) {
-            return new PageInfo(Collections.EMPTY_LIST);
-        }
-        return new PageInfo(articleDao.searchByTitleKey(key));
     }
     
     @Override

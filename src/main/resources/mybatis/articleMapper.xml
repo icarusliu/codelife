@@ -54,12 +54,47 @@
         order by t1.recommended desc, create_date desc
     </sql>
 
-    <!--查找专题下的文章-->
-    <select id="findByTopic" resultMap="articleResult">
+    <select id="findForExplorerOrderByRecommended" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        where 1 = 1
+        <if test="forumId != null">
+            and t1.forum = #{forumId}
+        </if>
+        <include refid="orderByRecommended"/>
+    </select>
+
+    <select id="findForExplorerOrderByFixTop" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        where 1 = 1
+        <if test="typeId != null">
+            and t1.type = #{typeId}
+        </if>
+        <if test="authorId != null">
+            and t1.author = #{authorId}
+        </if>
+        order by t1.fix_top desc, create_date desc
+    </select>
+
+    <select id="findForManager" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        order by create_date desc
+    </select>
+
+    <select id="findByTopicForManager" resultMap="articleResult">
         <include refid="selectArticle"/>
         left join topic_article t4
         on t4.article_id = t1.id
-        where t4.topic_id = #{id}
+        where t4.topic_id = #{topicId}
+        order by t1.create_date desc
+    </select>
+
+    <!--查找专题下的文章-->
+    <select id="findByTopicForExplorer" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        left join topic_article t4
+        on t4.article_id = t1.id
+        where t4.topic_id = #{topicId}
+        order by create_date desc
     </select>
 
     <!-- 通过文章ID查找文章-->
@@ -68,37 +103,10 @@
         where t1.id = #{id}
     </select>
 
-    <select id="searchByTitleKey" resultMap="articleResult">
+    <select id="search" resultMap="articleResult">
         <include refid="selectArticle"/>
         where t1.title like concat('%', concat(#{key}, '%'))
         <include refid="orderByRecommended"/>
-    </select>
-
-    <!-- 通过用户ID查找文章 -->
-    <select id="findByAuthor" resultMap="articleResult">
-        <include refid="selectArticle"/>
-        where t1.author = #{authorId}
-        <if test="typeId != null">
-            and t1.type = #{typeId}
-        </if>
-        order by t1.fix_top desc, create_date desc
-    </select>
-
-    <select id="findAll" resultMap="articleResult">
-        <include refid="selectArticle"/>
-        <include refid="orderByRecommended"/>
-    </select>
-
-    <select id="findByForum" resultMap="articleResult">
-        <include refid="selectArticle"/>
-        where t1.forum=#{forumId}
-        <include refid="orderByRecommended"/>
-    </select>
-
-    <select id="findTopArticles" resultMap="articleResult">
-        <include refid="selectArticle"/>
-        order by fix_top desc, read_count desc, create_date desc
-        limit #{i}
     </select>
 
     <select id="getStatisticInfoByAuthor" resultType="UserArticleStatInfo">

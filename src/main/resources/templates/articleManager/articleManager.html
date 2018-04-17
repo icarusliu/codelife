@@ -14,7 +14,7 @@
         var isSystemAdmin = [[${#authentication.details.user.isSystemAdmin()}]];
 
         $(function(){
-            table = new DataTable("articleTable", [[@{/getArticlesByAuthor}]], "toolBar",
+            table = new DataTable("articleTable", [[@{/getArticlesForManager}]], "toolBar",
                 {sidePagination: "server", pagination: true});
         });
 

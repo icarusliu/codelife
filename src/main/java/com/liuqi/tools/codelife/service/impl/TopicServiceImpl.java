@@ -85,7 +85,7 @@ public class TopicServiceImpl implements TopicService {
      */
     @Override
     public List<Article> getTopicArticles(Integer id) {
-        return Optional.ofNullable(articleDao.findByTopic(id)).orElse(Collections.EMPTY_LIST);
+        return Optional.ofNullable(articleDao.findByTopicForExplorer(id)).orElse(Collections.EMPTY_LIST);
     }
     
     /**

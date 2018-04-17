@@ -16,6 +16,59 @@ import java.util.List;
  **/
 public interface ArticleDao {
     /**
+     * 查找文章，用于首页及文章浏览页展示用
+     * 按系统是否推荐-发布时间进行排序
+     *
+     * @param forumId 版块编号，可以为空
+     * @return
+     */
+    List<Article> findForExplorerOrderByRecommended(Integer forumId);
+    
+    /**
+     * 查找文章，用于个人主页展示使用
+     * 按以下顺序排序：个人是否置顶-发布时间
+     *
+     * @param authorId 不能为空
+     * @param typeId 可以为空
+     * @return
+     */
+    List<Article> findForExplorerOrderByFixTop(Integer authorId,
+                                               Integer typeId);
+    
+    /**
+     * 查找文章，用于管理使用，严格按发表时间排序
+     *
+     * @param authorId 用户编号，可以为空
+     * @param typeId 分类编号，可以为空
+     * @return
+     */
+    List<Article> findForManager(Integer authorId,
+                                 Integer typeId);
+    
+    /**
+     * 获取专题下的文章，用于浏览，按是否置顶等进行排序
+     *
+     * @param topicId 专题编号 不能为空
+     * @return
+     */
+    List<Article> findByTopicForExplorer(Integer topicId);
+    
+    /**
+     * 获取专题下的文章，用于管理，严格按发布时间排序
+     * @param topicId
+     * @return
+     */
+    List<Article> findByTopicForManager(Integer topicId);
+    
+    /**
+     * 通过关键字搜索文章
+     *
+     * @param key
+     * @return
+     */
+    List<Article> search(String key);
+    
+    /**
      * 查找文章
      * @param id
      * @throws RestException 当指定编号的文章不存在时抛出异常
@@ -24,34 +77,11 @@ public interface ArticleDao {
     Article findById(int id) throws RestException;
     
     /**
-     * 查找某个用户所写的所有文章
-     *
-     * @param authorId 用户编号
-     * @param typeId
-     * @return 返回查找的所有文章，如果无则返回空的List对象
-     */
-    List<Article> findByAuthor(int authorId, Integer typeId);
-    
-    /**
-     * 查找所有的文章
-     * @return 返回查找的所有文章，如果无则返回空的List对象
-     */
-    List<Article> findAll();
-
-    /**
      * 保存文章对象
      *
      * @param article 需要保存的文章对象
      */
     Integer save(Article article);
-    
-    /**
-     * 通过分类查找该分类下的所有文章
-     *
-     * @param typeId
-     * @return 当没有数据时返回空的ArrayList对象
-     */
-    List<Article> findByForum(Integer typeId);
     
     /**
      * 对应ID的文章的阅读次数加1
@@ -76,15 +106,6 @@ public interface ArticleDao {
      */
     void updateArticle(Integer id, String title, Integer type, Integer forumId);
     
-    
-    /**
-     * 按ReadCount及CreateDate排序返回前指定个数和文章
-     *
-     * @param i 需要返回的文章数
-     * @return 查找的文章清单，如果无文章将返回一个空的List
-     */
-    List<Article> findTopArticles(int i);
-    
     /**
      * 为文章的点赞数增加一个值
      * 这个值可以是1或者-1，1时为点赞、-1时为取消点赞
@@ -93,22 +114,6 @@ public interface ArticleDao {
      * @param i 变动的点赞数，可以是1或者是-1
      */
     void addPraiseCount(int id, int i);
-    
-    /**
-     * 获取专题下的所有文章
-     *
-      * @param id
-     * @return
-     */
-    List<Article> findByTopic(Integer id);
-    
-    /**
-     * 通过标题关键字搜索文章
-     *
-     * @param key
-     * @return
-     */
-    List<Article> searchByTitleKey(String key);
     
     /**
      * 文章置顶及取消置顶

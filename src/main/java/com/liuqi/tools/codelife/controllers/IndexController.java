@@ -11,18 +11,15 @@ import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * 登录处理Controller
@@ -32,7 +29,7 @@ import java.util.List;
  * @Version: V1.0
  **/
 @Controller
-public class LoginController {
+public class IndexController {
     @Autowired
     private ArticleService articleService;
     
@@ -72,7 +69,7 @@ public class LoginController {
     public ModelAndView index() {
         Collection<Article> articles;
         try {
-           articles  = articleService.findTopArticleNoContent(10);
+           articles  = articleService.findForExplorer(1, 20).getList();
         } catch (Exception ex) {
             articles = Collections.EMPTY_LIST;
         }
@@ -110,7 +107,7 @@ public class LoginController {
         
         //专题最多搜索10个
         PageInfo<Topic> topics = topicService.search(key, 1, 10);
-        PageInfo<Article> articles = articleService.searchTitle(key, nowPage, pageSize);
+        PageInfo<Article> articles = articleService.search(key, nowPage, pageSize);
         
         return ModelAndViewBuilder.of("search")
                 .setData("articles", articles.getList())

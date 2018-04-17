@@ -97,7 +97,7 @@ public class UserController {
         
         User user = userService.findById(userId);
         
-        PageInfo<Article> articlePageInfo = articleService.findByAuthor(user, nowPage, pageSize, typeId);
+        PageInfo<Article> articlePageInfo = articleService.findByAuthorForExplorer(user, typeId, nowPage, pageSize);
     
         //查找所有用户分类并计算所有分类的文章总数
         List<ArticleType> types = typeService.findByUser(user);
