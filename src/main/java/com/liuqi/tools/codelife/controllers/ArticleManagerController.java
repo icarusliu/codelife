@@ -27,7 +27,7 @@ import java.util.Collection;
  * @Version: V1.0
  **/
 @Controller
-@RequestMapping("/articleManager")
+@RequestMapping("/system/articleManager")
 @PreAuthorize("isAuthenticated()")
 public class ArticleManagerController {
     @Autowired
@@ -50,7 +50,7 @@ public class ArticleManagerController {
      *
      * @return
      */
-    @GetMapping("/")
+    @GetMapping
     public ModelAndView articleManager() throws RestException {
         return ModelAndViewBuilder.of("articleManager/articleManager")
                 .build();

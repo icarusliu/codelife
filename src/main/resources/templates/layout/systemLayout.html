@@ -51,6 +51,10 @@
                 <a class="list-group-item" th:href="@{/system/userManager}"
                    sec:authorize="hasAuthority('ADMIN')">用户管理</a>
                 <!--<a class="list-group-item" th:href="@{/system/logStatistics}">日志分析</a>-->
+                <a class="list-group-item" th:href="@{/system/articleManager}"
+                   sec:authorize="isAuthenticated()">文章管理</a>
+                <a class="list-group-item" th:href="@{/system/articleTypeManager}"
+                   sec:authorize="isAuthenticated()">文章分类管理</a>
                 <a class="list-group-item" th:href="@{/system/topicManager}"
                    sec:authorize="hasAuthority('ADMIN') or hasAuthority('TOPIC_ADMIN')">专题管理</a>
                 <a class="list-group-item" th:href="@{/system/indexManager}"

@@ -27,15 +27,7 @@
 
             var as = $("#mainNavUl>li>a");
 
-            //首页是/需要特殊判断
-            if (url == "/") {
-                $(as[0]).parent().attr("class", "nav-item active");
-            } else {
-                $(as[0]).parent().attr("class", "nav-item");
-            }
-
-            //处理除首页外的其它链接
-            for (var i = 1; i < as.length; i++) {
+            for (var i = 0; i < as.length; i++) {
                 var a = as[i];
                 var href = $(a).attr("href");
                 var li = $(a).parent();
@@ -44,7 +36,7 @@
                     href = href.substring(0, href.indexOf("?"));
                 }
 
-                if (0 == url.indexOf(href)) {
+                if (('/' == url && 0 == i) || (0 != i && 0 == url.indexOf(href))) {
                    $(li).attr("class", "nav-item active");
                 } else {
                     $(li).attr("class", "nav-item");
@@ -90,14 +82,9 @@
                 <a class="nav-link text-center font-weight-bold" th:href="@{/topic/explorer}">专题浏览</a>
             </li>
 
-            <!-- 只有登录用户才能看到文章管理  -->
-            <li class="nav-item" sec:authorize="isAuthenticated()">
-                <a class="nav-link text-center font-weight-bold" th:href="@{/articleManager/}">文章管理<span class="sr-only">(current)</span></a>
-            </li>
-
             <!-- 只有管理员才能看到系统管理界面 -->
             <li class="nav-item" sec:authorize="hasAuthority('ADMIN') or hasAuthority('TOPIC_ADMIN')">
-                <a class="nav-link text-center font-weight-bold" th:href="@{/system/}">系统管理</a>
+                <a class="nav-link text-center font-weight-bold" th:href="@{/system}">系统管理</a>
             </li>
 
             <li class="nav-item"

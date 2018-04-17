@@ -4,7 +4,7 @@
         xmlns:th="http://www.thymeleaf.org"
         xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
         xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-        layout:decorator="layout/articleManagerLayout">
+        layout:decorator="layout/systemLayout">
 <head>
     <meta charset="UTF-8"/>
     <title>文章分类管理</title>
@@ -38,7 +38,7 @@
                 data.id = pTypeId;
             }
 
-            post([[@{/articleManager/typeManager/add}]], data, function(resp){
+            post([[@{/system/articleTypeManager/add}]], data, function(resp){
                     $("#newTypeDialog").modal("hide");
                     alert("保存成功！");
                     refreshTable();

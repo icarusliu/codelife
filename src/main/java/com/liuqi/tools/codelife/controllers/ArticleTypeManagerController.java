@@ -22,7 +22,7 @@ import java.util.Collection;
  * @Version: V1.0
  **/
 @Controller
-@RequestMapping("/articleManager/typeManager")
+@RequestMapping("/system/articleTypeManager")
 @PreAuthorize("isAuthenticated()")
 public class ArticleTypeManagerController {
     @Autowired

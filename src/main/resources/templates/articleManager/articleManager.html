@@ -4,7 +4,7 @@
         xmlns:th="http://www.thymeleaf.org"
         xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
         xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-        layout:decorator="layout/articleManagerLayout">
+        layout:decorator="layout/systemLayout">
 <head>
     <meta charset="UTF-8"/>
     <title>文章管理</title>
@@ -19,7 +19,7 @@
         });
 
         function newArticle(id) {
-            var url = "/articleManager/newArticle";
+            var url = "/system/articleManager/newArticle";
             if (undefined != id) {
                 url += "?id=" + id;
             }
@@ -69,10 +69,10 @@
                 window.open([[@{/articleDetail}]] + '?id=' + id, '_blank');
             },
             "click #fixTopButton": function(e, value, row, index) {
-                var url = [[@{/articleManager/fixTop}]];
+                var url = [[@{/system/articleManager/fixTop}]];
                 if ((!isSystemAdmin && row.fixTop)
                     || (isSystemAdmin && row.recommended)) {
-                    url = [[@{/articleManager/unFixTop}]];
+                    url = [[@{/system/articleManager/unFixTop}]];
                 }
 
                 post(url, {id: row.id}, function() {
@@ -89,7 +89,7 @@
                 var id = row.id;
                 if (confirm("将要删除所选文章【" + row.title + "】，是否确认？")) {
                     //删除文章
-                    post('/articleManager/deleteArticle', {id: id}, function() {
+                    post('/system/articleManager/deleteArticle', {id: id}, function() {
                         table.removeById(id); 
                     });
                 }
