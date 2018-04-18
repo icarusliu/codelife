@@ -120,10 +120,14 @@
 
     <!-- 新增Article对象   -->
     <insert id="save" parameterType="com.liuqi.tools.codelife.entity.Article" useGeneratedKeys="true" keyProperty="id">
-        insert into article(title, type, author, create_date, status, content_url, read_count, remark, forum)
+        insert into article(title, type, author, create_date, status, content_url, read_count, remark
+        <if test="null != forum">, forum</if>
+        )
         values(#{title}, #{articleType.id}, #{authorID}, #{createDate},
             #{status, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleStatusTypeHandler},
-            #{contentUrl}, #{readCount}, #{remark}, #{forum.id})
+            #{contentUrl}, #{readCount}, #{remark}
+        <if test="null != forum">, #{forum.id}</if>
+        )
     </insert>
 
     <update id="addReadCount" parameterType="com.liuqi.tools.codelife.entity.Article">

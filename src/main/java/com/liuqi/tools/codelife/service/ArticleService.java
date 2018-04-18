@@ -102,9 +102,10 @@ public interface ArticleService {
      *  @param title 文章标题
      * @param content 文章内容
      * @param type 文章类型
-     * @param topicId
+     * @param topicId 专题 可以为空
+     * @param forumId 版块，可以为空，文章可以不发表到任何版块
      */
-    void saveArticle(String title, String content, int type, Integer topicId, Integer forumId) throws RestException;
+    void saveArticle(String title, String content, Integer type, Integer topicId, Integer forumId) throws RestException;
     
     /**
      * 对应文章的阅读次数加1
@@ -121,13 +122,12 @@ public interface ArticleService {
     
     /**
      * 更新文章
-     *  @param id
-     * @param title
-     * @param content
-     * @param type
-     * @param forumId
+     *  @param id 文章编号，不能为空
+     * @param title 文章标题，不能为空
+     * @param content 文章内容，不能为空
+     * @param type  文章分类，不能为空
      */
-    void updateArticle(Integer id, String title, String content, Integer type, Integer forumId) throws RestException;
+    void updateArticle(Integer id, String title, String content, Integer type) throws RestException;
     
     /**
      * 对文章进行点赞

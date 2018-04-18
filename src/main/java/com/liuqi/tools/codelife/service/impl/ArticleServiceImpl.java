@@ -120,15 +120,33 @@ public class ArticleServiceImpl implements ArticleService {
     }
     
     @Override
-    public void saveArticle(String title, String content, int type, Integer topicId, Integer forumId) throws RestException {
+    public void saveArticle(String title, String content, Integer type, Integer topicId, Integer forumId) throws RestException {
+        if (null == title || "".equals(title.trim())) {
+            logger.error("Title cannot be null or empty");
+            throw new RestException("文章标题不能为空！");
+        }
+    
+        if (null == content || "".equals(content)) {
+            logger.error("Content cannot be null!");
+            throw new RestException("文章内容不能为空！");
+        }
+        
+        //type不能为空
+        if (null == type) {
+            logger.error("Type cannot be null!");
+            throw new RestException("文章分类不能为空！");
+        }
+        
         User user = authenticationService.getLoginUser();
         
         Article article = ArticleBuilder.of(title)
                 .setType(articleTypeService.findById(type))
                 .setContent(content, contentFilePath)
-                .setForum(articleTypeService.findById(forumId))
                 .setAuthor(user)
                 .build();
+        if (null != forumId) {
+            article.setForum(articleTypeService.findById(forumId));
+        }
         articleDao.save(article);
         
         //文章分类对象中文章数目加1
@@ -163,24 +181,48 @@ public class ArticleServiceImpl implements ArticleService {
      *  @param id
      * @param title
      * @param content
-     * @param type
-     * @param forumId
      */
     @Override
-    public void updateArticle(Integer id, String title, String content, Integer type, Integer forumId) throws RestException {
+    public void updateArticle(Integer id, String title, String content, Integer type) throws RestException {
+        if (null == id) {
+            logger.error("Id cannot be null!");
+            throw new RestException("文章编号不能为空！");
+        }
+        
+        if (null == title || "".equals(title.trim())) {
+            logger.error("Title cannot be null or empty");
+            throw new RestException("文章标题不能为空！");
+        }
+        
+        if (null == content || "".equals(content)) {
+            logger.error("Content cannot be null!");
+            throw new RestException("文章内容不能为空！");
+        }
+        
+        //type不能为空
+        if (null == type) {
+            logger.error("Type cannot be null!");
+            throw new RestException("文章分类不能为空！");
+        }
+        
         Article article = articleDao.findById(id);
+        if (null == article) {
+            logger.error("Article with the special id does not exist!");
+            throw new RestException("指定编号的文章不存在！");
+        }
+        
         ArticleType oldType = article.getArticleType();
         
         //更新文件内容
         FileUtils.saveToFile(content, contentFilePath, article.getContentUrl());
         
-        //更新数据库信息
-        articleDao.updateArticle(id, title, type, forumId);
+        //更新数据库信息 版块不进行更新
+        articleDao.updateArticle(id, title, type, article.getForum().getId());
         
-        //如果分类有修改，则修改两个分类下的文章数目
-        if (null != type && oldType.getId() != type) {
-            articleTypeService.deduceArticleCount(oldType.getId());
+        //更新分类中的文章计数信息
+        if (oldType.getId() != type) {
             articleTypeService.addArticleCount(type);
+            articleTypeService.deduceArticleCount(oldType.getId());
         }
     }
     

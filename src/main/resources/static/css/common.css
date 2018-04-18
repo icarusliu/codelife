@@ -42,6 +42,31 @@ body {
     color: black;
 }
 
+/*侧边栏样式*/
+.side-block {
+    border: 1px solid #F0F8FF;
+    background: #fff;
+    padding: 0.4em;
+}
+
+.side-block-title {
+    font-size: 0.8em;
+    color: blue;
+    line-height: 1.4em;
+    border-left: 4px solid #A52A2A;
+
+    padding-left: 0.4em;
+    margin-left: 0.6em;
+    margin-top: 0.4em;
+}
+
+.side-block-item {
+    font-size: 0.8em;
+    line-height: 2.4em;
+    padding-left: 2.2em;
+    margin-left: 0em;
+}
+
 /*右侧内容区域样式调整*/
 .right-content {
     border: 1px solid #AFEEEE;

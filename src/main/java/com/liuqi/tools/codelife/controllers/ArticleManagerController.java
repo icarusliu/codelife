@@ -130,10 +130,11 @@ public class ArticleManagerController {
      */
     @PostMapping("/saveArticle")
     @ResponseBody
-    public String saveArticle(@RequestParam("title") String title, @RequestParam("type") Integer type,
+    public String saveArticle(@RequestParam("title") String title,
+                              @RequestParam("type") Integer type,
                               @RequestParam("content") String content,
                               @RequestParam(value = "topic", required = false) Integer topicId,
-                              @RequestParam("forumId") Integer forumId,
+                              @RequestParam(value = "forumId", required = false) Integer forumId,
                               @RequestParam(name = "id", required = false) Integer id) throws RestException {
         if (null == id) {
             articleService.saveArticle(title, content, type, topicId, forumId);
@@ -147,7 +148,8 @@ public class ArticleManagerController {
                 throw new RestException("只能修改自己发布的文章！");
             }
             
-            articleService.updateArticle(id, title, content, type, forumId);
+            //只允许更新标题与内容
+            articleService.updateArticle(id, title, content, type);
         }
         
         return "succeed";

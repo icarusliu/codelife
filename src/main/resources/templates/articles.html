@@ -33,7 +33,7 @@
     <div class="article-tool-bar col-sm-12 text-right m-0">
         <div class="btn btn-link"
              th:if="${#authentication.name != 'anonymousUser'}">
-            <a th:href="@{/articleManager/newArticle}" target="_blank">新建</a>
+            <a th:href="@{/system/articleManager/newArticle}" target="_blank">新建</a>
         </div>
     </div>
 
@@ -53,7 +53,7 @@
                     </div>
                     <div class="article-list-item-buttons col-sm-2 text-right" >
                         <div class="btn btn-link mb-2" th:if="${#authentication.name != 'anonymousUser' && #authentication.details.user.id == article.authorID}">
-                            <a th:href="@{/articleManager/newArticle} + '?id=' + ${article.id}" target="_blank">编辑</a>
+                            <a th:href="@{/system/articleManager/newArticle} + '?id=' + ${article.id}" target="_blank">编辑</a>
                         </div>
                     </div>
                 </div>
