@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 文章分类管理控制器
@@ -63,5 +64,16 @@ public class ArticleTypeManagerController {
         return ModelAndViewBuilder.of("articleManager/typeManager")
                 .setData("types", types)
                 .build();
+    }
+    
+    /**
+     * REST方式下文章分类管理界面中获取所有文章分类
+     *
+     * @return
+     */
+    @GetMapping("/getAllForManager")
+    @ResponseBody
+    public List<ArticleType> getAllForManager() {
+        return typeService.findByUser(authenticationService.getLoginUser());
     }
 }

@@ -5,6 +5,7 @@ import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.util.FileUtils;
+import com.liuqi.tools.codelife.util.MapBuilder;
 import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import org.apache.ibatis.annotations.ResultMap;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -197,6 +199,23 @@ public class TopicManagerController {
                 .setData("topic", topic)
                 .setData("articles", articles)
                 .setData("types", TopicType.values())
+                .build();
+    }
+    
+    /**
+     * 获取编辑专题时需要的数据
+     *
+     * @param topicId
+     * @return
+     */
+    @PostMapping("/getEditInfo")
+    @ResponseBody
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TOPIC_ADMIN')")
+    public Map<String, Object> getEditInfo(@RequestParam("topicId") Integer topicId) {
+        return MapBuilder.of()
+                .put("topic", topicService.findById(topicId))
+                .put("articles", topicService.getTopicArticles(topicId))
+                .put("types", TopicType.values())
                 .build();
     }
     

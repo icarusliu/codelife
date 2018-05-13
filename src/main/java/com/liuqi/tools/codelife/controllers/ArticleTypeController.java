@@ -8,12 +8,10 @@ import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 文章分类控制器
@@ -34,6 +32,11 @@ public class ArticleTypeController {
     @Autowired
     private ArticleTypeService typeService;
     
+    @PostMapping("/getForums")
+    @ResponseBody
+    public List<ArticleType> getForums() {
+        return typeService.findSystemTypes();
+    }
     
     @GetMapping("/getAll")
     @ResponseBody

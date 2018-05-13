@@ -98,6 +98,21 @@ public class User implements Serializable{
         return false;
     }
     
+    /**
+     * 是否是专题管理员
+     *
+     * @return
+     */
+    public boolean isTopicAdmin() {
+        for (Role role: roles) {
+            if (role.getName().equals("TOPIC_ADMIN")) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     public String getRegisterTime() {
         return registerTime;
     }

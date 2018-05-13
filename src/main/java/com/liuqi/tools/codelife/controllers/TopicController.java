@@ -8,6 +8,7 @@ import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.util.FileUtils;
+import com.liuqi.tools.codelife.util.MapBuilder;
 import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * 专题控制器
@@ -69,6 +67,60 @@ public class TopicController {
         return ModelAndViewBuilder.of("topic")
                 .setData("myTopics", myTopics)
                 .setData("topics", topics)
+                .build();
+    }
+    
+    /**
+     * 获取REST模式下专题浏览页面需要的数据
+     */
+    @PostMapping("/getExplorerData")
+    @ResponseBody
+    public Map<String, Object> getExplorerData() {
+        //获取用户订阅专题及其更新的文章
+        User loginUser = authenticationService.getLoginUser();
+        Collection<Topic> myTopics;
+        if (null != loginUser) {
+            myTopics = topicService.getUserTopics(loginUser.getId());
+        } else {
+            myTopics = Collections.EMPTY_LIST;
+        }
+        if (0 != myTopics.size()) {
+            myTopics.forEach(topic -> topic.setArticles(topicService.getTopicArticles(topic.getId())));
+        }
+    
+        //获取所有的未订阅并且类型是开放的专题，私有的专题不能直接展现
+        List<Topic> topics = topicService.findUserNotSubscribed(loginUser, 1, 20).getList();
+        return MapBuilder.of()
+                .put("myTopics", myTopics)
+                .put("topics", topics)
+                .build();
+    }
+    
+    /**
+     * 获取首页需要展示的专题数据
+     *
+     * @return
+     */
+    @PostMapping("/getForIndex")
+    @ResponseBody
+    public Map<String, Object> getForIndex() {
+        //获取用户订阅专题及其更新的文章
+        User loginUser = authenticationService.getLoginUser();
+        Collection<Topic> myTopics;
+        if (null != loginUser) {
+            myTopics = topicService.getUserTopics(loginUser.getId());
+        } else {
+            myTopics = Collections.EMPTY_LIST;
+        }
+        if (0 != myTopics.size()) {
+            myTopics.forEach(topic -> topic.setArticles(topicService.getTopicArticles(topic.getId())));
+        }
+    
+        //获取所有的未订阅并且类型是开放的专题，私有的专题不能直接展现
+        List<Topic> topics = topicService.findUserNotSubscribed(loginUser, 1, 20).getList();
+    
+        return MapBuilder.of().put("myTopic", myTopics)
+                .put("topics", topics)
                 .build();
     }
     
@@ -129,6 +181,30 @@ public class TopicController {
      */
     @GetMapping("/detail")
     public ModelAndView detail(@RequestParam(value = "id", required = false) Integer topicId) {
+        return ModelAndViewBuilder.of("topicDetail")
+                .setDatasFromMap(getMyTopicsData(topicId))
+                .build();
+    }
+    
+    /**
+     * 返回REST方式下专题详细页面的数据
+     *
+     * @param topicId
+     * @return
+     */
+    @PostMapping("/getMyTopics")
+    @ResponseBody
+    public Map<String, Object> getMyTopics(@RequestParam(value = "id", required = false) Integer topicId) {
+        return getMyTopicsData(topicId);
+    }
+    
+    /**
+     * 获取个人专题页面需要的数据
+     *
+     * @param topicId
+     * @return
+     */
+    private Map<String, Object> getMyTopicsData(Integer topicId) {
         //获取用户订阅专题
         User loginUser = authenticationService.getLoginUser();
         Collection<Topic> myTopics;
@@ -137,7 +213,7 @@ public class TopicController {
         } else {
             myTopics = Collections.EMPTY_LIST;
         }
-        
+    
         //如果专题编号未传入，且用户已经登录，则获取用户订阅的第一个专题进行展示
         Topic topic = null;
         if (null == topicId && null != loginUser) {
@@ -149,7 +225,7 @@ public class TopicController {
         } else {
             topic = topicService.findById(topicId);
         }
-        
+    
         //获取专题订阅用户清单
         List<User> userList;
         if (null != topicId) {
@@ -157,7 +233,7 @@ public class TopicController {
         } else {
             userList = Collections.EMPTY_LIST;
         }
-        
+    
         //获取专题文章清单
         List<Article> articleList;
         if (null != topicId) {
@@ -165,12 +241,12 @@ public class TopicController {
         } else {
             articleList = Collections.EMPTY_LIST;
         }
-        
-        return ModelAndViewBuilder.of("topicDetail")
-                .setData("topic", topic)
-                .setData("articles", articleList)
-                .setData("myTopics", myTopics)
-                .setData("userList", userList)
+    
+        return MapBuilder.of()
+                .put("topic", topic)
+                .put("articles", articleList)
+                .put("myTopics", myTopics)
+                .put("userList", userList)
                 .build();
     }
     

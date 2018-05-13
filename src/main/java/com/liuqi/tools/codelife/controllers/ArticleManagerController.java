@@ -9,6 +9,7 @@ import com.liuqi.tools.codelife.service.ArticleService;
 import com.liuqi.tools.codelife.service.ArticleTypeService;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
+import com.liuqi.tools.codelife.util.MapBuilder;
 import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,8 +74,8 @@ public class ArticleManagerController {
             throws RestException {
         
         //offset与limit为datastrap table的分页参数
-        int nowPage = (null == offset ? 0 : offset) / pageSize + 1;
         pageSize = null == pageSize ? 20 : pageSize;
+        int nowPage = (null == offset ? 0 : offset) / pageSize + 1;
         
         //用户只能看自己的文章，而管理员可以看所有的文章
         User user = authenticationService.getLoginUser();
@@ -111,6 +112,31 @@ public class ArticleManagerController {
             if (null != article) {
                 builder.setData("article", article);
             }
+        }
+        
+        return builder.build();
+    }
+    
+    /**
+     * REST方式下获取新建文章时需要使用到的数据
+     *
+     * @param articleId
+     * @return
+     * @throws RestException
+     */
+    @PostMapping("/getNewArticleDatas")
+    @ResponseBody
+    public Map<String, Object> getNewArticleDatas(@RequestParam(value = "articleId", required = false) Integer articleId) throws RestException {
+        User loginUser = authenticationService.getLoginUser();
+        
+        MapBuilder builder = MapBuilder.of()
+                .put("types", typeService.findByUser(loginUser))
+                .put("forums", typeService.findSystemTypes())
+                .put("myTopics", topicService.getUserTopics(loginUser.getId()));
+        
+        if (null != articleId) {
+            Article article = articleService.findById(articleId);
+            builder.put("article", article);
         }
         
         return builder.build();

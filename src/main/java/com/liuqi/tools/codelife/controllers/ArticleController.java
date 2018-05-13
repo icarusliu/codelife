@@ -4,12 +4,14 @@ import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.*;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.*;
+import com.liuqi.tools.codelife.util.MapBuilder;
 import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import com.liuqi.tools.codelife.util.SessionProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -77,9 +79,41 @@ public class ArticleController {
     
     @PostMapping("/getForExplorer")
     @ResponseBody
-    public List<Article> getForExplorer(@RequestParam("nowPage") Integer nowPage,
+    public List<Article> getForExplorer(@RequestParam(value = "forumId", required = false) Integer forumId,
+                                        @RequestParam("nowPage") Integer nowPage,
                                                 @RequestParam("pageSize") Integer pageSize) {
-        return articleService.findForExplorer(nowPage, pageSize).getList();
+        if (null == forumId) {
+            return articleService.findForExplorer(nowPage, pageSize).getList();
+        } else {
+            return articleService.findForExplorer(forumId, nowPage, pageSize).getList();
+        }
+    }
+    
+    /**
+     * 获取文章详细信息
+     *
+     * @param articleId
+     * @param session
+     * @return
+     * @throws RestException
+     */
+    @PostMapping("/getDetail")
+    @ResponseBody
+    public Map<String, Object> getArticleDetail(@RequestParam("id") Integer articleId, HttpSession session) throws RestException {
+        Article article = articleService.findById(articleId);
+    
+        //阅读次数加1
+        //一个Session只算一次；
+        boolean notExist = SessionProxy.proxy(session)
+                .notExistSetMapAttribute(ARTICLE_READ_IDS, String.valueOf(articleId), articleId);
+        if (notExist) {
+            articleService.addReadCount(article);
+        }
+        
+        return MapBuilder.of()
+                .put("article", article)
+                .put("comments", commentService.findByDestination(CommentType.ARTICLE, articleId))
+                .build();
     }
     
     /**

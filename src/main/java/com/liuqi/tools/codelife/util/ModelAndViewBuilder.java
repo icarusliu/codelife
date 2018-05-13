@@ -2,6 +2,8 @@ package com.liuqi.tools.codelife.util;
 
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Map;
+
 /**
  * ModelAndView类的建造器
  * 使用方式：
@@ -43,6 +45,18 @@ public class ModelAndViewBuilder {
      */
     public ModelAndViewBuilder setData(String key, Object value) {
         modelAndView.addObject(key, value);
+        return this;
+    }
+    
+    /**
+     * 使用Map来设置数据到ModelAndView对象中
+     *
+     * @param map
+     * @return
+     */
+    public ModelAndViewBuilder setDatasFromMap(Map<String, Object> map) {
+        map.keySet().forEach(item -> modelAndView.addObject(item, map.get(item)));
+        
         return this;
     }
     
