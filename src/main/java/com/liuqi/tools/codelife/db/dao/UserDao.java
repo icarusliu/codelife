@@ -1,56 +1,55 @@
 package com.liuqi.tools.codelife.db.dao;
 
-import com.liuqi.tools.codelife.entity.Role;
-import com.liuqi.tools.codelife.entity.Topic;
 import com.liuqi.tools.codelife.entity.User;
-import com.liuqi.tools.codelife.entity.UserStatus;
+import org.apache.ibatis.annotations.*;
+import org.springframework.security.core.parameters.P;
 
 import java.util.Collection;
 import java.util.List;
 
 /**
- * 用户操作Dao接口
+ * 用户Mapper
  *
  * @Author: LiuQI
- * @Created: 2018/3/23 21:59
+ * @Created: 2018/3/23 21:01
  * @Version: V1.0
  **/
+@Mapper
 public interface UserDao {
     /**
      * 查找所有用户
      *
-     * @return 返回所有用户清单
+     * @return
      */
-    List<User> findAll();
+    public List<User> findAll();
     
     /**
      * 通过用户名查找用户
      *
      * @param username 用户名
-     * @return 返回查找的用户对象，如果未查找到返回Null
+     * @return 返回查找的用户，如果查找用户为空则返回Null
      */
-    User findByUsername(String username);
-    
+    public User findByUsername(@Param("username") String username);
     
     /**
      * 通过编号查找用户
      *
      * @param id
-     * @return 如果未找到时返回Null
+     * @return
      */
-    User findById(Integer id);
+    public User findById(@Param("id") Integer id);
     
     /**
-     * 修改用户状态
-     * @param id 需要修改状态的用户编号
-     * @param locked
+     * 更新用户状态
+     *
+     * @param id 用户编号
+     * @param status 用户状态的编号
      */
-    void updateUserStatus(int id, UserStatus locked);
-
+    void updateUserStatus(@Param("id") int id, @Param("status") int status);
+    
     /**
      * 更新用户信息
-     *
-     * @param user
+     * @Param user 需要更新的用户信息
      */
     void updateUser(User user);
     
@@ -63,25 +62,23 @@ public interface UserDao {
     
     /**
      * 通过关键字搜索用户
-     *
      * @param key
      * @return
      */
-    List<User> search(String key);
+    List<User> search(@Param("key") String key);
     
     /**
-     * 给用户添加角色
-     *
-     * @param user
-     * @param role
+     * 给用户添加权限
+     * @param userId
+     * @param roleId
      */
-    void addRole(User user, Role role);
+    void addRole(@Param("userId") int userId, @Param("roleId") int roleId);
     
     /**
-     * 获取专题用户
+     * 获取专题用户清单
      *
      * @param topicId
      * @return
      */
-    List<User> getTopicUsers(Integer topicId);
+    List<User> getTopicUsers(@Param("topicId") Integer topicId);
 }

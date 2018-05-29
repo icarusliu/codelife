@@ -9,11 +9,11 @@
 
     <!-- 注册Handler -->
     <typeHandlers>
-        <typeHandler handler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleStatusTypeHandler"/>
-        <typeHandler handler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.UserStatusTypeHandler"/>
-        <typeHandler handler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicStatusTypeHandler"/>
-        <typeHandler handler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicTypeTypeHandler"/>
-        <typeHandler handler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.CommentTypeHandler"/>
+        <typeHandler handler="com.liuqi.tools.codelife.db.dao.typehandler.ArticleStatusTypeHandler"/>
+        <typeHandler handler="com.liuqi.tools.codelife.db.dao.typehandler.UserStatusTypeHandler"/>
+        <typeHandler handler="com.liuqi.tools.codelife.db.dao.typehandler.TopicStatusTypeHandler"/>
+        <typeHandler handler="com.liuqi.tools.codelife.db.dao.typehandler.TopicTypeTypeHandler"/>
+        <typeHandler handler="com.liuqi.tools.codelife.db.dao.typehandler.CommentTypeHandler"/>
     </typeHandlers>
 
     <plugins>
@@ -31,6 +31,7 @@
         <mapper resource="mybatis/topicMapper.xml"/>
         <mapper resource="mybatis/commentMapper.xml"/>
         <mapper resource="mybatis/articleTypeMapper.xml"/>
+        <mapper resource="mybatis/systemMapper.xml"/>
     </mappers>
 
 </configuration>

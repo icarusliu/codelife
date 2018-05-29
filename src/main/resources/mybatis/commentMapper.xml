@@ -2,12 +2,12 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.liuqi.tools.codelife.db.dao.mybatis.mapper.CommentMapper">
+<mapper namespace="com.liuqi.tools.codelife.db.dao.CommentDao">
 
     <insert id="add" parameterType="Comment">
         insert into comment(user_id, ip, content, comment_time, anonymos, type, destination)
         values(#{commentUser.id}, #{ip}, #{content}, #{commentTime}, #{anonymos},
-        #{type, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.CommentTypeHandler},
+        #{type, typeHandler=com.liuqi.tools.codelife.db.dao.typehandler.CommentTypeHandler},
         #{destination});
     </insert>
 
@@ -18,10 +18,10 @@
         <result property="commentTime" column="comment_time"/>
         <result property="anonymos" column="anonymos"/>
         <result property="type" column="type"
-                typeHandler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.CommentTypeHandler"/>
+                typeHandler="com.liuqi.tools.codelife.db.dao.typehandler.CommentTypeHandler"/>
         <result property="destination" column="destination"/>
         <association property="commentUser" column="user_id" javaType="User"
-                     select="com.liuqi.tools.codelife.db.dao.mybatis.mapper.UserMapper.findById"/>
+                     select="com.liuqi.tools.codelife.db.dao.UserDao.findById"/>
         <collection property="children" ofType="Comment">
             <id column="child_id" property="id"/>
             <result property="ip" column="child_ip"/>
@@ -29,10 +29,10 @@
             <result property="commentTime" column="child_comment_time"/>
             <result property="anonymos" column="child_anonymos"/>
             <result property="type" column="child_type"
-                    typeHandler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.CommentTypeHandler"/>
+                    typeHandler="com.liuqi.tools.codelife.db.dao.typehandler.CommentTypeHandler"/>
             <result property="destination" column="child_destination"/>
             <association property="commentUser" column="child_user_id" javaType="User"
-                         select="com.liuqi.tools.codelife.db.dao.mybatis.mapper.UserMapper.findById"/>
+                         select="com.liuqi.tools.codelife.db.dao.UserDao.findById"/>
         </collection>
     </resultMap>
 
@@ -63,7 +63,7 @@
 
     <select id="getByDestination" resultMap="commentResult">
         <include refid="select"/>
-        where t1.type = #{type, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.CommentTypeHandler}
+        where t1.type = #{type, typeHandler=com.liuqi.tools.codelife.db.dao.typehandler.CommentTypeHandler}
             and t1.destination=#{destination}
     </select>
 

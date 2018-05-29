@@ -4,113 +4,61 @@ import com.liuqi.tools.codelife.entity.Topic;
 import com.liuqi.tools.codelife.entity.TopicStatus;
 import com.liuqi.tools.codelife.entity.TopicType;
 import com.liuqi.tools.codelife.entity.User;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Collection;
 import java.util.List;
 
 /**
- * Topic数据库操作类
- *
- */
+ * @Author: LiuQI
+ * @Created: 2018/4/3 11:36
+ * @Version: V1.0
+ **/
+@Mapper
 public interface TopicDao {
-    /**
-     * 查找所有专题清单
-     *
-     * @return
-     */
     List<Topic> findAll();
     
-    /**
-     * 查找用户订阅的所有专题
-     *
-     * @param id 用户编号
-     * @return
-     */
-    List<Topic> findByUser(Integer id);
+    List<Topic> findByUser(@Param("id") Integer id);
     
-    /**
-     * 通过标题查找Topic
-     *
-     * @param title
-     * @return
-     */
-    Topic findByTitle(String title);
+    Topic findByTitle(@Param("title") String title);
     
-    /**
-     * 通过编号查找专题
-     *
-     * @param id
-     * @return
-     */
-    Topic findById(Integer id);
+    Topic findById(@Param("id") Integer id);
     
-    /**
-     * 新增专题
-     * @param topic
-     */
     void insert(Topic topic);
     
-    /**
-     * 更新专题
-     *
-     * @param topic
-     */
     void update(Topic topic);
     
-    /**
-     * 批量在专题下新增文章
-     * @param id
-     * @param articles
-     */
-    void addTopicArticles(Integer id, List<Integer> articles);
+    void addTopicArticles(@Param("id") Integer id, @Param("articles") List<Integer> articles);
+    
+    void subscribeTopic(@Param("userId") Integer userId, @Param("topicId") Integer topicId);
+    
+    void unSubscribeTopic(@Param("userId") Integer userId, @Param("topicId") Integer topicId);
+    
+    void delete(@Param("id") Integer id);
     
     /**
-     * 用户订阅专题
-     *
-     * @param userId
-     * @param topicId
+     * 删除Topic下的指定文章
+      * @param id
+     * @param articleId
      */
-    void subscribeTopic(Integer userId, Integer topicId);
-    
-    /**
-     * 用户取消订阅专题
-     *
-     * @param userId
-     * @param topicId
-     */
-    void unSubscribeTopic(Integer userId, Integer topicId);
-    
-    /**
-     * 删除专题
-     *
-     * @param id
-     */
-    void delete(Integer id);
-    
-    /**
-     * 清空专题下的文章
-     *
-     * @param id
-     */
-    void clearTopicArticles(Integer id);
+    void deleteTopicArticle(@Param("id") Integer id, @Param("articleId") Integer articleId);
     
     /**
      * 清空专题的订阅关系
-     *
+     * 
      * @param id
      */
-    void clearTopicSubscribers(Integer id);
+    void clearTopicSubscribers(@Param("id") Integer id);
     
     /**
-     * 删除专题下的指定文章
-     *
+     * 清空专题的文章
      * @param id
-     * @param articleId
      */
-    void deleteTopicArticle(Integer id, Integer articleId);
+    void clearTopicArticles(@Param("id")Integer id);
     
     /**
-     * 获取用户未订阅的所有开放专题
+     * 获取用户未订阅的所有开放的专题
      *
      * @param user
      * @return
@@ -120,18 +68,18 @@ public interface TopicDao {
     /**
      * 更新专题状态
      *
-      * @param id
+     * @param id
      * @param status
      */
-    void updateStatus(Integer id, TopicStatus status);
+    void updateStatus(@Param("id") Integer id, @Param("status")TopicStatus status);
     
     /**
-     * 获取管理员为指定用户的所有专题
+     * 获取管理员为指定用户编号的专题清单
      *
-     * @param loginUser
+     * @param id 用户编号
      * @return
      */
-    List<Topic> findByAdmin(User loginUser);
+    List<Topic> findByAdmin(@Param("userId") int id);
     
     /**
      * 根据关键字搜索专题
@@ -139,5 +87,5 @@ public interface TopicDao {
      * @param key
      * @return
      */
-    List<Topic> search(String key);
+    List<Topic> search(@Param("key") String key);
 }

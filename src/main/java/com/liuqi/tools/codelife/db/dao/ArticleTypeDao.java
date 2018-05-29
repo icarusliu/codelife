@@ -1,65 +1,65 @@
 package com.liuqi.tools.codelife.db.dao;
 
+import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.User;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 /**
- * 文章分类数据库操作类
- */
+ * 文章分类Mapper
+ *
+ * @Author: LiuQI
+ * @Created: 2018/3/23 21:01
+ * @Version: V1.0
+ **/
+@Mapper
 public interface ArticleTypeDao {
     /**
-     * 根据ID查找文章分类
-     *
-     * @return 返回查找的文章分类 如果未找着会返回空值
+     * 根据Type的ID获取Type
+     * @return 返回获取的Type
      */
-    ArticleType findById(int id);
+    ArticleType findById(@Param("id") int id);
     
     /**
      * 通过分类名称查找分类
-     *
-     * @param typeName 分类名称
-     * @return 返回查找到的分类对象，如果没有返回为空
+     * @param typeName
      */
-    ArticleType findByName(String typeName);
+    ArticleType findByName(@Param("name") String typeName);
     
     /**
-     * 通过用户查找其分类
-     * @param user
-     * @return
-     */
-    List<ArticleType> findByUser(User user);
-    
-    /**
-     * 查找所有系统版块
+     * 查找用户的分类
      *
      * @return
      */
-    List<ArticleType> findAllSystemTypes();
+    List<ArticleType> findByUser(@Param("userId") Integer userId);
     
     /**
-     * 新增文章分类
+     * 保存文章分类
      *
      * @param type
      */
     void add(ArticleType type);
     
     /**
-     * 更新分类名称
+     * 重命名分类
+     * @param id 分类ID
+     * @param name 分类名称
+     */
+    void rename(@Param("id") Integer id, @Param("name") String name);
+    
+    /**
+     * 增加文章数目
+     * @param id
+     */
+    void addArticleCount(@Param("id") Integer id);
+    
+    /**
+     * 文章数目减1
      *
-     */
-    void rename(Integer id, String name);
-    
-    /**
-     * 分类下文章数加1
      * @param id
      */
-    void addArticleCount(Integer id);
-    
-    /**
-     * 分类下文章数减1
-     * @param id
-     */
-    void deduceArticleCount(Integer id);
+    void deduceArticleCount(@Param("id") Integer id);
 }

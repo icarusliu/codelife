@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleMapper">
+<mapper namespace="com.liuqi.tools.codelife.db.dao.ArticleDao">
     <resultMap id="articleResult" type="Article">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
@@ -10,7 +10,7 @@
         <result property="authorName"  column="author_name"/>
         <result property="createDate" column="create_date"/>
         <result property="status" column="status" jdbcType="INTEGER"
-                typeHandler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleStatusTypeHandler"/>
+                typeHandler="com.liuqi.tools.codelife.db.dao.typehandler.ArticleStatusTypeHandler"/>
         <result property="contentUrl" column="content_url"/>
         <result property="remark" column="remark"/>
         <result property="readCount" column="read_count"/>
@@ -18,10 +18,10 @@
         <result property="fixTop" column="fix_top"/>
         <result property="recommended" column="recommended"/>
         <association property="articleType" column="type"
-                     select="com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleTypeMapper.findById"
+                     select="com.liuqi.tools.codelife.db.dao.ArticleTypeDao.findById"
                      javaType="ArticleType"/>
         <association property="forum" column="forum"
-                     select="com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleTypeMapper.findById"
+                     select="com.liuqi.tools.codelife.db.dao.ArticleTypeDao.findById"
                     javaType="ArticleType">
         </association>
     </resultMap>
@@ -124,7 +124,7 @@
         <if test="null != forum">, forum</if>
         )
         values(#{title}, #{articleType.id}, #{authorID}, #{createDate},
-            #{status, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleStatusTypeHandler},
+            #{status, typeHandler=com.liuqi.tools.codelife.db.dao.typehandler.ArticleStatusTypeHandler},
             #{contentUrl}, #{readCount}, #{remark}
         <if test="null != forum">, #{forum.id}</if>
         )

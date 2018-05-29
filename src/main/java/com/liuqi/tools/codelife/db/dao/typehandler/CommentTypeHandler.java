@@ -1,4 +1,4 @@
-package com.liuqi.tools.codelife.db.dao.mybatis.mapper;
+package com.liuqi.tools.codelife.db.dao.typehandler;
 
 import com.liuqi.tools.codelife.entity.CommentType;
 import org.apache.ibatis.type.EnumOrdinalTypeHandler;

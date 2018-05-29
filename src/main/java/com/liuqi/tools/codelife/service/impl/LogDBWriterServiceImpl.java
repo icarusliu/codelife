@@ -7,7 +7,6 @@ import com.liuqi.tools.codelife.service.LogDBWriterService;
 import com.liuqi.tools.codelife.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.stereotype.Service;
 
 /**

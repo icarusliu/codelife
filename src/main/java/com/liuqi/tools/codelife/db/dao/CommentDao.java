@@ -2,13 +2,19 @@ package com.liuqi.tools.codelife.db.dao;
 
 import com.liuqi.tools.codelife.entity.Comment;
 import com.liuqi.tools.codelife.entity.CommentType;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Collection;
 
 /**
- * 评论数据库操作接口
- */
+ * 评论Mapper对象
+ *
+ * @Author: LiuQI
+ * @Created: 2018/4/13 16:00
+ * @Version: V1.0
+ **/
+@Mapper
 public interface CommentDao {
     /**
      * 通过评论类型及评论主体获取所有评论
@@ -16,8 +22,8 @@ public interface CommentDao {
      * @param destination
      * @return
      */
-    Collection<Comment> getByDestination(CommentType type,
-                                         Integer destination);
+    Collection<Comment> getByDestination(@Param("type") CommentType type,
+                                                @Param("destination") Integer destination);
     
     /**
      * 添加评论
@@ -37,7 +43,7 @@ public interface CommentDao {
      * @param id
      * @param content
      */
-    void update(@Param("id") Integer id, String content);
+    void update(@Param("id") Integer id, @Param("content") String content);
     
     /**
      * 根据作者获取它的文章的评论总数
@@ -45,5 +51,5 @@ public interface CommentDao {
      * @param authorId
      * @return
      */
-    int getCommentCountByAuthor(Integer authorId);
+    int getCommentCountByAuthor(@Param("authorId") Integer authorId);
 }

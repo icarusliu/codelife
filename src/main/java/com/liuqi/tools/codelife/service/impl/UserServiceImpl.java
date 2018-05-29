@@ -2,7 +2,6 @@ package com.liuqi.tools.codelife.service.impl;
 
 import com.liuqi.tools.codelife.db.dao.UserDao;
 import com.liuqi.tools.codelife.entity.Role;
-import com.liuqi.tools.codelife.entity.Topic;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.entity.UserStatus;
 import com.liuqi.tools.codelife.exceptions.RestException;
@@ -79,7 +78,7 @@ public class UserServiceImpl implements UserService{
     
     @Override
     public void lockUser(User user) {
-        userDao.updateUserStatus(user.getId(), UserStatus.LOCKED);
+        userDao.updateUserStatus(user.getId(), UserStatus.LOCKED.ordinal());
     }
     
     /**
@@ -188,7 +187,7 @@ public class UserServiceImpl implements UserService{
             throw new RestException("用户状态不是锁定状态，不能进行解锁！");
         }
         
-        userDao.updateUserStatus(id, UserStatus.NORMAL);
+        userDao.updateUserStatus(id, UserStatus.NORMAL.ordinal());
     }
     
     @Override
@@ -200,7 +199,7 @@ public class UserServiceImpl implements UserService{
             throw new RestException("不能注销管理员！");
         }
         
-        userDao.updateUserStatus(id, UserStatus.CANCEL);
+        userDao.updateUserStatus(id, UserStatus.CANCEL.ordinal());
     }
     
     @Override
@@ -211,7 +210,7 @@ public class UserServiceImpl implements UserService{
             throw new RestException("用户状态不是待审批状态，不能被审批！");
         }
         
-        userDao.updateUserStatus(id, UserStatus.NORMAL);
+        userDao.updateUserStatus(id, UserStatus.NORMAL.ordinal());
     }
     
     @Override
@@ -259,7 +258,7 @@ public class UserServiceImpl implements UserService{
             logger.warn("Role already exists for user, role: " + role + ", user: " + user);
             return;
         }
-        userDao.addRole(user, role);
+        userDao.addRole(user.getId(), role.getId());
     }
     
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);

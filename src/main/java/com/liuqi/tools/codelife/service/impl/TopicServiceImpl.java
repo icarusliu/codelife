@@ -324,7 +324,7 @@ public class TopicServiceImpl implements TopicService {
             return Collections.EMPTY_LIST;
         }
         
-        return topicDao.findByAdmin(loginUser);
+        return topicDao.findByAdmin(loginUser.getId());
     }
     
     @Override

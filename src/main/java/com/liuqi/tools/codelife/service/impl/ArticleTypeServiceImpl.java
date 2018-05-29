@@ -1,6 +1,5 @@
 package com.liuqi.tools.codelife.service.impl;
 
-import com.liuqi.tools.codelife.db.dao.ArticleDao;
 import com.liuqi.tools.codelife.db.dao.ArticleTypeDao;
 import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.User;
@@ -29,12 +28,12 @@ public class ArticleTypeServiceImpl implements ArticleTypeService {
     
     @Override
     public List<ArticleType> findByUser(User user) {
-        return articleTypeDao.findByUser(user);
+        return articleTypeDao.findByUser(user.getId());
     }
     
     @Override
     public List<ArticleType> findSystemTypes() {
-        return articleTypeDao.findAllSystemTypes();
+        return articleTypeDao.findByUser(0);
     }
     
     @Override

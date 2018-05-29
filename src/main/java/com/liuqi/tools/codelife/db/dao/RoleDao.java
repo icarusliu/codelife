@@ -1,16 +1,16 @@
 package com.liuqi.tools.codelife.db.dao;
 
 import com.liuqi.tools.codelife.entity.Role;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.Collection;
 
 /**
- * 角色操作Dao
- *
- * @Author: LiuQI
- * @Created: 2018/3/24 16:00
- * @Version: V1.0
- **/
+ * 角色操作Mapper
+ */
+@Mapper
 public interface RoleDao {
     /**
      * 查找所有角色
@@ -25,7 +25,7 @@ public interface RoleDao {
      * @param roleName
      * @param remark
      */
-    void add(String roleName, String remark);
+    void add(@Param("roleName") String roleName, @Param("remark") String remark);
     
     /**
      * 更新角色
@@ -34,5 +34,5 @@ public interface RoleDao {
      * @param roleName
      * @param remark
      */
-    void update(Integer id, String roleName, String remark);
+    void update(@Param("id") Integer id, @Param("roleName") String roleName, @Param("remark") String remark);
 }
