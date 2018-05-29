@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+        xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+        layout:decorator="layout/layout">
+<head>
+    <meta charset="UTF-8"/>
+    <title>系统设置</title>
+
+    <script th:inline="javascript">
+        $(function(){
+           setActiveItem();
+        });
+
+        //加载完成后设置哪个分类被选中
+        function setActiveItem() {
+            var page = $.getUrlPage();
+            var as = $("#navUl>a");
+
+            //如果页面是system/结束时加载第一个页面
+            <!--if ('system/' == page.substring(page.length - 7, page.length)) {-->
+                <!--$(as[0]).attr("class", "list-group-item active");-->
+                <!--return;-->
+            <!--}-->
+
+            //否则根据页面比较看加载哪个页面
+            for (var i = 0; i < as.length; i++) {
+                var a = as[i];
+                var url = $(a).attr("href");
+
+                if (0 == page.indexOf(url)) {
+                    $(a).attr("class", "list-group-item active");
+                } else {
+                    $(a).attr("class", "list-group-item");
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+<div layout:fragment="content" class="container-fluid">
+    <div class="row">
+        <!-- 左侧导航页面 -->
+        <div class="col-sm-3 col-md-2 bg-faded sidebar"
+             style="background: #fefefe; border-bottom: 1px solid #eeeeee; ">
+            <div class="list-group" id="navUl" >
+                <a class="list-group-item" th:href="@{/system/roleManager}"
+                   sec:authorize="hasAuthority('ADMIN')">角色管理</a>
+                <a class="list-group-item" th:href="@{/system/userManager}"
+                   sec:authorize="hasAuthority('ADMIN')">用户管理</a>
+                <!--<a class="list-group-item" th:href="@{/system/logStatistics}">日志分析</a>-->
+                <a class="list-group-item" th:href="@{/system/articleManager}"
+                   sec:authorize="isAuthenticated()">文章管理</a>
+                <a class="list-group-item" th:href="@{/system/articleTypeManager}"
+                   sec:authorize="isAuthenticated()">文章分类管理</a>
+                <a class="list-group-item" th:href="@{/system/topicManager}"
+                   sec:authorize="hasAuthority('ADMIN') or hasAuthority('TOPIC_ADMIN')">专题管理</a>
+                <a class="list-group-item" th:href="@{/system/indexManager}"
+                   sec:authorize="hasAuthority('ADMIN')">首页管理</a>
+            </div>
+        </div>
+
+        <!-- 右侧文章列表 -->
+        <div layout:fragment="subContent" class="col-sm-9 col-md-10 right-content">
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

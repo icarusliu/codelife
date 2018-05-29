@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleMapper">
+    <resultMap id="articleResult" type="Article">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="authorID" column="author_id"/>
+        <result property="authorName"  column="author_name"/>
+        <result property="createDate" column="create_date"/>
+        <result property="status" column="status" jdbcType="INTEGER"
+                typeHandler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleStatusTypeHandler"/>
+        <result property="contentUrl" column="content_url"/>
+        <result property="remark" column="remark"/>
+        <result property="readCount" column="read_count"/>
+        <result property="praiseCount" column="praise_count"/>
+        <result property="fixTop" column="fix_top"/>
+        <result property="recommended" column="recommended"/>
+        <association property="articleType" column="type"
+                     select="com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleTypeMapper.findById"
+                     javaType="ArticleType"/>
+        <association property="forum" column="forum"
+                     select="com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleTypeMapper.findById"
+                    javaType="ArticleType">
+        </association>
+    </resultMap>
+
+    <sql id="selectArticle">
+        select
+            t1.id as id,
+            t1.title as title,
+            t1.type as type,
+            t1.forum as forum,
+            t3.name as type_name,
+            t1.author as author_id,
+            t2.realname as author_name,
+            t1.create_date as create_date,
+            t1.status as status,
+            t1.content_url as content_url,
+            t1.remark as remark,
+            t1.read_count as read_count,
+            t1.praise_count as praise_count,
+            t1.fix_top as fix_top,
+            t1.recommended as recommended
+        from article t1
+        left join user t2
+            on t1.author = t2.id
+        left join article_type t3
+            on t1.type = t3.id
+    </sql>
+
+    <sql id="orderByRecommended">
+        order by t1.recommended desc, create_date desc
+    </sql>
+
+    <select id="findForExplorerOrderByRecommended" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        where 1 = 1
+        <if test="forumId != null">
+            and t1.forum = #{forumId}
+        </if>
+        <include refid="orderByRecommended"/>
+    </select>
+
+    <select id="findForExplorerOrderByFixTop" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        where 1 = 1
+        <if test="typeId != null">
+            and t1.type = #{typeId}
+        </if>
+        <if test="authorId != null">
+            and t1.author = #{authorId}
+        </if>
+        order by t1.fix_top desc, create_date desc
+    </select>
+
+    <select id="findForManager" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        order by create_date desc
+    </select>
+
+    <select id="findByTopicForManager" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        left join topic_article t4
+        on t4.article_id = t1.id
+        where t4.topic_id = #{topicId}
+        order by t1.create_date desc
+    </select>
+
+    <!--查找专题下的文章-->
+    <select id="findByTopicForExplorer" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        left join topic_article t4
+        on t4.article_id = t1.id
+        where t4.topic_id = #{topicId}
+        order by create_date desc
+    </select>
+
+    <!-- 通过文章ID查找文章-->
+    <select id="findById" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        where t1.id = #{id}
+    </select>
+
+    <select id="search" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        where t1.title like concat('%', concat(#{key}, '%'))
+        <include refid="orderByRecommended"/>
+    </select>
+
+    <select id="getStatisticInfoByAuthor" resultType="UserArticleStatInfo">
+        select
+            sum(read_count) as readCount,
+            sum(praise_count) as praiseCount
+        from
+            article
+        where author = #{authorId}
+    </select>
+
+    <!-- 新增Article对象   -->
+    <insert id="save" parameterType="com.liuqi.tools.codelife.entity.Article" useGeneratedKeys="true" keyProperty="id">
+        insert into article(title, type, author, create_date, status, content_url, read_count, remark
+        <if test="null != forum">, forum</if>
+        )
+        values(#{title}, #{articleType.id}, #{authorID}, #{createDate},
+            #{status, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.ArticleStatusTypeHandler},
+            #{contentUrl}, #{readCount}, #{remark}
+        <if test="null != forum">, #{forum.id}</if>
+        )
+    </insert>
+
+    <update id="addReadCount" parameterType="com.liuqi.tools.codelife.entity.Article">
+        update article set read_count = read_count + 1 where id = #{id}
+    </update>
+
+    <delete id="deleteArticle">
+        delete from article where id=#{id}
+    </delete>
+
+    <update id="updateArticle">
+        update article set type=#{type}, title=#{title}, forum=#{forumId} where id=#{id}
+    </update>
+
+    <update id="addPraiseCount">
+        update article set praise_count = praise_count + #{count} where id=#{id}
+    </update>
+
+    <update id="updateFixTop">
+        update article set fix_top = #{fixTop} where id=#{id}
+    </update>
+
+    <update id="updateRecommended">
+        update article set recommended = #{recommended} where id=#{id}
+    </update>
+</mapper>
