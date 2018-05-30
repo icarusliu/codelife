@@ -3,6 +3,8 @@ package com.liuqi.tools.codelife.service.impl;
 import com.liuqi.tools.codelife.db.dao.ArticleTypeDao;
 import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.User;
+import com.liuqi.tools.codelife.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.ArticleTypeService;
 import com.liuqi.tools.codelife.service.AuthenticationService;
@@ -33,7 +35,7 @@ public class ArticleTypeServiceImpl implements ArticleTypeService {
     
     @Override
     public List<ArticleType> findSystemTypes() {
-        return articleTypeDao.findByUser(0);
+        return articleTypeDao.findByUser(1);
     }
     
     @Override
@@ -47,7 +49,7 @@ public class ArticleTypeServiceImpl implements ArticleTypeService {
         ArticleType type = articleTypeDao.findByName(name);
         if (null != type) {
             logger.error("Article type with the same name exists already, name: " + name);
-            throw new RestException("相同名称的分类已经存在，请确认！");
+            throw ExceptionTool.getException(ErrorCodes.ARTICLE_TYPE_EXISTS);
         }
     
         //不存在时增加
@@ -62,7 +64,7 @@ public class ArticleTypeServiceImpl implements ArticleTypeService {
         ArticleType type = articleTypeDao.findById(id);
         if (null == type) {
             logger.error("Type does not exist, id: {}!", id);
-            throw new RestException("类型不存在，类型ID：" + id);
+            throw ExceptionTool.getException(ErrorCodes.ARTICLE_TYPE_NOT_EXISTS, id);
         }
     
         return type;

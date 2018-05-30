@@ -6,6 +6,8 @@ import com.liuqi.tools.codelife.db.dao.ArticleDao;
 import com.liuqi.tools.codelife.db.dao.TopicDao;
 import com.liuqi.tools.codelife.db.dao.UserDao;
 import com.liuqi.tools.codelife.entity.*;
+import com.liuqi.tools.codelife.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.RoleService;
 import com.liuqi.tools.codelife.service.TopicService;
@@ -130,7 +132,7 @@ public class TopicServiceImpl implements TopicService {
         Topic findTopic = findByTitle(title);
         if (null != findTopic) {
             logger.error("Topic with the same title already exists!");
-            throw new RestException("同名的专题已经存在，请不要重复添加！");
+            throw ExceptionTool.getException(ErrorCodes.TOPIC_NAME_EXISTS);
         }
         
         Topic topic = new Topic();
@@ -152,14 +154,14 @@ public class TopicServiceImpl implements TopicService {
         
         if (null == id) {
             logger.error("ID cannot be null when updating it!");
-            throw new RestException("编号不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "编号");
         }
         
         //检测ID是否存在
         Topic topic = findById(id);
         if (null == topic) {
             logger.error("Topic with the special id does not exist, id: " + id);
-            throw new RestException("指定编号的专题不存在！");
+            throw ExceptionTool.getException(ErrorCodes.TOPIC_NOT_EXISTS, id);
         }
         
         //如果管理员账号有变更，需要给新的专题管理员添加专题管理员角色；
@@ -178,7 +180,7 @@ public class TopicServiceImpl implements TopicService {
             
             if (null == findRole) {
                 logger.error("Role with name TOPIC_ADMIN does not exist!");
-                throw new RestException("名称为TOPIC_ADMIN的角色不存在，请联系管理员添加！");
+                throw ExceptionTool.getException(ErrorCodes.ROLE_NOT_EXISTS, "TOPIC_ADMIN");
             }
             
             userService.addRole(adminUser, findRole);
@@ -212,29 +214,29 @@ public class TopicServiceImpl implements TopicService {
         //为空判断
         if (null == title || title.trim().equals("")) {
             logger.error("Topic title cannot be null or empty!");
-            throw new RestException("专题标题不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "专题名称");
         }
-        
+
         if (null == introduction || "".equals(introduction.trim())) {
             logger.error("Topic introduction cannot be null or empty!");
-            throw new RestException("专题介绍不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "专题介绍");
         }
-        
+
         //检查长度是否超过限制
         if (title.length() > Integer.valueOf(maxTitleLength)) {
             logger.error("Topic title is too long, title: {}, maxLength: {}!", title, maxTitleLength);
-            throw new RestException("标题长度不能超过" + maxTitleLength);
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_TOO_LONG, "专题名称", maxTitleLength);
         }
-        
+
         if (introduction.length() > Integer.valueOf(maxIntroductionLength)) {
             logger.error("Topic introduction is too long, introduction: {}, maxLength: {}!"
                     , introduction, maxIntroductionLength);
-            throw new RestException("介绍长度不能超过" + maxIntroductionLength);
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_TOO_LONG, "专题介绍", maxIntroductionLength);
         }
-        
+
         if (null != img && img.length() > Integer.valueOf(maxImgLength)) {
             logger.error("Topic img is too long, img: {}, maxLength: {}!", img, maxImgLength);
-            throw new RestException("封面长度不能超过" + maxImgLength);
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_TOO_LONG, "专题封面", maxIntroductionLength);
         }
     }
     
@@ -258,7 +260,7 @@ public class TopicServiceImpl implements TopicService {
         
         if (null == userId) {
             logger.error("User id cannot be null!");
-            throw new RestException("用户编号不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "用户编号");
         }
         
         //检查用户编号是否存在
@@ -284,7 +286,7 @@ public class TopicServiceImpl implements TopicService {
     
         if (null == userId) {
             logger.error("User id cannot be null!");
-            throw new RestException("用户编号不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "用户编号");
         }
     
         userService.findById(userId);
@@ -347,12 +349,12 @@ public class TopicServiceImpl implements TopicService {
     private void checkTopicId(Integer id) throws RestException {
         if (null == id ) {
             logger.error("ID cannot be null!");
-            throw new RestException("专题编号不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "专题编号");
         }
     
         if (null == findById(id)) {
             logger.error("Topic with the special id does not exist, id: " + id);
-            throw new RestException("指定编号的专题不存在！");
+            throw ExceptionTool.getException(ErrorCodes.TOPIC_NOT_EXISTS, id);
         }
     }
     

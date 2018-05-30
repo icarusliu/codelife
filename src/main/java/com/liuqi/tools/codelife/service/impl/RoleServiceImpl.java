@@ -2,6 +2,8 @@ package com.liuqi.tools.codelife.service.impl;
 
 import com.liuqi.tools.codelife.db.dao.RoleDao;
 import com.liuqi.tools.codelife.entity.Role;
+import com.liuqi.tools.codelife.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.RoleService;
 import org.slf4j.Logger;
@@ -34,7 +36,7 @@ public class RoleServiceImpl implements RoleService {
         
         if ("".equals(roleName)) {
             logger.error("Role name cannot be empty!");
-            throw new RestException("角色名称不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "角色名称");
         }
         
         roleDao.add(roleName, remark);
@@ -49,7 +51,7 @@ public class RoleServiceImpl implements RoleService {
     
         if ("".equals(roleName)) {
             logger.error("Role name cannot be empty!");
-            throw new RestException("角色名称不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "角色名称");
         }
         
         roleDao.update(id, roleName, remark);
@@ -68,7 +70,7 @@ public class RoleServiceImpl implements RoleService {
             if (null != id && role.getId() != id && role.getName().equals(roleName)) {
                 //如果编号不一样但名称一样，则表明有重复
                 logger.error("Role name already exists, role name: {}", roleName);
-                throw new RestException("角色名称重复！");
+                throw ExceptionTool.getException(ErrorCodes.ROLE_EXISTS);
             }
         }
     }

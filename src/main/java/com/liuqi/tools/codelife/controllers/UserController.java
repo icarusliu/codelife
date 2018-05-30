@@ -5,6 +5,8 @@ import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.entity.UserArticleStatInfo;
+import com.liuqi.tools.codelife.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.*;
 import com.liuqi.tools.codelife.util.MapBuilder;
@@ -91,7 +93,7 @@ public class UserController {
         password = password.trim();
         if ("".equals(username)) {
             logger.error("Username cannot be empty!");
-            throw new RestException("用户名不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "用户名");
         }
     
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -104,10 +106,10 @@ public class UserController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
         } catch (AuthenticationException ex) {
-            throw new RestException(ex.getMessage());
+            throw ExceptionTool.getException(ex, ErrorCodes.COMM_LOGIN_ERROR);
         } catch (Exception e) {
             logger.error("Build authenticationManager failed!", e);
-            throw new RestException(e.getMessage());
+            throw ExceptionTool.getException(e, ErrorCodes.COMM_LOGIN_ERROR);
         }
     
         return "succeed";

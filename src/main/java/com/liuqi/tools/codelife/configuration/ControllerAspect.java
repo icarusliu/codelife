@@ -65,9 +65,11 @@ public class ControllerAspect {
         logDBWriterService.log(joinPoint.toLongString());
         
         Object result = "";
+
         try {
             //调用实际处理方法
             result = joinPoint.proceed();
+            return result;
         } finally {
             //打印后置日志
             logger.info(spliter  + "End of processing request:" + infos
@@ -75,9 +77,10 @@ public class ControllerAspect {
                     + "\nuse time: " + (System.currentTimeMillis() - startTime) + "ms"
                     + spliter);
         }
-        
-        return result;
+
     }
     
     private static final Logger logger = LoggerFactory.getLogger(ControllerAspect.class);
+    private static final String STATUS_CODE_SUCCEEDED = "200";
+    private static final String STATUS_CODE_INTERNAL_ERROR = "500";
 }

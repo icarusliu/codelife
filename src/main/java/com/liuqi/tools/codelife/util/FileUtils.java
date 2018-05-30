@@ -1,5 +1,7 @@
 package com.liuqi.tools.codelife.util;
 
+import com.liuqi.tools.codelife.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +60,7 @@ public final class FileUtils {
                 destFile.createNewFile();
             } catch (IOException e) {
                 logger.error("Create file failed!", e);
-                throw new RestException("创建文件失败，请联系管理员！");
+                throw ExceptionTool.getException(ErrorCodes.COMM_FILE_CREATE_FAILED);
             }
         }
     
@@ -66,7 +68,7 @@ public final class FileUtils {
             file.transferTo(destFile);
         } catch (IOException e) {
             logger.error("Save file failed!", e);
-            throw new RestException("保存文件失败，请联系管理员！", e);
+            throw ExceptionTool.getException(ErrorCodes.COMM_FILE_SAVE_FAILED);
         }
     
         return fileName;
@@ -92,7 +94,7 @@ public final class FileUtils {
             inputStream = new FileInputStream(file);
         } catch (FileNotFoundException e) {
             logger.error("File does not exist, file: " + file.getName());
-            throw new RestException("文件不存在！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_FILE_NOT_EXISTS);
         }
         
         byte[] buffer = new byte[1000];
@@ -103,7 +105,7 @@ public final class FileUtils {
             }
         } catch (IOException e) {
             logger.error("Read file failed!", e);
-            throw new RestException("读取文件内容失败！");
+            throw ExceptionTool.getException(e, ErrorCodes.COMM_FILE_READ_FAILED);
         } finally {
             try {
                 inputStream.close();
@@ -173,7 +175,7 @@ public final class FileUtils {
             writer.flush();
         } catch (IOException e) {
             logger.error("Write file failed!", e);
-            throw new RestException("服务器写文件失败，请联系管理员！", e);
+            throw ExceptionTool.getException(e, ErrorCodes.COMM_FILE_WRITE_FAILED);
         } finally {
             if (null != writer) {
                 try {
@@ -202,7 +204,7 @@ public final class FileUtils {
             reader = Files.newBufferedReader(Paths.get(filePath + fileName), StandardCharsets.UTF_8);
         } catch (IOException e) {
             logger.error("File does not exist!", e);
-            throw new RestException("文章内容不存在！");
+            throw ExceptionTool.getException(e, ErrorCodes.ARTICLE_CONTENT_NOT_EXISTS);
         }
         
         try {

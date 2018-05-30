@@ -122,7 +122,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping("/detail")
-    public ModelAndView articleDetail(@RequestParam("id") Integer id, HttpSession session) throws RestException {
+    public ModelAndView articleDsetail(@RequestParam("id") Integer id, HttpSession session) throws RestException {
         Article article = articleService.findById(id);
         
         //阅读次数加1

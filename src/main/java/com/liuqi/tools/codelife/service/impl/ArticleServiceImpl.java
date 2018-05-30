@@ -6,6 +6,8 @@ import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.entity.UserArticleStatInfo;
+import com.liuqi.tools.codelife.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.*;
 import com.liuqi.tools.codelife.util.ArticleBuilder;
@@ -76,7 +78,7 @@ public class ArticleServiceImpl implements ArticleService {
     public PageInfo<Article> findByAuthorForExplorer(User user, int nowPage, int pageSize) throws RestException {
         if (null == user) {
             logger.error("User cannot be null!");
-            throw new RestException("作者不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "作者");
         }
         return PageInfo.of(articleDao.findForExplorerOrderByFixTop(user.getId(), null));
     }
@@ -85,7 +87,7 @@ public class ArticleServiceImpl implements ArticleService {
     public PageInfo<Article> findByAuthorForExplorer(User user, Integer typeId, int nowPage, int pageSize) throws RestException {
         if (null == user) {
             logger.error("User cannot be null!");
-            throw new RestException("作者不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "作者");
         }
         
         return PageInfo.of(articleDao.findForExplorerOrderByFixTop(user.getId(), typeId));
@@ -123,18 +125,18 @@ public class ArticleServiceImpl implements ArticleService {
     public void saveArticle(String title, String content, Integer type, Integer topicId, Integer forumId) throws RestException {
         if (null == title || "".equals(title.trim())) {
             logger.error("Title cannot be null or empty");
-            throw new RestException("文章标题不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章标题");
         }
     
         if (null == content || "".equals(content)) {
             logger.error("Content cannot be null!");
-            throw new RestException("文章内容不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章内容");
         }
         
         //type不能为空
         if (null == type) {
             logger.error("Type cannot be null!");
-            throw new RestException("文章分类不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章分类");
         }
         
         User user = authenticationService.getLoginUser();
@@ -186,29 +188,29 @@ public class ArticleServiceImpl implements ArticleService {
     public void updateArticle(Integer id, String title, String content, Integer type) throws RestException {
         if (null == id) {
             logger.error("Id cannot be null!");
-            throw new RestException("文章编号不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章编号");
         }
         
         if (null == title || "".equals(title.trim())) {
             logger.error("Title cannot be null or empty");
-            throw new RestException("文章标题不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章标题");
         }
         
         if (null == content || "".equals(content)) {
             logger.error("Content cannot be null!");
-            throw new RestException("文章内容不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章内容");
         }
         
         //type不能为空
         if (null == type) {
             logger.error("Type cannot be null!");
-            throw new RestException("文章分类不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章分类");
         }
         
         Article article = articleDao.findById(id);
         if (null == article) {
             logger.error("Article with the special id does not exist!");
-            throw new RestException("指定编号的文章不存在！");
+            throw ExceptionTool.getException(ErrorCodes.ARTICLE_NOT_EXISTS, id);
         }
         
         ArticleType oldType = article.getArticleType();

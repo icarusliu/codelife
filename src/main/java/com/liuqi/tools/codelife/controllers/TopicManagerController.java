@@ -1,6 +1,8 @@
 package com.liuqi.tools.codelife.controllers;
 
 import com.liuqi.tools.codelife.entity.*;
+import com.liuqi.tools.codelife.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
@@ -259,7 +261,7 @@ public class TopicManagerController {
         Topic topic = topicService.findById(topicId);
         if (null == topic) {
             logger.error("Topic does not exist, topic Id: " + topicId);
-            throw new RestException("专题不存在！");
+            throw ExceptionTool.getException(ErrorCodes.TOPIC_NOT_EXISTS, topicId);
         }
         
         User loginUser = authenticationService.getLoginUser();
@@ -267,7 +269,7 @@ public class TopicManagerController {
         if (!loginUser.isSystemAdmin() && (topic.getAdmin() == null || loginUser.getId() != topic.getAdmin().getId())) {
             logger.error("Topic admin is not current user, current user: "
                     + loginUser + ", admin: " + topic.getAdmin());
-            throw new RestException("不是该专题管理员的用户不能修改该专题！");
+            throw ExceptionTool.getException(ErrorCodes.TOPIC_MANAGER_EDIT_NOT_MANAGER);
         }
     }
     

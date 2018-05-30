@@ -4,7 +4,6 @@ import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.*;
 import com.liuqi.tools.codelife.exceptions.RestException;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -16,7 +15,7 @@ public interface TopicService {
      *
      * @return
      */
-    PageInfo<Topic> findAll(int nowPage, int pageSize);
+    PageInfo findAll(int nowPage, int pageSize);
     
     /**
      * 获取用户未订阅的所有开放的专题
@@ -127,7 +126,7 @@ public interface TopicService {
      * @param loginUser
      * @return
      */
-    List<Topic> findByAdmin(User loginUser);
+    List findByAdmin(User loginUser);
     
     /**
      * 获取专题订阅用户列表

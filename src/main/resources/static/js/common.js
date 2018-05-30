@@ -95,18 +95,18 @@ function ajaxError(resp) {
 
 //Ajax请求成功时回调处理
 function ajaxSuccess(data, success) {
-    var errorMessage = data.errorMessage;
+    let statusCode = data.statusCode;
 
-    if (undefined != errorMessage && null != errorMessage) {
-        alert("操作失败，错误信息：" + errorMessage);
+    if (undefined != statusCode && null != statusCode && "" != statusCode
+        && "200" != statusCode) {
+        alert("操作失败，错误信息：" + data.errorMessage);
     } else if ("timeout" == data) {
         alert("登录超时，请重新登录后再操作！");
         window.location.replace("/index?lastUrl=" + window.location.href);
     } else if (undefined != success) {
-        success(data);
+        success(data.data);
     }
 }
-
 
 //数据表格的使用
 function DataTable(tableId, dataUrl, toolbarId, extraParams) {
@@ -119,6 +119,9 @@ function DataTable(tableId, dataUrl, toolbarId, extraParams) {
     params.rowStyle = rowStyle;
     params.toolbar = "#" + toolbarId;
     params.pagination = true;
+    params.responseHandler = function (resp) {
+        return resp.data;
+    };
 
     if (extraParams) {
         for (var i in extraParams) {

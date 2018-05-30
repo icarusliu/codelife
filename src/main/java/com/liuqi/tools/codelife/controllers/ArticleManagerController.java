@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.User;
+import com.liuqi.tools.codelife.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.ArticleService;
 import com.liuqi.tools.codelife.service.ArticleTypeService;
@@ -65,13 +67,11 @@ public class ArticleManagerController {
      * 根据当前登录用户获取其有权限管理的文章清单
      *
      * @return
-     * @throws RestException 如果用户不存在时抛出异常；实际上已经登录时理论上不会出现这种情况
      */
     @GetMapping("/getArticlesForManager")
     @ResponseBody
     public Map<String, Object> getArticlesForManager(@RequestParam(value = "offset", required = false) Integer offset,
-                                                     @RequestParam(value = "limit", required = false) Integer pageSize)
-            throws RestException {
+                                                     @RequestParam(value = "limit", required = false) Integer pageSize) {
         
         //offset与limit为datastrap table的分页参数
         pageSize = null == pageSize ? 20 : pageSize;
@@ -171,7 +171,7 @@ public class ArticleManagerController {
             
             if (article.getAuthorID() != loginUser.getId()) {
                 logger.error("User is not the author, user: {}!", loginUser.getUsername());
-                throw new RestException("只能修改自己发布的文章！");
+                throw ExceptionTool.getException(ErrorCodes.ARTICLE_MANAGER_EDIT_NOT_AUTHOR);
             }
             
             //只允许更新标题与内容
@@ -194,7 +194,7 @@ public class ArticleManagerController {
     
         if (article.getAuthorID() != loginUser.getId()) {
             logger.error("User is not the author, user: {}!", loginUser.getUsername());
-            throw new RestException("不能删除他人发布的文章！");
+            throw ExceptionTool.getException(ErrorCodes.ARTICLE_MANAGER_DELETE_NOT_AUTHOR);
         }
         
         articleService.deleteArticle(id);

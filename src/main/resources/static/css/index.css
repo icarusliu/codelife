@@ -49,6 +49,7 @@
 .block {
     border: 1px solid #B0E0E6;
     padding: 0px;
+    background: #fff;
 }
 
 .block-title {

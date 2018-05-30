@@ -30,7 +30,7 @@ public class SystemManagerController {
     private RoleService roleService;
     
     @RequestMapping
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TOPIC_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public String system() {
         return "system/index";
     }
