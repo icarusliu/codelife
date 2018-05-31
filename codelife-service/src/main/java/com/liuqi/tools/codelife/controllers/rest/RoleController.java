@@ -1,4 +1,4 @@
-package com.liuqi.tools.codelife.controllers;
+package com.liuqi.tools.codelife.controllers.rest;
 
 import com.liuqi.tools.codelife.entity.Role;
 import com.liuqi.tools.codelife.exceptions.RestException;

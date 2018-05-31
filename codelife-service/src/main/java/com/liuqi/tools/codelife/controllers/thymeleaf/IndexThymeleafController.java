@@ -1,4 +1,4 @@
-package com.liuqi.tools.codelife.controllers;
+package com.liuqi.tools.codelife.controllers.thymeleaf;
 
 import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.Article;
@@ -18,8 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * 首页处理控制器
@@ -29,9 +29,9 @@ import java.util.Collections;
  * @Version: V1.0
  **/
 @Controller
-public class IndexController {
-    public static final String XMLHTTP_REQUEST = "XMLHttpRequest";
-    public static final String X_REQUESTED_WITH = "x-requested-with";
+public class IndexThymeleafController {
+    private static final String XMLHTTP_REQUEST = "XMLHttpRequest";
+    private static final String X_REQUESTED_WITH = "x-requested-with";
     @Autowired
     private ArticleService articleService;
     
@@ -69,7 +69,7 @@ public class IndexController {
      */
     @RequestMapping({"/index", "/", "/login"})
     public ModelAndView index() {
-        Collection<Article> articles;
+        List articles;
         try {
            articles  = articleService.findForExplorer(1, 20).getList();
         } catch (Exception ex) {
@@ -79,7 +79,7 @@ public class IndexController {
         //获取订阅专题
         //获取用户订阅专题及其更新的文章
         User loginUser = authenticationService.getLoginUser();
-        Collection<Topic> myTopics;
+        List myTopics;
         if (null != loginUser) {
             myTopics = topicService.getUserTopics(loginUser.getId());
         } else {

@@ -1,30 +1,25 @@
-package com.liuqi.tools.codelife.controllers;
+package com.liuqi.tools.codelife.controllers.rest;
 
-import com.github.pagehelper.PageInfo;
-import com.liuqi.tools.codelife.entity.*;
+import com.liuqi.tools.codelife.entity.Article;
+import com.liuqi.tools.codelife.entity.CommentType;
 import com.liuqi.tools.codelife.exceptions.RestException;
-import com.liuqi.tools.codelife.service.*;
+import com.liuqi.tools.codelife.service.ArticleService;
+import com.liuqi.tools.codelife.service.CommentService;
 import com.liuqi.tools.codelife.tool.MapBuilder;
-import com.liuqi.tools.codelife.tool.ModelAndViewBuilder;
 import com.liuqi.tools.codelife.tool.SessionProxy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 文章控制器
  *
- * @Author: LiuQI
- * @Created: 2018/3/26 17:46
- * @Version: V1.0
+ * @author LiuQI 2018/3/26 17:46
+ * @version V1.0
  **/
 @Controller
 @RequestMapping("/article")
@@ -33,44 +28,7 @@ public class ArticleController {
     private ArticleService articleService;
     
     @Autowired
-    private AuthenticationService authenticationService;
-    
-    @Autowired
     private CommentService commentService;
-    
-    @Autowired
-    private ArticleTypeService typeService;
-
-    /**
-     * 打开文章清单页面
-     * 同时获取所有文章分类、所有文章
-     * 所有用户均可以访问
-     *
-     * @return
-     */
-    @GetMapping("/articles")
-    public ModelAndView articles(@RequestParam(name = "forumId", required = false) Integer forumId,
-                                 @RequestParam(value = "nowPage", required = false) Integer nowPage,
-                                 @RequestParam(value = "pageSize", required = false) Integer pageSize) {
-        Collection<ArticleType> forums = typeService.findSystemTypes();
-        PageInfo<Article> pageInfo;
-        nowPage = null == nowPage ? 1 : nowPage;
-        pageSize = null == pageSize ? 20 : pageSize;
-        
-        if (null != forumId) {
-            pageInfo = articleService.findForExplorer(forumId, nowPage, pageSize);
-        } else {
-            pageInfo = articleService.findForExplorer(nowPage, pageSize);
-        }
-
-        return ModelAndViewBuilder.of("articles")
-                .setData("forums", forums)
-                .setData("forumId", forumId)
-                .setData("articles", pageInfo.getList())
-                .setData("pages", pageInfo.getPages())
-                .setData("nowPage", nowPage)
-                .build();
-    }
     
     @PostMapping("/getForExplorer")
     @ResponseBody
@@ -112,29 +70,6 @@ public class ArticleController {
     }
     
     /**
-     * 获取文章详细页面
-     *
-     * @return
-     */
-    @GetMapping("/detail")
-    public ModelAndView articleDsetail(@RequestParam("id") Integer id, HttpSession session) throws RestException {
-        Article article = articleService.findById(id);
-        
-        //阅读次数加1
-        //一个Session只算一次；
-        boolean notExist = SessionProxy.proxy(session)
-                .notExistSetMapAttribute(ARTICLE_READ_IDS, String.valueOf(id), id);
-        if (notExist) {
-            articleService.addReadCount(article);
-        }
-        
-        return ModelAndViewBuilder.of("articleDetail")
-                .setData("article", article)
-                .setData("comments", commentService.findByDestination(CommentType.ARTICLE, id))
-                .build();
-    }
-    
-    /**
      * 对文章进行点赞
      *
      * @param id 文章编号
@@ -169,6 +104,5 @@ public class ArticleController {
         return articleService.search(key, 0, 20).getList();
     }
     
-    private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);
     private static final String ARTICLE_READ_IDS = "article-read-ids";
 }

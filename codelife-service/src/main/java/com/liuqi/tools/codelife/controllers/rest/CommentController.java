@@ -1,4 +1,4 @@
-package com.liuqi.tools.codelife.controllers;
+package com.liuqi.tools.codelife.controllers.rest;
 
 import com.liuqi.tools.codelife.entity.Comment;
 import com.liuqi.tools.codelife.entity.CommentType;
@@ -47,7 +47,7 @@ public class CommentController {
      * @return
      */
     private CommentType ofType(String type) {
-        CommentType commentType = CommentType.ARTICLE;
+        CommentType commentType;
         switch(type) {
             case "topic": commentType = CommentType.TOPIC; break;
             case "comment": commentType = CommentType.COMMENT; break;
