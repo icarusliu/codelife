@@ -4,12 +4,14 @@ import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.Topic;
 import com.liuqi.tools.codelife.entity.User;
+import com.liuqi.tools.codelife.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
-import com.liuqi.tools.codelife.util.FileUtils;
-import com.liuqi.tools.codelife.util.MapBuilder;
-import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
+import com.liuqi.tools.codelife.tool.FileUtils;
+import com.liuqi.tools.codelife.tool.MapBuilder;
+import com.liuqi.tools.codelife.tool.ModelAndViewBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,7 +154,7 @@ public class TopicController {
         Topic topic = topicService.findById(topicId);
         if (null == topic) {
             logger.error("Topic does not exist, id: " + topicId);
-            throw new RestException("专题编号不存在！");
+            throw ExceptionTool.getException(ErrorCodes.TOPIC_NOT_EXISTS, topicId);
         }
         
         //调用TopicService进行订阅

@@ -82,13 +82,14 @@ public interface ArticleDao {
      * 保存文章
      *
      * @param article 需要保存的文章
+     * @return 返回新增的文章ID
      */
     Integer save(Article article);
     
     /**
      * 保存文章分类
      *
-     * @param type
+     * @param type 需要保存的文章分类
      */
     void saveType(ArticleType type);
     
@@ -108,9 +109,10 @@ public interface ArticleDao {
     
     /**
      * 更新文章标题、分类等信息
-     *  @param id
+     * @param id
      * @param title
      * @param type
+     * @param forumId
      */
     void updateArticle(@Param("id") Integer id, @Param("title") String title, @Param("type") Integer type,
                        @Param("forumId") Integer forumId);

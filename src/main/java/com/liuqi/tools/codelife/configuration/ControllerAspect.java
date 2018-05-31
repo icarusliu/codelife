@@ -1,6 +1,6 @@
 package com.liuqi.tools.codelife.configuration;
 
-import com.liuqi.tools.codelife.service.LogDBWriterService;
+import com.liuqi.tools.codelife.service.LogDbWriterService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ControllerAspect {
     @Autowired
-    private LogDBWriterService logDBWriterService;
+    private LogDbWriterService logDBWriterService;
     
     /**
      * Controller方法执行前后切面处理
@@ -36,7 +36,7 @@ public class ControllerAspect {
      */
     @Around("execution(public * com.liuqi.tools.codelife.controllers..*.*(..))")
     public Object beforeRequest(ProceedingJoinPoint joinPoint) throws Throwable {
-        String spliter = "\n----------------------------------------------------------------------------------------\n";
+        String split = "\n----------------------------------------------------------------------------------------\n";
         
         long startTime = System.currentTimeMillis();
         
@@ -59,24 +59,25 @@ public class ControllerAspect {
                 + "\nargs: " + argsInfo;
         
         //打印前置日志
-        logger.info(spliter + "Begin to process a request: " + infos + spliter);
+        logger.info(split + "Begin to process a request: " + infos + split);
         
         //提交记录日志的请求到线程池中，由线程池来完成日志的存库处理
         logDBWriterService.log(joinPoint.toLongString());
         
         Object result = "";
+
         try {
             //调用实际处理方法
             result = joinPoint.proceed();
+            return result;
         } finally {
             //打印后置日志
-            logger.info(spliter  + "End of processing request:" + infos
+            logger.info(split  + "End of processing request:" + infos
                     + "\nresult: " + result
                     + "\nuse time: " + (System.currentTimeMillis() - startTime) + "ms"
-                    + spliter);
+                    + split);
         }
-        
-        return result;
+
     }
     
     private static final Logger logger = LoggerFactory.getLogger(ControllerAspect.class);

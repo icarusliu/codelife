@@ -9,6 +9,7 @@ import java.util.Collection;
 
 /**
  * 角色操作Mapper
+ * @author qi.liu
  */
 @Mapper
 public interface RoleDao {

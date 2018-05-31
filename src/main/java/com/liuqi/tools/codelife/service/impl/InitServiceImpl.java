@@ -1,6 +1,7 @@
 package com.liuqi.tools.codelife.service.impl;
 
 import com.liuqi.tools.codelife.db.dao.SystemDao;
+import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.service.InitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+import java.io.IOException;
 
 /**
  * 初始化服务实现类
@@ -30,8 +32,9 @@ public class InitServiceImpl implements InitService {
     private DataSource dataSource;
 
     @PostConstruct
-    public void init() {
+    public void init() throws IOException {
         initDB();
+        ExceptionTool.init();
     }
 
     @Override

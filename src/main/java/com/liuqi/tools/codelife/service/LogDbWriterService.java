@@ -8,7 +8,7 @@ package com.liuqi.tools.codelife.service;
  * @Created: 2018/3/31 17:09
  * @Version: V1.0
  **/
-public interface LogDBWriterService {
+public interface LogDbWriterService {
     
     /**
      * 记录日志

@@ -1,27 +1,53 @@
 package com.liuqi.tools.codelife.exceptions;
 
+import net.bytebuddy.implementation.bytecode.Throw;
+
 /**
  * @Author: LiuQI
  * @Created: 2018/3/17 22:22
  * @Version: V1.0
  **/
 public class RestException extends Exception {
-    public RestException() {
+    private String code;
+    private String message;
+    private Throwable t;
+
+    RestException(String code, String message) {
+        this.code = code;
+        this.message = message;
     }
-    
-    public RestException(String message) {
-        super(message);
+
+    RestException(String code, String message, Throwable t) {
+        this.code = code;
+        this.message = message;
+        this.t = t;
     }
-    
-    public RestException(String message, Throwable cause) {
-        super(message, cause);
+
+    public String getCode() {
+        return code;
     }
-    
-    public RestException(Throwable cause) {
-        super(cause);
+
+    public RestException setCode(String code) {
+        this.code = code;
+        return this;
     }
-    
-    public RestException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
+    public RestException setMessage(String message) {
+        this.message = message;
+        return this;
+    }
+
+    public Throwable getT() {
+        return t;
+    }
+
+    public RestException setT(Throwable t) {
+        this.t = t;
+        return this;
     }
 }

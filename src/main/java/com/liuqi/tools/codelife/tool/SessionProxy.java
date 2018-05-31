@@ -1,4 +1,4 @@
-package com.liuqi.tools.codelife.util;
+package com.liuqi.tools.codelife.tool;
 
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -43,7 +43,7 @@ public final class SessionProxy {
     public <T> SessionProxy setMapAttribute(String mapName, String name, T value) {
         Map<String, T> map = (Map<String, T>) Optional.ofNullable(session.getAttribute(mapName))
                 .orElseGet(() -> {
-                    Map<String, T> result = new HashMap<>();
+                    Map<String, T> result = new HashMap<>(16);
                     session.setAttribute(mapName, result);
                     return result;
                 });
@@ -63,7 +63,7 @@ public final class SessionProxy {
     public <T> T getMapAttribute(String mapName, String name) {
         Map<String, T> map = (Map<String, T>) Optional.ofNullable(session.getAttribute(mapName))
                 .orElseGet(() -> {
-                    Map<String, T> result = new HashMap<>();
+                    Map<String, T> result = new HashMap<>(16);
                     session.setAttribute(mapName, result);
                     return result;
                 });

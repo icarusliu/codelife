@@ -17,24 +17,71 @@ import java.util.List;
  **/
 @Mapper
 public interface TopicDao {
+    /**
+     * 查找所有专题
+     * @return
+     */
     List<Topic> findAll();
-    
+
+    /**
+     * 通过用户查找专题
+     * @param id
+     * @return
+     */
     List<Topic> findByUser(@Param("id") Integer id);
-    
+
+    /**
+     * 通过标题查找专题
+     * @param title
+     * @return
+     */
     Topic findByTitle(@Param("title") String title);
-    
+
+    /**
+     * 通过编号查找专题
+     * @param id
+     * @return
+     */
     Topic findById(@Param("id") Integer id);
-    
+
+    /**
+     * 新增专题
+     * @param topic
+     */
     void insert(Topic topic);
-    
+
+    /**
+     * 更新专题
+     * @param topic
+     */
     void update(Topic topic);
-    
+
+    /**
+     * 专题下批量新增文章
+     *
+     * @param id
+     * @param articles
+     */
     void addTopicArticles(@Param("id") Integer id, @Param("articles") List<Integer> articles);
-    
+
+    /**
+     * 订阅专题
+     * @param userId
+     * @param topicId
+     */
     void subscribeTopic(@Param("userId") Integer userId, @Param("topicId") Integer topicId);
-    
+
+    /**
+     * 取消订阅专题
+     * @param userId
+     * @param topicId
+     */
     void unSubscribeTopic(@Param("userId") Integer userId, @Param("topicId") Integer topicId);
-    
+
+    /**
+     * 删除专题
+     * @param id
+     */
     void delete(@Param("id") Integer id);
     
     /**

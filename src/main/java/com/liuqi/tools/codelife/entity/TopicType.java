@@ -7,14 +7,22 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * 0 开放式 1 封闭式
  * 开放式时所有人都可以看到 ；
  * 封闭式时浏览时无法看到；只有通过管理员添加才能加入专题
+ * @author qi.liu
  */
 public enum TopicType {
+    /**
+     * 开放状态的专题
+     */
     OPEN("开放"),
+
+    /**
+     * 封闭状态的专题
+     */
     PROTECTED("封闭");
     
     private String name;
     
-    private TopicType(String name) {
+    TopicType(String name) {
         this.name = name;
     }
     

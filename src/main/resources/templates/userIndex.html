@@ -46,7 +46,7 @@
 <body>
 <div layout:fragment="content" class="container-fluid">
     <div class="row">
-        <div class="col-sm-2 col-md-2 hidden-xs-down sidebar">
+        <div class="col-md-2 col-lg-3 hidden-xs-down sidebar">
             <div class="container side-block container mb-2">
                 <div class="row p-1">
                     <span th:text="${realName}" class="stat-info-title col-sm text-center"></span>
@@ -90,7 +90,7 @@
             </div>
         </div>
 
-        <div class="right-content col-sm mr-2">
+        <div class="right-content col-md mr-2">
             <div class="article-tool-bar row text-right m-0">
                 <div class="btn btn-link"
                      th:if="${#authentication.name != 'anonymousUser'

@@ -4,9 +4,11 @@ import com.liuqi.tools.codelife.db.dao.CommentDao;
 import com.liuqi.tools.codelife.entity.Comment;
 import com.liuqi.tools.codelife.entity.CommentType;
 import com.liuqi.tools.codelife.entity.User;
+import com.liuqi.tools.codelife.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.CommentService;
-import com.liuqi.tools.codelife.util.DateUtils;
+import com.liuqi.tools.codelife.tool.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,17 +43,17 @@ public class CommentServiceImpl implements CommentService {
                     Integer id, User loginUser, String host) throws RestException {
         if (null == content || "".equals(content.trim())) {
             logger.error("Content cannot be null or empty!");
-            throw new RestException("内容不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "评论内容");
         }
         
         if (null == commentType) {
             logger.error("Comment type cannot be null!");
-            throw new RestException("评论类型不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "评论类型");
         }
         
         if (null == id) {
             logger.error("Destination cannot be null!");
-            throw new RestException("评论对象不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "评论对象");
         }
         
         if (null == host) {

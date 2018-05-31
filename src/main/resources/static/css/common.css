@@ -6,10 +6,15 @@ body {
 #mainNav {
     background: #F0F8FF;
     padding-bottom: 0px;
+    border-bottom: 1px solid #ddd;
 }
 
 #mainNavUl .active {
     background: #fdfdfd;
+    border: 1px solid #ddd;
+    border-width: 1px 1px 0px 1px;
+    border-radius: 6px 6px 0px 0px;
+    margin-bottom: -1px;
 }
 
 #mainNavUl li: hover{

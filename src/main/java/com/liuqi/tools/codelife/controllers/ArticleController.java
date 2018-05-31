@@ -4,20 +4,18 @@ import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.*;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.*;
-import com.liuqi.tools.codelife.util.MapBuilder;
-import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
-import com.liuqi.tools.codelife.util.SessionProxy;
+import com.liuqi.tools.codelife.tool.MapBuilder;
+import com.liuqi.tools.codelife.tool.ModelAndViewBuilder;
+import com.liuqi.tools.codelife.tool.SessionProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,10 +40,7 @@ public class ArticleController {
     
     @Autowired
     private ArticleTypeService typeService;
-    
-    @Autowired
-    private UserService userService;
-    
+
     /**
      * 打开文章清单页面
      * 同时获取所有文章分类、所有文章
@@ -122,7 +117,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping("/detail")
-    public ModelAndView articleDetail(@RequestParam("id") Integer id, HttpSession session) throws RestException {
+    public ModelAndView articleDsetail(@RequestParam("id") Integer id, HttpSession session) throws RestException {
         Article article = articleService.findById(id);
         
         //阅读次数加1

@@ -4,9 +4,11 @@ import com.liuqi.tools.codelife.db.dao.UserDao;
 import com.liuqi.tools.codelife.entity.Role;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.entity.UserStatus;
+import com.liuqi.tools.codelife.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.UserService;
-import com.liuqi.tools.codelife.util.DateUtils;
+import com.liuqi.tools.codelife.tool.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +72,7 @@ public class UserServiceImpl implements UserService{
     public User findByUsername(String username) throws RestException {
         User user = userDao.findByUsername(username);
         if (null == user) {
-            throw new RestException("用户名不存在！");
+            throw ExceptionTool.getException(ErrorCodes.USER_USERNAME_NOT_EXISTS, username);
         }
         
         return user;
@@ -132,32 +134,32 @@ public class UserServiceImpl implements UserService{
         
         if ("".equals(username)) {
             logger.error("Username cannot be empty!");
-            throw new RestException("用户名不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "用户名");
         } else if ("".equals(password)) {
             logger.error("Password cannot be empty!");
-            throw new RestException("密码不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "密码");
         }
         
         //检测用户名是否存在
         try {
             findByUsername(username);
-    
+
             logger.error("User with the name of {} already exists!", username);
-            throw new RestException("用户名重复！");
+            throw ExceptionTool.getException(ErrorCodes.USER_USERNAME_EXISTS);
         } catch (RestException ex) {
-        
+
         }
-        
+
         //检测用户名长度、密码长度以及实际长度是否超过限制
         if (Integer.valueOf(maxUsernameLength) < username.length()) {
             logger.error("Username too long, username: {}, max allowed length: {}!", username, maxUsernameLength);
-            throw new RestException("用户名过长");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_TOO_LONG, "用户名", maxUsernameLength);
         } else if (Integer.valueOf(maxPasswordLength) < password.length()) {
             logger.error("Username too long, username: {}, max allowed length: {}!", password, maxPasswordLength);
-            throw new RestException("密码过长");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_TOO_LONG, "密码", maxPasswordLength);
         } else if (Integer.valueOf(maxRealNameLength) < realName.length()) {
             logger.error("RealName too long, username: {}, max allowed length: {}!", realName, maxRealNameLength);
-            throw new RestException("显示名称过长");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_TOO_LONG, "显示名称", maxRealNameLength);
         }
         
         //添加用户
@@ -184,7 +186,7 @@ public class UserServiceImpl implements UserService{
         User user = findById(id);
         if (!UserStatus.LOCKED.equals(user.getStatus()) && !UserStatus.CANCEL.equals(user.getStatus())) {
             logger.error("User status is not locked, cannot be unlocked!");
-            throw new RestException("用户状态不是锁定状态，不能进行解锁！");
+            throw ExceptionTool.getException(ErrorCodes.USER_STATUS_NOT_LOCKED);
         }
         
         userDao.updateUserStatus(id, UserStatus.NORMAL.ordinal());
@@ -194,9 +196,9 @@ public class UserServiceImpl implements UserService{
     public void unregisterUser(Integer id) throws RestException {
         //ADMIN不能被注销
         User user = findById(id);
-        if (user.getUsername().equals("admin")) {
+        if (user.isSystemAdmin()) {
             logger.error("Admin cannot be unregistered!");
-            throw new RestException("不能注销管理员！");
+            throw ExceptionTool.getException(ErrorCodes.USER_ADMIN_CANNOT_BE_REGISTED);
         }
         
         userDao.updateUserStatus(id, UserStatus.CANCEL.ordinal());
@@ -207,7 +209,7 @@ public class UserServiceImpl implements UserService{
         User user = findById(id);
         if (!UserStatus.APPROVING.equals(user.getStatus())) {
             logger.error("User status is not approving, cannot be approved!");
-            throw new RestException("用户状态不是待审批状态，不能被审批！");
+            throw ExceptionTool.getException(ErrorCodes.USER_STATUS_NOT_APPROVING);
         }
         
         userDao.updateUserStatus(id, UserStatus.NORMAL.ordinal());
@@ -217,13 +219,13 @@ public class UserServiceImpl implements UserService{
     public User findById(Integer id) throws RestException {
         if (null == id) {
             logger.error("ID cannot be null!");
-            throw new RestException("编号不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "编号");
         }
         
         User user = userDao.findById(id);
         if (null == user) {
             logger.error("User with the special id does not exist, id: {}!", id);
-            throw new RestException("用户不存在！");
+            throw ExceptionTool.getException(ErrorCodes.USER_ID_NOT_EXISTS, id);
         }
         
         return user;

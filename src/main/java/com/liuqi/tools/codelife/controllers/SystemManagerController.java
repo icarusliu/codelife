@@ -1,17 +1,11 @@
 package com.liuqi.tools.codelife.controllers;
 
-import com.liuqi.tools.codelife.service.ArticleService;
 import com.liuqi.tools.codelife.service.RoleService;
 import com.liuqi.tools.codelife.service.UserService;
-import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.Map;
 
 /**
  * 系统管理Controller
@@ -30,7 +24,7 @@ public class SystemManagerController {
     private RoleService roleService;
     
     @RequestMapping
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TOPIC_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public String system() {
         return "system/index";
     }

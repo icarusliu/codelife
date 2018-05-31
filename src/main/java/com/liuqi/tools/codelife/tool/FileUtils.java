@@ -1,15 +1,15 @@
-package com.liuqi.tools.codelife.util;
+package com.liuqi.tools.codelife.tool;
 
+import com.liuqi.tools.codelife.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -37,8 +37,8 @@ public final class FileUtils {
         //获取项目部署路径
         String prjPath = System.getProperty("user.dir");
         
-        if (!filePath.startsWith("/")) {
-            prjPath += "/";
+        if (!filePath.startsWith(PATH_SPLIT)) {
+            prjPath += PATH_SPLIT;
         }
         
         //如果文件夹不存在则先创建文件夹
@@ -48,8 +48,8 @@ public final class FileUtils {
         }
     
         //如果配置的文件路径最后不包含/，则添加上
-        if (!filePath.endsWith("/")) {
-            filePath = filePath + "/";
+        if (!filePath.endsWith(PATH_SPLIT)) {
+            filePath = filePath + PATH_SPLIT;
         }
         
         File destFile = new File(prjPath + filePath + fileName);
@@ -58,7 +58,7 @@ public final class FileUtils {
                 destFile.createNewFile();
             } catch (IOException e) {
                 logger.error("Create file failed!", e);
-                throw new RestException("创建文件失败，请联系管理员！");
+                throw ExceptionTool.getException(ErrorCodes.COMM_FILE_CREATE_FAILED);
             }
         }
     
@@ -66,7 +66,7 @@ public final class FileUtils {
             file.transferTo(destFile);
         } catch (IOException e) {
             logger.error("Save file failed!", e);
-            throw new RestException("保存文件失败，请联系管理员！", e);
+            throw ExceptionTool.getException(ErrorCodes.COMM_FILE_SAVE_FAILED);
         }
     
         return fileName;
@@ -76,13 +76,13 @@ public final class FileUtils {
                                      OutputStream outputStream) throws RestException {
         String prjPath = System.getProperty("user.dir");
     
-        if (!filePath.startsWith("/")) {
-            prjPath += "/";
+        if (!filePath.startsWith(PATH_SPLIT)) {
+            prjPath += PATH_SPLIT;
         }
     
         //如果配置的文件路径最后不包含/，则添加上
-        if (!filePath.endsWith("/")) {
-            filePath = filePath + "/";
+        if (!filePath.endsWith(PATH_SPLIT)) {
+            filePath = filePath + PATH_SPLIT;
         }
         
         File file = new File(prjPath + filePath + fileName);
@@ -92,7 +92,7 @@ public final class FileUtils {
             inputStream = new FileInputStream(file);
         } catch (FileNotFoundException e) {
             logger.error("File does not exist, file: " + file.getName());
-            throw new RestException("文件不存在！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_FILE_NOT_EXISTS);
         }
         
         byte[] buffer = new byte[1000];
@@ -103,7 +103,7 @@ public final class FileUtils {
             }
         } catch (IOException e) {
             logger.error("Read file failed!", e);
-            throw new RestException("读取文件内容失败！");
+            throw ExceptionTool.getException(e, ErrorCodes.COMM_FILE_READ_FAILED);
         } finally {
             try {
                 inputStream.close();
@@ -121,8 +121,8 @@ public final class FileUtils {
      */
     public static final void deleteFile(String filePath, String fileName) {
         //检测路径是否以/结尾
-        if (!filePath.endsWith("/")) {
-            filePath = filePath + "/";
+        if (!filePath.endsWith(PATH_SPLIT)) {
+            filePath = filePath + PATH_SPLIT;
         }
         
         File file = new File(filePath + fileName);
@@ -162,8 +162,8 @@ public final class FileUtils {
         }
         
         //如果配置的文件路径最后不包含/，则添加上
-        if (!filePath.endsWith("/")) {
-            filePath = filePath + "/";
+        if (!filePath.endsWith(PATH_SPLIT)) {
+            filePath = filePath + PATH_SPLIT;
         }
         
         BufferedWriter writer = null;
@@ -173,7 +173,7 @@ public final class FileUtils {
             writer.flush();
         } catch (IOException e) {
             logger.error("Write file failed!", e);
-            throw new RestException("服务器写文件失败，请联系管理员！", e);
+            throw ExceptionTool.getException(e, ErrorCodes.COMM_FILE_WRITE_FAILED);
         } finally {
             if (null != writer) {
                 try {
@@ -193,8 +193,8 @@ public final class FileUtils {
      * @return 返回文件内容
      */
     public static String getFileContent(String fileName, String filePath) throws RestException {
-        if (!filePath.endsWith("/")) {
-            filePath = filePath + "/";
+        if (!filePath.endsWith(PATH_SPLIT)) {
+            filePath = filePath + PATH_SPLIT;
         }
         
         BufferedReader reader;
@@ -202,7 +202,7 @@ public final class FileUtils {
             reader = Files.newBufferedReader(Paths.get(filePath + fileName), StandardCharsets.UTF_8);
         } catch (IOException e) {
             logger.error("File does not exist!", e);
-            throw new RestException("文章内容不存在！");
+            throw ExceptionTool.getException(e, ErrorCodes.ARTICLE_CONTENT_NOT_EXISTS);
         }
         
         try {
@@ -226,15 +226,24 @@ public final class FileUtils {
     public static final String htmlToText(String html) {
         String result = "";
         //第一步先去掉HTML相关标签
-        Pattern pattern = Pattern.compile(REGEX_HTML, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(html);
+        Matcher matcher = HTML_PATTERN.matcher(html);
         result = matcher.replaceAll("");
         
         //第二步去掉回车换行等字符
-        return Pattern.compile(REGEX_SPACE, Pattern.CASE_INSENSITIVE).matcher(result).replaceAll("");
+        return SPACE_PATTERN.matcher(result).replaceAll("");
     }
-    
-    private static final String REGEX_HTML = "<[^>]+>"; // 定义HTML标签的正则表达式
-    private static final String REGEX_SPACE = "\\s*|\t|\r|\n";//定义空格回车换行符
+
+    /**
+     * 定义HTML标签的正则表达式
+     */
+    private static final Pattern HTML_PATTERN = Pattern.compile("<[^>]+>", Pattern.CASE_INSENSITIVE);
+
+    /**
+     * 定义空格回车换行符
+     */
+    private static final Pattern SPACE_PATTERN = Pattern.compile("\\s*|\t|\r|\n", Pattern.CASE_INSENSITIVE);
+
+    private static final String PATH_SPLIT = "/";
+
     private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
 }

@@ -4,24 +4,28 @@ import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.*;
 import com.liuqi.tools.codelife.exceptions.RestException;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
  * 专题服务接口
+ * @author qi.liu
  */
 public interface TopicService {
     /**
      * 查找所有专题
      *
+     * @param nowPage
+     * @param pageSize
      * @return
      */
-    PageInfo<Topic> findAll(int nowPage, int pageSize);
+    PageInfo findAll(int nowPage, int pageSize);
     
     /**
      * 获取用户未订阅的所有开放的专题
      *
      * @param user
+     * @param nowPage
+     * @param pageSize
      * @return
      */
     PageInfo<Topic> findUserNotSubscribed(User user, int nowPage, int pageSize);
@@ -49,15 +53,22 @@ public interface TopicService {
      * @return
      */
     Topic findByTitle(String title);
-    
+
+    /**
+     * 通过编号查找专题
+     * @param id
+     * @return
+     */
     Topic findById(Integer id);
     
     /**
      * 新增专题
-     *  @param title
+     * @param title
      * @param introduction
      * @param img
      * @param topicType
+     * @param creator
+     * @throws RestException
      */
     void addTopic(String title, String introduction, String img, TopicType topicType, User creator) throws RestException;
     
@@ -70,6 +81,7 @@ public interface TopicService {
      * @param img
      * @param type
      * @param admin
+     * @throws RestException
      */
     void updateTopic(Integer id, String title, String introduction, String img, TopicType type, Integer admin) throws RestException;
     
@@ -78,6 +90,7 @@ public interface TopicService {
      *
      * @param id
      * @param articles 文件的编号清单
+     * @throws RestException
      */
     void addTopicArticls(Integer id, List<Integer> articles) throws RestException;
     
@@ -86,6 +99,7 @@ public interface TopicService {
      *
      * @param userId
      * @param topicId
+     * @throws RestException
      */
     void subscribeTopic(Integer userId, Integer topicId) throws RestException;
     
@@ -94,6 +108,7 @@ public interface TopicService {
      *
      * @param userId
      * @param topicId
+     * @throws RestException
      */
     void unSubscribeTopic(Integer userId, Integer topicId) throws RestException;
     
@@ -102,6 +117,7 @@ public interface TopicService {
      * 删除专题后会将对应用户的订阅关系以及专题中包含的文章两层关系均进行删除
      *
      * @param id
+     * @throws RestException
      */
     void deleteTopic(Integer id) throws RestException;
     
@@ -127,7 +143,7 @@ public interface TopicService {
      * @param loginUser
      * @return
      */
-    List<Topic> findByAdmin(User loginUser);
+    List findByAdmin(User loginUser);
     
     /**
      * 获取专题订阅用户列表
@@ -141,6 +157,8 @@ public interface TopicService {
      * 根据关键字搜索专题
      *
      * @param key
+     * @param nowPage
+     * @param pageSize
      * @return
      */
     PageInfo<Topic> search(String key, int nowPage, int pageSize);

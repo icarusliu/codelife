@@ -7,16 +7,32 @@ package com.liuqi.tools.codelife.entity;
  * 正常状态下如果一天超过3次输入错误将被锁定，第二天解锁后正常；
  * 账户如存在其它异常被手动注销后为注销状态；
  *
+ * @author qi.liu
  */
 public enum UserStatus {
+    /**
+     * 审批中
+     */
     APPROVING("审批中"),
+
+    /**
+     * 正常状态
+     */
     NORMAL("正常"),
+
+    /**
+     * 锁定状态
+     */
     LOCKED("锁定"),
+
+    /**
+     * 注销状态
+     */
     CANCEL("注销")
     ;
     private String name;
     
-    private UserStatus(String name) {
+    UserStatus(String name) {
         this.name = name;
     }
     
@@ -33,6 +49,7 @@ public enum UserStatus {
      *
      * @return
      */
+    @Override
     public String toString() {
         return name;
     }

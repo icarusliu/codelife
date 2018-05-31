@@ -19,6 +19,8 @@ import java.util.List;
 public interface ArticleTypeDao {
     /**
      * 根据Type的ID获取Type
+     *
+     * @param id
      * @return 返回获取的Type
      */
     ArticleType findById(@Param("id") int id);
@@ -26,12 +28,13 @@ public interface ArticleTypeDao {
     /**
      * 通过分类名称查找分类
      * @param typeName
+     * @return
      */
     ArticleType findByName(@Param("name") String typeName);
     
     /**
      * 查找用户的分类
-     *
+     * @param userId
      * @return
      */
     List<ArticleType> findByUser(@Param("userId") Integer userId);

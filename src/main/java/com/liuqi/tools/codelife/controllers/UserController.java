@@ -5,22 +5,22 @@ import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.entity.UserArticleStatInfo;
+import com.liuqi.tools.codelife.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.*;
-import com.liuqi.tools.codelife.util.MapBuilder;
-import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
+import com.liuqi.tools.codelife.tool.MapBuilder;
+import com.liuqi.tools.codelife.tool.ModelAndViewBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -91,7 +91,7 @@ public class UserController {
         password = password.trim();
         if ("".equals(username)) {
             logger.error("Username cannot be empty!");
-            throw new RestException("用户名不能为空！");
+            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "用户名");
         }
     
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -104,10 +104,10 @@ public class UserController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
         } catch (AuthenticationException ex) {
-            throw new RestException(ex.getMessage());
+            throw ExceptionTool.getException(ex, ErrorCodes.COMM_LOGIN_ERROR);
         } catch (Exception e) {
             logger.error("Build authenticationManager failed!", e);
-            throw new RestException(e.getMessage());
+            throw ExceptionTool.getException(e, ErrorCodes.COMM_LOGIN_ERROR);
         }
     
         return "succeed";
