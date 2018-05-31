@@ -1,4 +1,4 @@
-package com.liuqi.tools.codelife.controllers;
+package com.liuqi.tools.codelife.controllers.thymeleaf;
 
 import com.liuqi.tools.codelife.service.RoleService;
 import com.liuqi.tools.codelife.service.UserService;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  **/
 @Controller
 @RequestMapping("/system")
-public class SystemManagerController {
+public class SystemManagerThymeleafController {
     @Autowired
     private UserService userService;
     

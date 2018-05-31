@@ -1,4 +1,4 @@
-package com.liuqi.tools.codelife.controllers;
+package com.liuqi.tools.codelife.controllers.rest;
 
 import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.Article;
@@ -11,14 +11,11 @@ import com.liuqi.tools.codelife.service.ArticleTypeService;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.tool.MapBuilder;
-import com.liuqi.tools.codelife.tool.ModelAndViewBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +27,7 @@ import java.util.Map;
  * @Created: 2018/3/28 14:45
  * @Version: V1.0
  **/
-@Controller
+@RestController
 @RequestMapping("/system/articleManager")
 @PreAuthorize("isAuthenticated()")
 public class ArticleManagerController {
@@ -47,27 +44,12 @@ public class ArticleManagerController {
     private ArticleTypeService typeService;
     
     /**
-     * 打开文章管理页面
-     * 同时获取所有文章分类、所有文章
-     * 只有登录用户才可访问
-     * 用户只能查看自己发表的文章；而管理员可以看到所有文章 ；
-     *
-     * @return
-     */
-    @GetMapping
-    public ModelAndView articleManager() throws RestException {
-        return ModelAndViewBuilder.of("articleManager/articleManager")
-                .build();
-    }
-    
-    /**
      * 获取用于管理的文章清单
      * 根据当前登录用户获取其有权限管理的文章清单
      *
      * @return
      */
     @GetMapping("/getArticlesForManager")
-    @ResponseBody
     public Map<String, Object> getArticlesForManager(@RequestParam(value = "offset", required = false) Integer offset,
                                                      @RequestParam(value = "limit", required = false) Integer pageSize) {
         
@@ -85,36 +67,7 @@ public class ArticleManagerController {
         
         return map;
     }
-    
-    /**
-     * 新建文章页面
-     * 如果打开新建文章页面时传入了文章ID，那么对文章进行编辑而不是新建
-     * @return
-     */
-    @GetMapping("/newArticle")
-    public ModelAndView newArticle(@RequestParam(name = "id",  required = false) Integer id) {
-        User loginUser = authenticationService.getLoginUser();
-        
-        ModelAndViewBuilder builder = ModelAndViewBuilder.of("articleManager/newArticle")
-                .setData("types", typeService.findByUser(loginUser))
-                .setData("forums", typeService.findSystemTypes())
-                .setData("myTopics", topicService.getUserTopics(loginUser.getId()));
-        
-        if (null != id) {
-            Article article = null;
-            try {
-                article = articleService.findById(id);
-            } catch (RestException e) {
-                logger.error("Article with the special id({}) does not exist!", e);
-            }
-            if (null != article) {
-                builder.setData("article", article);
-            }
-        }
-        
-        return builder.build();
-    }
-    
+
     /**
      * REST方式下获取新建文章时需要使用到的数据
      *
@@ -123,7 +76,6 @@ public class ArticleManagerController {
      * @throws RestException
      */
     @PostMapping("/getNewArticleDatas")
-    @ResponseBody
     public Map<String, Object> getNewArticleDatas(@RequestParam(value = "articleId", required = false) Integer articleId) throws RestException {
         User loginUser = authenticationService.getLoginUser();
         
@@ -153,7 +105,6 @@ public class ArticleManagerController {
      * @throws RestException
      */
     @PostMapping("/saveArticle")
-    @ResponseBody
     public String saveArticle(@RequestParam("title") String title,
                               @RequestParam("type") Integer type,
                               @RequestParam("content") String content,
@@ -185,7 +136,6 @@ public class ArticleManagerController {
      * @param id 需要删除文章的ID
      */
     @PostMapping("/deleteArticle")
-    @ResponseBody
     public void deleteArticle(@RequestParam("id") Integer id) throws RestException {
         User loginUser = authenticationService.getLoginUser();
         Article article = articleService.findById(id);
@@ -203,7 +153,6 @@ public class ArticleManagerController {
      * @param id
      */
     @PostMapping("/fixTop")
-    @ResponseBody
     public void fixTop(@RequestParam("id") Integer id) {
         //如果是管理员进行操作，则是进行推荐；否则是进行置顶（只会在用户页面中显示在前列）
         User user = authenticationService.getLoginUser();
@@ -220,7 +169,6 @@ public class ArticleManagerController {
      * @param id
      */
     @PostMapping("/unFixTop")
-    @ResponseBody
     public void unFixTop(@RequestParam("id") Integer id) {
         User user = authenticationService.getLoginUser();
     

@@ -1,18 +1,13 @@
-package com.liuqi.tools.codelife.controllers;
+package com.liuqi.tools.codelife.controllers.rest;
 
 import com.liuqi.tools.codelife.entity.ArticleType;
-import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.ArticleTypeService;
 import com.liuqi.tools.codelife.service.AuthenticationService;
-import com.liuqi.tools.codelife.tool.ModelAndViewBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -22,7 +17,7 @@ import java.util.List;
  * @Created: 2018/4/16 14:34
  * @Version: V1.0
  **/
-@Controller
+@RestController
 @RequestMapping("/system/articleTypeManager")
 @PreAuthorize("isAuthenticated()")
 public class ArticleTypeManagerController {
@@ -40,7 +35,6 @@ public class ArticleTypeManagerController {
      * @param id 可能为空，不为空时是更新；为空时是新增
      */
     @PostMapping("/add")
-    @ResponseBody
     public void add(@RequestParam("typeName") String name,
                          @RequestParam(value = "id", required = false) Integer id) throws RestException {
         if (null == id) {
@@ -49,30 +43,13 @@ public class ArticleTypeManagerController {
             typeService.saveType(id, name);
         }
     }
-    
-    /**
-     * 打开文章分类管理页面
-     * 只有登录用户才能访问
-     *
-     * @return
-     */
-    @GetMapping
-    public ModelAndView typeManager() {
-        User user = authenticationService.getLoginUser();
-        
-        Collection<ArticleType> types = typeService.findByUser(user);
-        return ModelAndViewBuilder.of("articleManager/typeManager")
-                .setData("types", types)
-                .build();
-    }
-    
+
     /**
      * REST方式下文章分类管理界面中获取所有文章分类
      *
      * @return
      */
     @GetMapping("/getAllForManager")
-    @ResponseBody
     public List<ArticleType> getAllForManager() {
         return typeService.findByUser(authenticationService.getLoginUser());
     }
