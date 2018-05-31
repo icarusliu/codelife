@@ -2,7 +2,6 @@ package com.liuqi.tools.codelife.controllers;
 
 import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.entity.Article;
-import com.liuqi.tools.codelife.entity.ArticleType;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.exceptions.ErrorCodes;
 import com.liuqi.tools.codelife.exceptions.ExceptionTool;
@@ -11,8 +10,8 @@ import com.liuqi.tools.codelife.service.ArticleService;
 import com.liuqi.tools.codelife.service.ArticleTypeService;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
-import com.liuqi.tools.codelife.util.MapBuilder;
-import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
+import com.liuqi.tools.codelife.tool.MapBuilder;
+import com.liuqi.tools.codelife.tool.ModelAndViewBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,7 +79,7 @@ public class ArticleManagerController {
         User user = authenticationService.getLoginUser();
         PageInfo<Article> pageInfo = articleService.findForManager(user, nowPage, pageSize);
         
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(2);
         map.put("rows", pageInfo.getList());
         map.put("total", pageInfo.getTotal());
         

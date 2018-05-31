@@ -10,6 +10,7 @@ import java.util.Collection;
 
 /**
  * 评论服务接口
+ * @author qi.liu
  */
 public interface CommentService {
     /**
@@ -20,6 +21,7 @@ public interface CommentService {
      * @param id
      * @param loginUser
      * @param host
+     * @throws RestException
      */
     void add(String content, Boolean anonymos, CommentType commentType, Integer id, User loginUser, String host) throws RestException;
     

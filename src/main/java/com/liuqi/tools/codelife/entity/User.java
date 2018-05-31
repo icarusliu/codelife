@@ -105,7 +105,7 @@ public class User implements Serializable{
      */
     public boolean isTopicAdmin() {
         for (Role role: roles) {
-            if (role.getName().equals("TOPIC_ADMIN")) {
+            if ("TOPIC_ADMIN".equals(role.getName())) {
                 return true;
             }
         }

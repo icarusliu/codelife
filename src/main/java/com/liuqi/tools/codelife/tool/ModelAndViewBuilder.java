@@ -1,4 +1,4 @@
-package com.liuqi.tools.codelife.util;
+package com.liuqi.tools.codelife.tool;
 
 import org.springframework.web.servlet.ModelAndView;
 

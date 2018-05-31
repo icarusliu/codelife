@@ -7,7 +7,7 @@ import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.service.ArticleService;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
-import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
+import com.liuqi.tools.codelife.tool.ModelAndViewBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +30,8 @@ import java.util.Collections;
  **/
 @Controller
 public class IndexController {
+    public static final String XMLHTTP_REQUEST = "XMLHttpRequest";
+    public static final String X_REQUESTED_WITH = "x-requested-with";
     @Autowired
     private ArticleService articleService;
     
@@ -48,10 +50,10 @@ public class IndexController {
      */
     @RequestMapping("/timeout")
     public void sessionTimeout(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (request.getHeader("x-requested-with") != null
-                && request.getHeader("x-requested-with").equalsIgnoreCase(
-                "XMLHttpRequest")) { // ajax 超时处理
-            response.getWriter().print("timeout"); //设置超时标识
+        // ajax 超时处理
+        if (XMLHTTP_REQUEST.equalsIgnoreCase(request.getHeader(X_REQUESTED_WITH))) {
+            //设置超时标识
+            response.getWriter().print("timeout");
             response.getWriter().close();
         } else {
             response.sendRedirect("/index");

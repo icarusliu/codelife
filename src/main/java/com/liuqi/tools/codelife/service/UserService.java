@@ -27,6 +27,7 @@ public interface UserService {
      * 通过用户名查找用户
      * @param username 待查找的用户名
      * @return 未找到时返回空
+     * @throws RestException
      */
     public User findByUsername(String username) throws RestException;
     
@@ -40,8 +41,8 @@ public interface UserService {
      * 更新密码错误次数
      * 如果出错次数超过配置次数，需要将账户锁定
      *
-     * @Param user 用户
-     * @Param errorCount 需要更新的次数
+     * @param user 用户
+     * @param errorCount 需要更新的次数
      */
     void updateErrorCount(User user, int errorCount);
     
@@ -51,6 +52,7 @@ public interface UserService {
      * @param username
      * @param password
      * @param realName 显示名称
+     * @throws RestException
      */
     void register(String username, String password, String realName) throws RestException;
     
@@ -83,7 +85,7 @@ public interface UserService {
      * 通过编号查找用户
      * @param id
      * @return  返回查找到的用户，不会返回空值
-     * @Throws RestException 如果未找到用户时抛出异常
+     * @throws RestException 如果未找到用户时抛出异常
      */
     User findById(Integer id) throws RestException;
     

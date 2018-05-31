@@ -8,7 +8,7 @@ import com.liuqi.tools.codelife.exceptions.ErrorCodes;
 import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.UserService;
-import com.liuqi.tools.codelife.util.DateUtils;
+import com.liuqi.tools.codelife.tool.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -196,7 +196,7 @@ public class UserServiceImpl implements UserService{
     public void unregisterUser(Integer id) throws RestException {
         //ADMIN不能被注销
         User user = findById(id);
-        if (user.getUsername().equals("admin")) {
+        if (user.isSystemAdmin()) {
             logger.error("Admin cannot be unregistered!");
             throw ExceptionTool.getException(ErrorCodes.USER_ADMIN_CANNOT_BE_REGISTED);
         }

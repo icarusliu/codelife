@@ -8,7 +8,7 @@ import com.liuqi.tools.codelife.exceptions.ErrorCodes;
 import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.CommentService;
-import com.liuqi.tools.codelife.util.DateUtils;
+import com.liuqi.tools.codelife.tool.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

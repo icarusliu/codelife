@@ -21,6 +21,7 @@ public interface ArticleService {
      * 用于展现的文章清单需要按一些特定顺序排序，如是否置顶等；
      * @param nowPage
      * @param pageSize
+     * @return
      */
     PageInfo<Article> findForExplorer(int nowPage, int pageSize);
     
@@ -43,6 +44,7 @@ public interface ArticleService {
      * @param nowPage
      * @param pageSize
      * @return
+     * @throws RestException
      */
     PageInfo<Article> findByAuthorForExplorer(User user, int nowPage, int pageSize) throws RestException;
     
@@ -55,6 +57,7 @@ public interface ArticleService {
      * @param nowPage
      * @param pageSize
      * @return
+     * @throws RestException
      */
     PageInfo<Article> findByAuthorForExplorer(User user, Integer typeId, int nowPage, int pageSize) throws RestException;
     
@@ -86,6 +89,8 @@ public interface ArticleService {
      * 搜索的结果将按文章的优先级进行排序，如是否置顶等
      *
      * @param key
+     * @param nowPage
+     * @param pageSize
      * @return
      */
     PageInfo<Article> search(String key, int nowPage, int pageSize);
@@ -94,6 +99,7 @@ public interface ArticleService {
      * 通过ID查找文章内容并返回
      * @param id 文章ID
      * @return 文章对象
+     * @throws RestException
      */
     Article findById(int id) throws RestException;
     
@@ -104,6 +110,7 @@ public interface ArticleService {
      * @param type 文章类型
      * @param topicId 专题 可以为空
      * @param forumId 版块，可以为空，文章可以不发表到任何版块
+     * @throws RestException
      */
     void saveArticle(String title, String content, Integer type, Integer topicId, Integer forumId) throws RestException;
     
@@ -126,6 +133,7 @@ public interface ArticleService {
      * @param title 文章标题，不能为空
      * @param content 文章内容，不能为空
      * @param type  文章分类，不能为空
+     * @throws RestException
      */
     void updateArticle(Integer id, String title, String content, Integer type) throws RestException;
     
@@ -151,7 +159,7 @@ public interface ArticleService {
     void fixTop(Integer id);
     
     /**
-     *
+     * 取消置顶
      * @param id
      */
     void unFixTop(Integer id);

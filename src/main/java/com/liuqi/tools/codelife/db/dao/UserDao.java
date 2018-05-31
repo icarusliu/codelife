@@ -49,7 +49,7 @@ public interface UserDao {
     
     /**
      * 更新用户信息
-     * @Param user 需要更新的用户信息
+     * @param user 需要更新的用户信息
      */
     void updateUser(User user);
     

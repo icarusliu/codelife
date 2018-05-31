@@ -25,6 +25,7 @@ public interface RoleService {
      *
      * @param roleName
      * @param remark
+     * @throws RestException
      */
     public void add(String roleName, String remark) throws RestException;
     
@@ -33,6 +34,7 @@ public interface RoleService {
      * @param id
      * @param roleName
      * @param remark
+     * @throws RestException
      */
     public void update(Integer id, String roleName, String remark) throws RestException;
 }

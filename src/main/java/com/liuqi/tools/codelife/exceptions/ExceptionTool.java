@@ -16,9 +16,13 @@ import java.util.Properties;
  * @author LiuQI 2018/5/29 19:32
  * @version V1.0
  **/
-public abstract class ExceptionTool {
+public class ExceptionTool {
     private static final Logger logger = LoggerFactory.getLogger(ExceptionTool.class);
     private static Map<String, ErrorInfo> errorInfoMap = new HashMap<>();
+
+    private ExceptionTool() {
+
+    }
 
     public static void init() throws IOException {
         DefaultResourceLoader resourceLoader = new DefaultResourceLoader();

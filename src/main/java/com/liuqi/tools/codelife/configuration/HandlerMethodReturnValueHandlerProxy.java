@@ -31,7 +31,7 @@ public class HandlerMethodReturnValueHandlerProxy implements HandlerMethodReturn
     @Override
     public void handleReturnValue(Object returnValue, MethodParameter returnType, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest) throws Exception {
-        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>(3);
 
         resultMap.put("statusCode", STATUS_CODE_SUCCEEDED);
         resultMap.put("errorMessage", "");

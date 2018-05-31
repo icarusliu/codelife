@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -171,7 +172,7 @@ public class TopicServiceImpl implements TopicService {
             Role findRole = null;
             
             for (Role role: roles) {
-                if (role.getName().equals("TOPIC_ADMIN")) {
+                if ("TOPIC_ADMIN".equals(role.getName())) {
                     findRole = role;
                     
                     break;
@@ -212,12 +213,12 @@ public class TopicServiceImpl implements TopicService {
      */
     private void checkTopicProps(String title, String introduction, String img) throws RestException {
         //为空判断
-        if (null == title || title.trim().equals("")) {
+        if (StringUtils.isEmpty(title)) {
             logger.error("Topic title cannot be null or empty!");
             throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "专题名称");
         }
 
-        if (null == introduction || "".equals(introduction.trim())) {
+        if (StringUtils.isEmpty(introduction)) {
             logger.error("Topic introduction cannot be null or empty!");
             throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "专题介绍");
         }

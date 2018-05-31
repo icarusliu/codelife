@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * 文章分类服务类
+ * @author qi.liu
  */
 public interface ArticleTypeService {
     /**
@@ -30,6 +31,7 @@ public interface ArticleTypeService {
      *
      * @param id 分类ID
      * @param name 新的分类名称
+     * @throws RestException
      */
     void saveType(Integer id, String name) throws RestException;
     
@@ -37,6 +39,7 @@ public interface ArticleTypeService {
      * 保存文件类型
      *
      * @param name
+     * @throws RestException
      */
     void saveType(String name) throws RestException;
     
@@ -44,6 +47,7 @@ public interface ArticleTypeService {
      * 通过ID获取Type
      * @param id Type的ID
      * @return 返回获取的Type对象
+     * @throws RestException
      */
     ArticleType findById(int id) throws RestException;
     

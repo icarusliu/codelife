@@ -6,10 +6,9 @@ import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
-import com.liuqi.tools.codelife.util.FileUtils;
-import com.liuqi.tools.codelife.util.MapBuilder;
-import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
-import org.apache.ibatis.annotations.ResultMap;
+import com.liuqi.tools.codelife.tool.FileUtils;
+import com.liuqi.tools.codelife.tool.MapBuilder;
+import com.liuqi.tools.codelife.tool.ModelAndViewBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -266,9 +265,9 @@ public class TopicManagerController {
         
         User loginUser = authenticationService.getLoginUser();
         //如果不是系统管理员，并且Topic的管理员为空或者不为空且不与当前登录用户相同，那么不能修改
-        if (!loginUser.isSystemAdmin() && (topic.getAdmin() == null || loginUser.getId() != topic.getAdmin().getId())) {
-            logger.error("Topic admin is not current user, current user: "
-                    + loginUser + ", admin: " + topic.getAdmin());
+        boolean canNotEdit = !loginUser.isSystemAdmin() && (topic.getAdmin() == null || loginUser.getId() != topic.getAdmin().getId());
+        if (canNotEdit) {
+            logger.error("Topic admin is not current user, current user: " + loginUser + ", admin: " + topic.getAdmin());
             throw ExceptionTool.getException(ErrorCodes.TOPIC_MANAGER_EDIT_NOT_MANAGER);
         }
     }

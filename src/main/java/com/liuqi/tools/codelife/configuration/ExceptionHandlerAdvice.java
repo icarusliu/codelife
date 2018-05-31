@@ -30,7 +30,7 @@ public class ExceptionHandlerAdvice {
     @ResponseBody
     public Map<String, Object> restError(HttpServletRequest request, HttpServletResponse response, Exception ex) {
         RestException restException = (RestException) ex;
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(4);
         map.put("exception", null != restException.getT() ? restException.getT() : restException);
         map.put("errorMessage", restException.getMessage());
         map.put("url", request.getRequestURL());

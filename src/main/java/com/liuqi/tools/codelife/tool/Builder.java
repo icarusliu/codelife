@@ -1,8 +1,9 @@
-package com.liuqi.tools.codelife.util;
+package com.liuqi.tools.codelife.tool;
 
 /**
  * 构建器接口
  *
+ * @author qi.liu
  * @param <T>
  */
 public interface Builder<T> {

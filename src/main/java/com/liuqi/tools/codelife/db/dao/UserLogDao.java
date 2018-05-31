@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface UserLogDao {
     /**
+     * 将用户操作日志记录到DB
      *
      * @param username
      * @param operateTime
