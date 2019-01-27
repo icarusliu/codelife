@@ -36,7 +36,7 @@
         <!-- 左侧导航页面 -->
         <div class="col-sm-3 col-md-2 hidden-xs-down sidebar">
             <div class="side-block container" id="navUl" >
-                <span class="side-block-title row">文章版块</span>
+                <span class="side-block-title row">文章分类</span>
                 <a class="side-block-item row active" th:href="@{/article/articles}">所有文章</a>
                 <a class="side-block-item row"  th:each="forum: ${forums}" th:href="@{'/article/articles?forumId=' + ${forum.id}}"
                    th:text="${forum.name}">

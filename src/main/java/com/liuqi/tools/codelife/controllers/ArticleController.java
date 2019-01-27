@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
 import java.util.HashMap;
@@ -45,6 +46,9 @@ public class ArticleController {
     
     @Autowired
     private UserService userService;
+    
+    @Resource
+    private TopicService topicService;
     
     /**
      * 打开文章清单页面
@@ -110,9 +114,12 @@ public class ArticleController {
             articleService.addReadCount(article);
         }
         
+        List<Topic> topics = topicService.findByArticle(articleId);
+        
         return MapBuilder.of()
                 .put("article", article)
                 .put("comments", commentService.findByDestination(CommentType.ARTICLE, articleId))
+                .put("topics", topics)
                 .build();
     }
     
@@ -136,6 +143,7 @@ public class ArticleController {
         return ModelAndViewBuilder.of("articleDetail")
                 .setData("article", article)
                 .setData("comments", commentService.findByDestination(CommentType.ARTICLE, id))
+                .setData("topics", topicService.findByArticle(id))
                 .build();
     }
     

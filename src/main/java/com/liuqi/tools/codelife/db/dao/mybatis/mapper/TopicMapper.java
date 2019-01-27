@@ -88,4 +88,6 @@ public interface TopicMapper {
      * @return
      */
     List<Topic> search(@Param("key") String key);
+    
+    List<Topic> findByArticle(@Param("articleId") Integer articleId);
 }

@@ -87,6 +87,17 @@
             <div id="catalog" class="article-catalog-content ml-2">
 
             </div>
+
+            <div class="block">
+                <h5>文章专题</h5>
+                <ul>
+                    <li th:each="topic: ${topics}">${topic.title}</li>
+                </ul>
+            </div>
+
+            <div class="block">
+                <h5>相关文章</h5>
+            </div>
         </div>
 
         <!--文章内容-->

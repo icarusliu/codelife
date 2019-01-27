@@ -344,6 +344,11 @@ public class TopicServiceImpl implements TopicService {
         return PageInfo.of(topicDao.search(key));
     }
     
+    @Override
+    public List<Topic> findByArticle(Integer articleId) {
+        return topicDao.findByArticle(articleId);
+    }
+    
     private void checkTopicId(Integer id) throws RestException {
         if (null == id ) {
             logger.error("ID cannot be null!");

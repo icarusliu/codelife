@@ -75,10 +75,20 @@
 </head>
 <body>
 <div layout:fragment="content" class="container-fluid">
+    <form method="get" th:action="@{/search}"
+          class="row m-4">
+        <input type="text"
+               placeholder="搜索" name="key" required
+               class="form-control col-md-6 mr-md-2 offset-md-2"/>
+        <input type="submit" value="搜索"
+               class="btn btn-primary"/>
+    </form>
+
     <div class="row">
         <!-- 登录框 -->
         <div class="col-sm-2" th:if="${#authentication.name eq 'anonymousUser'}">
             <form class="login-form pt-2 pl-4 pb-2"
+                  th:if="${login}"
                   th:action="@{/login}" method="POST">
                 <input class="form-control row mb-2" name="username" type="text"
                        oninput="javascript: inputUsername(); "
@@ -99,18 +109,19 @@
                     </div>
                 </div>
             </form>
+
+            <div class="block">
+                <h5 class="block-title article-type-block-title">文章分类</h5>
+                <div class="w-100"></div>
+                <div class="article-type-item" th:each="articleType: ${articleTypes}">
+                    <a th:text="${articleType.name}" class="article-type-title font-weight-bold"
+                       th:href="@{/article/articles} + '?forumId=' + ${articleType.id}"></a>
+                </div>
+            </div>
         </div>
 
         <div class="col-sm">
             <!--搜索操作-->
-            <form method="get" th:action="@{/search}"
-                  class="row m-4">
-                <input type="text"
-                       placeholder="搜索" name="key" required
-                       class="form-control col-md-6 mr-md-2 offset-md-2"/>
-                <input type="submit" value="搜索"
-                       class="btn btn-primary"/>
-            </form>
 
             <div class="row">
                 <div class="col-sm-8">

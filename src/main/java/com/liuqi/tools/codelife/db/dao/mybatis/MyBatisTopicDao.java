@@ -109,4 +109,9 @@ public class MyBatisTopicDao implements TopicDao {
     public List<Topic> search(String key) {
         return Optional.ofNullable(topicMapper.search(key)).orElse(Collections.EMPTY_LIST);
     }
+    
+    @Override
+    public List<Topic> findByArticle(Integer articleId) {
+        return topicMapper.findByArticle(articleId);
+    }
 }

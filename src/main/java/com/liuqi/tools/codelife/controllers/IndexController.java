@@ -5,6 +5,7 @@ import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.Topic;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.service.ArticleService;
+import com.liuqi.tools.codelife.service.ArticleTypeService;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
@@ -37,6 +38,9 @@ public class IndexController {
     private TopicService topicService;
     
     @Autowired
+    private ArticleTypeService articleTypeService;
+    
+    @Autowired
     private AuthenticationService authenticationService;
     
     /**
@@ -66,7 +70,7 @@ public class IndexController {
      * @return
      */
     @RequestMapping({"/index", "/", "/login"})
-    public ModelAndView index() {
+    public ModelAndView index(@RequestParam(value = "login", required = false) Boolean login) {
         Collection<Article> articles;
         try {
            articles  = articleService.findForExplorer(1, 20).getList();
@@ -87,7 +91,9 @@ public class IndexController {
         return ModelAndViewBuilder.of("index")
                 .setData("articles", articles)
                 .setData("topics", topicService.search("", 1, 20).getList())
+                .setData("articleTypes", articleTypeService.findSystemTypes())
                 .setData("myTopics", myTopics)
+                .setData("login", login)
                 .build();
     }
     

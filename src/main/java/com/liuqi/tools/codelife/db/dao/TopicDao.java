@@ -140,4 +140,12 @@ public interface TopicDao {
      * @return
      */
     List<Topic> search(String key);
+    
+    /**
+     * 根据文章编号查找专题清单
+     *
+     * @param articleId
+     * @return
+     */
+    List<Topic> findByArticle(Integer articleId);
 }

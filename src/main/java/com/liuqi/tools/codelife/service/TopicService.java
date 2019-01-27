@@ -144,4 +144,11 @@ public interface TopicService {
      * @return
      */
     PageInfo<Topic> search(String key, int nowPage, int pageSize);
+    
+    /**
+     * 通过文章查找该文章所属的标题清单
+     * @param articleId
+     * @return
+     */
+    List<Topic> findByArticle(Integer articleId);
 }
