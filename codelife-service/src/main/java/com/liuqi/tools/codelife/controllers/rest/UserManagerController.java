@@ -19,7 +19,7 @@ import java.util.Collection;
  * @Created: 2018/4/2 15:25
  * @Version: V1.0
  **/
-@RequestMapping("/userManager")
+@RequestMapping("/manager/user")
 @RestController
 @PreAuthorize("hasAuthority('ADMIN')")
 public class UserManagerController {

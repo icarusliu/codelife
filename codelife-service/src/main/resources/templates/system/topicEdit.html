@@ -13,11 +13,11 @@
         var imgUrl = [[@{/topic/getImg}]] + '?fileName=' + [[${topic.img}]];
         var getTopicArticlesUrl = [[@{/topic/getTopicArticles}]];
         var searchArticleUrl = [[@{/searchArticleByTitle}]];
-        var addArticlesUrl = [[@{/system/topicManager/addArticles}]];
-        var deleteTopicArticleUrl = [[@{/system/topicManager/deleteArticle}]];
+        var addArticlesUrl = [[@{/topic/manager/addArticles}]];
+        var deleteTopicArticleUrl = [[@{/topic/manager/deleteArticle}]];
         var searchUserUrl = [[@{/user/search}]];
-        var updateTopicUrl = [[@{/system/topicManager/update}]];
-        var getTopicUserUrl = [[@{/system/topicManager/getTopicUsers}]];
+        var updateTopicUrl = [[@{/topic/manager/update}]];
+        var getTopicUserUrl = [[@{/topic/manager/getTopicUsers}]];
 
         var id = [[${topic.id}]];
         var table;

@@ -10,10 +10,10 @@
     <title>用户管理</title>
 
     <script th:inline="javascript">
-        var dataTableUrl = [[@{/userManager/getAll}]];
-        var approveUrl = [[@{/userManager/approve}]];
-        var unlockUrl = [[@{/userManager/unlock}]];
-        var unregisterUrl = [[@{/userManager/unregister}]];
+        var dataTableUrl = [[@{/manager/user/getAll}]];
+        var approveUrl = [[@{/manager/user/approve}]];
+        var unlockUrl = [[@{/manager/user/unlock}]];
+        var unregisterUrl = [[@{/manager/user/unregister}]];
 
         var tableId = "#dataTable";
         var table = null;
