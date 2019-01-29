@@ -78,7 +78,12 @@ public class ArticleThymeleafController {
      */
     @GetMapping("/detail")
     public ModelAndView articleDsetail(@RequestParam("id") Integer id, HttpSession session) throws RestException {
-        Article article = articleService.findById(id);
+        Article article;
+        try {
+            article = articleService.findById(id);
+        } catch (RestException ex) {
+            return articles(null, null, null);
+        }
 
         //阅读次数加1
         //一个Session只算一次；
