@@ -75,6 +75,7 @@
     background: #F0F8FF;
     line-height: 2.4em;
     padding-left: 10px;
+    margin-bottom: 0px!important;
 }
 
 .block-title-topic {
@@ -87,22 +88,32 @@
 
 .article-item {
     border-bottom: 1px dotted #efefef;
-    margin-top: 10px;
+    padding-top: 10px;
     padding-left: 10px;
+}
+
+.article-item:hover {
+    background: #f8f8f8;
 }
 
 .article-item-title {
     font-size: 1em;
+    color: black;
+    margin-bottom: 10px;
 }
 
 .article-item-remark {
     font-size: 0.8em;
     margin-top: 4px;
-    color: #4682B4;
+    color: gray;
 }
 
 .article-item-info {
     font-size: 0.8em;
     color: #bbb;
     margin-top: 10px;
+}
+
+.article-item-info>span {
+    color: #3261A7;
 }

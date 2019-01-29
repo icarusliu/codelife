@@ -95,7 +95,6 @@
                 <div class="col-sm-8">
                     <div class="block" id="articleList">
                         <h5 class="block-title">热门文章</h5>
-                        <div class="w-100"></div>
                         <div class="article-item" th:each="article: ${articles}">
                             <sup th:if="${article.recommended}" style="color: red; ">[置顶]</sup>
                             <a th:text="${article.title}" class="article-item-title font-weight-bold"
@@ -104,9 +103,9 @@
                             <p class="article-item-remark" th:text="${article.remark}"></p>
                             <div class="article-item-info">
                                 <span th:text="${article.authorName}" class="mr-4"></span>
-                                发表于：<cite th:text="${article.createDate}" class="mr-5"></cite>
-                                阅读次数：<cite th:text="${article.readCount}" class="mr-5"></cite>
-                                点赞数：<cite th:text="${article.praiseCount}"></cite>
+                                发表于：<span th:text="${article.createDate}" class="mr-5"></span>
+                                阅读次数：<span th:text="${article.readCount}" class="mr-5"></span>
+                                点赞数：<span th:text="${article.praiseCount}"></span>
                             </div>
                         </div>
                     </div>

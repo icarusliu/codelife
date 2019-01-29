@@ -2,12 +2,10 @@ package com.liuqi.tools.codelife.db.dao;
 
 import com.liuqi.tools.codelife.entity.Topic;
 import com.liuqi.tools.codelife.entity.TopicStatus;
-import com.liuqi.tools.codelife.entity.TopicType;
 import com.liuqi.tools.codelife.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
