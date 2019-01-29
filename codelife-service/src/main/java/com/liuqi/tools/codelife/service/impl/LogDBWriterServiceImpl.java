@@ -3,7 +3,7 @@ package com.liuqi.tools.codelife.service.impl;
 import com.liuqi.tools.codelife.db.dao.UserLogDao;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.service.AuthenticationService;
-import com.liuqi.tools.codelife.service.LogDbWriterService;
+import com.liuqi.tools.codelife.service.LogDBWriterService;
 import com.liuqi.tools.codelife.tool.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * @Version: V1.0
  **/
 @Service
-public class LogDbWriterServiceImpl implements LogDbWriterService {
+public class LogDBWriterServiceImpl implements LogDBWriterService {
     @Autowired
     private TaskExecutor taskExecutor;
     

@@ -5,6 +5,7 @@ import com.liuqi.tools.codelife.entity.Article;
 import com.liuqi.tools.codelife.entity.Topic;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.service.ArticleService;
+import com.liuqi.tools.codelife.service.ArticleTypeService;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.tool.ModelAndViewBuilder;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,6 +42,9 @@ public class IndexThymeleafController {
     
     @Autowired
     private AuthenticationService authenticationService;
+
+    @Autowired
+    private ArticleTypeService articleTypeService;
     
     /**
      * 超时处理
@@ -67,15 +72,15 @@ public class IndexThymeleafController {
      *
      * @return
      */
-    @RequestMapping({"/index", "/", "/login"})
+    @RequestMapping({"/index", "/"})
     public ModelAndView index() {
         List articles;
         try {
-           articles  = articleService.findForExplorer(1, 20).getList();
+            articles  = articleService.findForExplorer(1, 20).getList();
         } catch (Exception ex) {
             articles = Collections.EMPTY_LIST;
         }
-        
+
         //获取订阅专题
         //获取用户订阅专题及其更新的文章
         User loginUser = authenticationService.getLoginUser();
@@ -85,10 +90,11 @@ public class IndexThymeleafController {
         } else {
             myTopics = Collections.EMPTY_LIST;
         }
-        
+
         return ModelAndViewBuilder.of("index")
                 .setData("articles", articles)
                 .setData("topics", topicService.search("", 1, 20).getList())
+                .setData("articleTypes", articleTypeService.findSystemTypes())
                 .setData("myTopics", myTopics)
                 .build();
     }

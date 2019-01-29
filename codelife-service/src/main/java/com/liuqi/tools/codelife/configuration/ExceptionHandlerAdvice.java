@@ -1,5 +1,6 @@
 package com.liuqi.tools.codelife.configuration;
 
+import com.liuqi.tools.codelife.exceptions.CommonException;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,6 +19,23 @@ import java.util.Map;
  **/
 @ControllerAdvice
 public class ExceptionHandlerAdvice {
+    /**
+     * 处理返回页面的异常
+     *
+     * @param request
+     * @param response
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(CommonException.class)
+    public ModelAndView error(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        ModelAndView view = new ModelAndView();
+        view.addObject("exception", ex);
+        view.addObject("url", request.getRequestURL());
+        view.addObject("statusCode", response.getStatus());
+        view.setViewName("error");
+        return view;
+    }
 
     /**
      * 处理Rest接口请求时的异常

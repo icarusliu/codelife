@@ -2,7 +2,6 @@
 <html
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:th="http://www.thymeleaf.org"
-        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
         xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
         layout:decorator="layout/layout">
 <head>
@@ -12,14 +11,6 @@
     <link rel="stylesheet" href="/css/index.css"/>
 
     <script th:inline="javascript">
-        function inputUsername() {
-            $("#errorMessage").hide();
-        }
-
-        function register() {
-            window.open([[@{/register}]], "_blank");
-        }
-
         var isLoading = false;
         var nowPage = 1;
         var pageSize = 20;
@@ -75,42 +66,30 @@
 </head>
 <body>
 <div layout:fragment="content" class="container-fluid">
+    <form method="get" th:action="@{/search}"
+          class="row m-4">
+        <input type="text"
+               placeholder="搜索" name="key" required
+               class="form-control col-md-6 mr-md-2 offset-md-2"/>
+        <input type="submit" value="搜索"
+               class="btn btn-primary"/>
+    </form>
+
     <div class="row">
         <!-- 登录框 -->
         <div class="col-sm-2" th:if="${#authentication.name eq 'anonymousUser'}">
-            <form class="login-form pt-2 pl-4 pb-2"
-                  th:action="@{/login}" method="POST">
-                <input class="form-control row mb-2" name="username" type="text"
-                       oninput="javascript: inputUsername(); "
-                       placeholder="用户名" required/>
-                <input class="form-control row mb-2" name="password" type="password" placeholder="密码" required/>
-                <div class="row">
-                    <div class="col-3"></div>
-                    <input type="button" class="btn btn-link" value="注册" onclick="javascript: register(); "/>
-                    <input type="submit" class="btn btn-primary col-4 ml-1" value="登录"/>
+            <div class="block row ml-1">
+                <font class="block-title article-type-block-title col-12">文章分类</font>
+                <div class="w-100"></div>
+                <div class="article-type-item col-12" th:each="articleType: ${articleTypes}">
+                    <a th:text="${articleType.name}" class="article-type-title font-weight-bold"
+                       th:href="@{/article/articles} + '?forumId=' + ${articleType.id}"></a>
                 </div>
-
-                <!-- 如果返回的链接中带有error参数，那么说明后台登录出现异常，可以通过Spring在Session中保存的异常变量获取异常信息并提示 -->
-                <div id="errorMessage" class="mt-1 text-danger"
-                     style="font-size: 12px;  ">
-                    <!-- 登录失败的信息  -->
-                    <div  th:if="${param.error}"
-                          th:text="${'登录失败：' + session.SPRING_SECURITY_LAST_EXCEPTION.message}">
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
 
         <div class="col-sm">
             <!--搜索操作-->
-            <form method="get" th:action="@{/search}"
-                  class="row m-4">
-                <input type="text"
-                       placeholder="搜索" name="key" required
-                       class="form-control col-md-6 mr-md-2 offset-md-2"/>
-                <input type="submit" value="搜索"
-                       class="btn btn-primary"/>
-            </form>
 
             <div class="row">
                 <div class="col-sm-8">

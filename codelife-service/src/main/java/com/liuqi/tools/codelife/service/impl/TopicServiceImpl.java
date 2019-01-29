@@ -358,6 +358,11 @@ public class TopicServiceImpl implements TopicService {
             throw ExceptionTool.getException(ErrorCodes.TOPIC_NOT_EXISTS, id);
         }
     }
+
+    @Override
+    public List<Topic> findByArticle(Integer articleId) {
+        return topicDao.findByArticle(articleId);
+    }
     
     private static final Logger logger = LoggerFactory.getLogger(TopicServiceImpl.class);
 }

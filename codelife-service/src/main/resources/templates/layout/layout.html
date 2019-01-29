@@ -20,7 +20,7 @@
     <script src="/js/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
     <script th:src="@{/js/common.js}"></script>
 
-    <script>
+    <script th:inline="javascript">
         //页面加载完成后设置主导航栏的选中
         $(function(){
             var url = $.getUrlPage();
@@ -43,6 +43,14 @@
                 }
             }
         });
+
+        function register() {
+            window.open([[@{/register}]], "_blank");
+        }
+
+        function login() {
+            window.open([[@{/login}]], "_self");
+        }
     </script>
 </head>
 <body>
@@ -105,6 +113,11 @@
             <div th:if="${#authentication.name != 'anonymousUser'}" style="font-size: 0.8em; ">
                 登录用户：<font th:text="${#authentication.details.user.realName}" class="text-primary mr-4"></font>
                 <a th:href="@{/logout}">注销</a>
+            </div>
+
+            <div th:if="${#authentication.name == 'anonymousUser'}" style="font-size: 0.8em; ">
+                <input type="button" class="btn-link btn-xs" value="注册" onclick="javascript: register(); "/>
+                <input type="button" class="btn-xs btn-success login-button" value="登录" onclick="javascript: login();"/>
             </div>
         </form>
     </div>
