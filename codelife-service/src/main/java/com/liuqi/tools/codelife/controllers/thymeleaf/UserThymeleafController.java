@@ -57,6 +57,11 @@ public class UserThymeleafController {
     public String registerPage() {
         return "register";
     }
+
+    @RequestMapping("/login")
+    public String login() {
+        return "login";
+    }
     
     /**
      * 用户首页

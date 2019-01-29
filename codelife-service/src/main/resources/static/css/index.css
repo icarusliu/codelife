@@ -7,6 +7,22 @@
     border: 1px solid #f3f3f3;
 }
 
+/*文章分类列表*/
+.article-type-item {
+    margin-left: 10px;
+    line-height: 30px;
+    font-size: 0.8em;
+}
+
+.article-type-item>a{
+    font-weight: normal!important;
+    color: #4D5593;
+}
+
+.article-type-block-title {
+    background: #D6F9E0!important;
+}
+
 /*文章列表*/
 .article-list-title {
     font-size: 0.9em;

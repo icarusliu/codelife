@@ -18,7 +18,7 @@ import java.util.List;
  * @Version: V1.0
  **/
 @RestController
-@RequestMapping("/system/articleTypeManager")
+@RequestMapping("/articleType/manager")
 @PreAuthorize("isAuthenticated()")
 public class ArticleTypeManagerController {
     @Autowired
@@ -49,7 +49,7 @@ public class ArticleTypeManagerController {
      *
      * @return
      */
-    @GetMapping("/getAllForManager")
+    @GetMapping("/list")
     public List<ArticleType> getAllForManager() {
         return typeService.findByUser(authenticationService.getLoginUser());
     }

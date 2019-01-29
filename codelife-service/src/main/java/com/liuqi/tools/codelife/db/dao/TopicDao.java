@@ -135,4 +135,12 @@ public interface TopicDao {
      * @return
      */
     List<Topic> search(@Param("key") String key);
+
+    /**
+     * 根据文章查找专题
+     *
+     * @param articleId
+     * @return
+     */
+    List<Topic> findByArticle(@Param("articleId") Integer articleId);
 }

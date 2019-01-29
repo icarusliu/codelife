@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -156,7 +157,7 @@ public class ArticleServiceImpl implements ArticleService {
         
         //将文章添加到专题
         if (null != topicId && 0 != topicId) {
-            topicService.addTopicArticls(topicId, List.of(article.getId()));
+            topicService.addTopicArticls(topicId, Arrays.asList(article.getId()));
         }
     }
     

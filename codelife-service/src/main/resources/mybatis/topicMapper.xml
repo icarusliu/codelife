@@ -58,6 +58,13 @@
         where id=#{id}
     </select>
 
+    <select id="findByArticle" resultMap="topicResult">
+        <include refid="selectSql"/>
+        inner join topic_article t2
+        on t1.id = t2.topic_id
+        where t2.article_id = #{articleId}
+    </select>
+
     <!--查找用户未订阅的并且是开放的专题清单，而且专题需要是Normal状态 -->
     <select id="findUserNotSubscribed" resultMap="topicResult" parameterType="User">
         <include refid="selectSql"/>

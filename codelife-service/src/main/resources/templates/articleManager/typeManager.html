@@ -38,7 +38,7 @@
                 data.id = pTypeId;
             }
 
-            post([[@{/system/articleTypeManager/add}]], data, function(resp){
+            post([[@{/articleType/manager/add}]], data, function(resp){
                     $("#newTypeDialog").modal("hide");
                     alert("保存成功！");
                     refreshTable();

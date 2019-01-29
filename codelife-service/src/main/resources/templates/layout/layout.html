@@ -20,7 +20,7 @@
     <script src="/js/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
     <script th:src="@{/js/common.js}"></script>
 
-    <script>
+    <script th:inline="javascript">
         //页面加载完成后设置主导航栏的选中
         $(function(){
             var url = $.getUrlPage();
@@ -43,17 +43,26 @@
                 }
             }
         });
+
+        function register() {
+            window.open([[@{/register}]], "_blank");
+        }
+
+        function login() {
+            window.open([[@{/login}]], "_self");
+        }
     </script>
 </head>
 <body>
 
 <nav class="navbar navbar-toggleable-md sticky-top navbar-light mb-2" id="mainNav">
-    <a class="navbar-brand" href="#"></a>
+    <a th:href="@{/}"><img class="navbar-brand" th:src="@{/icons/mouse.png}" width="30" height="30"/></a>
     <!-- 小页面上时导航栏按下拉的方式展现 -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
             aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto" id="mainNavUl">
@@ -105,6 +114,11 @@
             <div th:if="${#authentication.name != 'anonymousUser'}" style="font-size: 0.8em; ">
                 登录用户：<font th:text="${#authentication.details.user.realName}" class="text-primary mr-4"></font>
                 <a th:href="@{/logout}">注销</a>
+            </div>
+
+            <div th:if="${#authentication.name == 'anonymousUser'}" style="font-size: 0.8em; ">
+                <input type="button" class="btn-link btn-xs" value="注册" onclick="javascript: register(); "/>
+                <input type="button" class="btn-xs btn-success login-button" value="登录" onclick="javascript: login();"/>
             </div>
         </form>
     </div>

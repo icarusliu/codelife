@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  * @Version: V1.0
  **/
 @RestController
-@RequestMapping("/system/topicManager")
+@RequestMapping("/topic/manager")
 public class TopicManagerController {
     @Autowired
     private TopicService topicService;

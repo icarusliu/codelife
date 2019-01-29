@@ -25,6 +25,11 @@ body {
     width: 100px;
 }
 
+.login-button {
+    border: 1px solid gray;
+    border-radius: 4px;
+}
+
 /*左侧导航标题样式*/
 .left-nav-title {
     font-size: 0.8em;

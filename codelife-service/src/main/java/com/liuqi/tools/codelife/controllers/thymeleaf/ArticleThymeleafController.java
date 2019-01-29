@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
 
@@ -35,6 +36,9 @@ public class ArticleThymeleafController {
     
     @Autowired
     private ArticleTypeService typeService;
+
+    @Resource
+    private TopicService topicService;
 
     /**
      * 打开文章清单页面
@@ -74,8 +78,13 @@ public class ArticleThymeleafController {
      */
     @GetMapping("/detail")
     public ModelAndView articleDsetail(@RequestParam("id") Integer id, HttpSession session) throws RestException {
-        Article article = articleService.findById(id);
-        
+        Article article;
+        try {
+            article = articleService.findById(id);
+        } catch (RestException ex) {
+            return articles(null, null, null);
+        }
+
         //阅读次数加1
         //一个Session只算一次；
         boolean notExist = SessionProxy.proxy(session)
@@ -83,10 +92,11 @@ public class ArticleThymeleafController {
         if (notExist) {
             articleService.addReadCount(article);
         }
-        
+
         return ModelAndViewBuilder.of("articleDetail")
                 .setData("article", article)
                 .setData("comments", commentService.findByDestination(CommentType.ARTICLE, id))
+                .setData("topics", topicService.findByArticle(id))
                 .build();
     }
 
