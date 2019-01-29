@@ -6,5 +6,6 @@ db-h2/
 target/
 topicFiles/
 
-codelife.iml
+*.iml
+codelife-service/codelife-service.iml
 sh.exe.stackdump

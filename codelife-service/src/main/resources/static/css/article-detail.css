@@ -31,6 +31,10 @@
     background: #fcfcfc;
 }
 
+#content>p{
+    font-size: 14px;
+}
+
 #content pre{
     border: 1px solid #eee;
     padding: 10px;
