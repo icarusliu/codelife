@@ -81,4 +81,18 @@ public interface UserDao {
      * @return
      */
     List<User> getTopicUsers(@Param("topicId") Integer topicId);
+
+    /**
+     * 解锁用户
+     *
+     * @param id 用户编号
+     */
+    void unlockUser(@Param("id") Integer id);
+
+    /**
+     * 设置用户密码
+     * @param id 用户编号
+     * @param defPassword 新密码
+     */
+    void resetPassword(@Param("id") Integer id, @Param("password") String defPassword);
 }

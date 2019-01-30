@@ -14,6 +14,7 @@
         var approveUrl = [[@{/manager/user/approve}]];
         var unlockUrl = [[@{/manager/user/unlock}]];
         var unregisterUrl = [[@{/manager/user/unregister}]];
+        var passwordResetUrl = [[@{/manager/user/resetPassword}]];
 
         var tableId = "#dataTable";
         var table = null;
@@ -60,7 +61,9 @@
             var unlockButton = '<button id="unlockUser" type="button" class="btn btn-sm mr-2">解锁</button>';
             var unregisterButton = '<button id="unregisterUser" type="button" class="btn btn-sm">注销</button>';
             var unUnregisterButton = '<button id="unUnregisterButton" type="button" class="btn btn-sm mr-2">取消注销</button>';
+            var passwordResetButton = '<button id="passwordResetButton" type="button" class="btn btn-sm mr-2">密码重置</button>';
 
+            buttons.push(passwordResetButton);
             if ("APPROVING" == status) {
                 buttons.push(approveButton);
                 buttons.push(unregisterButton);
@@ -99,6 +102,12 @@
             "click #unUnregisterButton": function(e, value, row, index) {
                 post(unlockUrl, {id: row.id}, function(){
                     alert("取消注销成功！");
+                    refreshTable();
+                });
+            },
+            "click #passwordResetButton": function(e, value, row, index) {
+                post(passwordResetUrl, {id: row.id}, function(){
+                    alert("密码重置成功！");
                     refreshTable();
                 });
             }

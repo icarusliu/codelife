@@ -138,4 +138,8 @@
     <delete id="delete">
         delete from topic where id=#{id}
     </delete>
+
+    <delete id="deleteAllArticleTopics">
+        delete from topic_article where article_id = #{articleId}
+    </delete>
 </mapper>

@@ -143,4 +143,10 @@ public interface TopicDao {
      * @return
      */
     List<Topic> findByArticle(@Param("articleId") Integer articleId);
+
+    /**
+     * 根据文章编号删除文章专题关系
+     * @param articleId 文章编号
+     */
+    void deleteAllArticleTopics(@Param("articleId") Integer articleId);
 }

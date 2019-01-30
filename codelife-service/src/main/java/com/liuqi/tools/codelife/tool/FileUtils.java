@@ -202,7 +202,7 @@ public final class FileUtils {
             reader = Files.newBufferedReader(Paths.get(filePath + fileName), StandardCharsets.UTF_8);
         } catch (IOException e) {
             logger.error("File does not exist!", e);
-            throw ExceptionTool.getException(e, ErrorCodes.ARTICLE_CONTENT_NOT_EXISTS);
+            return "";
         }
         
         try {

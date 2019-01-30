@@ -138,13 +138,13 @@ public class ArticleManagerController {
     @PostMapping("/delete")
     public void delete(@RequestParam("id") Integer id) throws RestException {
         User loginUser = authenticationService.getLoginUser();
+
         Article article = articleService.findById(id);
-    
-        if (article.getAuthorID() != loginUser.getId()) {
+        if (article.getAuthorID() != loginUser.getId() && !loginUser.isSystemAdmin()) {
             logger.error("User is not the author, user: {}!", loginUser.getUsername());
             throw ExceptionTool.getException(ErrorCodes.ARTICLE_MANAGER_DELETE_NOT_AUTHOR);
         }
-        
+
         articleService.deleteArticle(id);
     }
     

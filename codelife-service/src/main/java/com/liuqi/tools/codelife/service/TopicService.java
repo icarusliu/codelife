@@ -169,4 +169,11 @@ public interface TopicService {
      * @return
      */
     List<Topic> findByArticle(Integer articleId);
+
+    /**
+     * 根据文章编号删除所有该文章专题关系
+     *
+     * @param articleId 文章编号
+     */
+    void deleteTopicArticle(Integer articleId);
 }

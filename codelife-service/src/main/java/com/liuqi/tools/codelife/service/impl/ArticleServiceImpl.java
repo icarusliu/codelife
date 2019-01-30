@@ -173,6 +173,9 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public void deleteArticle(Integer id) {
+        // 如果文章已经加入专题，需要先将文章从专题中删除
+        topicService.deleteTopicArticle(id);
+
         articleDao.deleteArticle(id);
         
         //分类中文章数目减1

@@ -1,5 +1,6 @@
 package com.liuqi.tools.codelife.service.impl;
 
+import com.liuqi.tools.codelife.common.AppConstants;
 import com.liuqi.tools.codelife.db.dao.UserDao;
 import com.liuqi.tools.codelife.entity.Role;
 import com.liuqi.tools.codelife.entity.User;
@@ -189,7 +190,7 @@ public class UserServiceImpl implements UserService{
             throw ExceptionTool.getException(ErrorCodes.USER_STATUS_NOT_LOCKED);
         }
         
-        userDao.updateUserStatus(id, UserStatus.NORMAL.ordinal());
+        userDao.unlockUser(id);
     }
     
     @Override
@@ -262,6 +263,16 @@ public class UserServiceImpl implements UserService{
         }
         userDao.addRole(user.getId(), role.getId());
     }
-    
+
+    /**
+     * 重置密码
+     *
+     * @param id 用户编号
+     */
+    @Override
+    public void resetPassword(Integer id) {
+        userDao.resetPassword(id, AppConstants.DEF_PASSWORD);
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 }

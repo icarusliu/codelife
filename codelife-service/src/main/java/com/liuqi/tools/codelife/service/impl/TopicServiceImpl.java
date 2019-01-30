@@ -363,6 +363,16 @@ public class TopicServiceImpl implements TopicService {
     public List<Topic> findByArticle(Integer articleId) {
         return topicDao.findByArticle(articleId);
     }
-    
+
+    /**
+     * 根据文章编号删除所有该文章专题关系
+     *
+     * @param articleId 文章编号
+     */
+    @Override
+    public void deleteTopicArticle(Integer articleId) {
+        topicDao.deleteAllArticleTopics(articleId);
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(TopicServiceImpl.class);
 }

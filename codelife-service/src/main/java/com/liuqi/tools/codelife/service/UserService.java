@@ -105,4 +105,10 @@ public interface UserService {
      * @param role
      */
     void addRole(User user, Role role);
+
+    /**
+     * 重置密码
+     * @param id 用户编号
+     */
+    void resetPassword(Integer id);
 }
