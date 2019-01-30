@@ -23,7 +23,7 @@ public interface CommentDao {
      * @return
      */
     Collection<Comment> getByDestination(@Param("type") CommentType type,
-                                                @Param("destination") Integer destination);
+                                         @Param("destination") Integer destination);
     
     /**
      * 添加评论
