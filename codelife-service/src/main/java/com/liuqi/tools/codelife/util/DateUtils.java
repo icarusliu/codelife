@@ -1,4 +1,4 @@
-package com.liuqi.tools.codelife.tool;
+package com.liuqi.tools.codelife.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

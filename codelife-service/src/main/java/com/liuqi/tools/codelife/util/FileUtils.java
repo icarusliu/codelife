@@ -1,4 +1,4 @@
-package com.liuqi.tools.codelife.tool;
+package com.liuqi.tools.codelife.util;
 
 import com.liuqi.tools.codelife.exceptions.ErrorCodes;
 import com.liuqi.tools.codelife.exceptions.ExceptionTool;

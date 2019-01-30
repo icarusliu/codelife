@@ -1,24 +1,26 @@
 body {
-    background: #fdfdfd;
+    background-image: url('/icons/bg.gif');
 }
 
 /*导航栏CSS调整*/
 #mainNav {
-    background: #F0F8FF;
+    background: #5bc0dec7;
     padding-bottom: 0px;
     border-bottom: 1px solid #ddd;
 }
 
 #mainNavUl .active {
-    background: #fdfdfd;
-    border: 1px solid #ddd;
+    background: #4c582812;
+    border: 1px solid #4c582830;
     border-width: 1px 1px 0px 1px;
     border-radius: 6px 6px 0px 0px;
-    margin-bottom: -1px;
+    margin-bottom: -2px;
 }
 
-#mainNavUl li: hover{
-    background: #fff;
+#mainNavUl li:hover{
+    background: rgb(255, 255, 255, .2);
+    border-width: 1px 1px 0px 1px;
+    border-radius: 6px 6px 0px 0px;
 }
 
 #mainNavUl li {

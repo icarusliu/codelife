@@ -4,7 +4,7 @@ import com.liuqi.tools.codelife.db.dao.UserLogDao;
 import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.LogDBWriterService;
-import com.liuqi.tools.codelife.tool.DateUtils;
+import com.liuqi.tools.codelife.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;

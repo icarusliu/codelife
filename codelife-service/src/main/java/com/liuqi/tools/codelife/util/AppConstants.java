@@ -1,4 +1,4 @@
-package com.liuqi.tools.codelife.common;
+package com.liuqi.tools.codelife.util;
 
 /**
  * 应用常量

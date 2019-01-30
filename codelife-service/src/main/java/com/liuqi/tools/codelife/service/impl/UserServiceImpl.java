@@ -1,6 +1,6 @@
 package com.liuqi.tools.codelife.service.impl;
 
-import com.liuqi.tools.codelife.common.AppConstants;
+import com.liuqi.tools.codelife.util.AppConstants;
 import com.liuqi.tools.codelife.db.dao.UserDao;
 import com.liuqi.tools.codelife.entity.Role;
 import com.liuqi.tools.codelife.entity.User;
@@ -9,7 +9,7 @@ import com.liuqi.tools.codelife.exceptions.ErrorCodes;
 import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.UserService;
-import com.liuqi.tools.codelife.tool.DateUtils;
+import com.liuqi.tools.codelife.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
