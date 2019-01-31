@@ -4,13 +4,13 @@ body {
 
 /*导航栏CSS调整*/
 #mainNav {
-    background: #5bc0dec7;
+    background: rgba(19, 29, 32, .6)!important;
     padding-bottom: 0px;
     border-bottom: 1px solid #ddd;
 }
 
 #mainNavUl .active {
-    background: #4c582812;
+    background: rgba(255, 255, 255, .2);
     border: 1px solid #4c582830;
     border-width: 1px 1px 0px 1px;
     border-radius: 6px 6px 0px 0px;
@@ -27,9 +27,17 @@ body {
     width: 100px;
 }
 
+#mainNavUl>li>a {
+    color: #fff!important;
+}
+
 .login-button {
     border: 1px solid gray;
     border-radius: 4px;
+}
+
+.my-nav-link {
+    color: #89db74;
 }
 
 /*左侧导航标题样式*/
