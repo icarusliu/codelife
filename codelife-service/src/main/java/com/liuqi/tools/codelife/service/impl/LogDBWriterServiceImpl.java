@@ -33,8 +33,13 @@ public class LogDBWriterServiceImpl implements LogDBWriterService {
         User loginUser = authenticationService.getLoginUser();
         String operateTime = DateUtils.getNowDateStr();
         String userIp = authenticationService.getLoginUserIp();
-        
+
+        if (200 <= logMessage.length()) {
+            logMessage = logMessage.substring(0, 200);
+        }
+
+        String pLogMessage = logMessage;
         String username = (null != loginUser) ? loginUser.getUsername() : "未登录用户";
-        taskExecutor.execute(() -> userLogDao.logToDB(username, operateTime, userIp, logMessage));
+        taskExecutor.execute(() -> userLogDao.logToDB(username, operateTime, userIp, pLogMessage));
     }
 }
