@@ -162,4 +162,18 @@ public interface TopicService {
      * @return
      */
     PageInfo<Topic> search(String key, int nowPage, int pageSize);
+
+    /**
+     * 通过文章查找该文章所属的标题清单
+     * @param articleId
+     * @return
+     */
+    List<Topic> findByArticle(Integer articleId);
+
+    /**
+     * 根据文章编号删除所有该文章专题关系
+     *
+     * @param articleId 文章编号
+     */
+    void deleteTopicArticle(Integer articleId);
 }

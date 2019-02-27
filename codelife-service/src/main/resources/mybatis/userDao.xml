@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuqi.tools.codelife.db.dao.UserDao">
+    <resultMap id="userResult" type="com.liuqi.tools.codelife.entity.User">
+        <id property="id" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="realName" column="realname"/>
+        <result property="registerTime" column="register_time"/>
+        <result property="status" column="status" jdbcType="TINYINT"
+                typeHandler="com.liuqi.tools.codelife.db.dao.typehandler.UserStatusTypeHandler"/>
+        <result property="errorCount" column="error_count"/>
+        <collection property="roles" ofType="com.liuqi.tools.codelife.entity.Role">
+            <id property="id" column="role_id"/>
+            <result property="name" column="role_name"/>
+        </collection>
+    </resultMap>
+
+    <sql id="selectUserBase">
+        select
+            user.id as user_id,
+            user.name as username,
+            user.realname as realname,
+            user.password as password,
+            user.status as status,
+            user.register_time as register_time,
+            user.error_count as error_count,
+            role.id as role_id,
+            role.name as role_name
+        from user
+        left join user_role
+            on user.id = user_role.user_id
+        left join role
+            on role.id = user_role.role_id
+    </sql>
+
+    <sql id="selectUser">
+        <include refid="selectUserBase"/>
+    </sql>
+
+    <select id="search" resultMap="userResult">
+        <include refid="selectUser"/>
+        where user.id like concat(#{key}, '%')
+            or user.name like concat('%', #{key}, '%')
+            or user.realname like concat('%', #{key}, '%')
+    </select>
+
+    <!-- 通过用户名称查找用户-->
+    <select id="findByUsername" resultMap="userResult">
+        <include refid="selectUser"/>
+        where user.name = #{username}
+    </select>
+
+    <!-- 查找所有用户 -->
+    <select id="findAll" resultMap="userResult">
+       <include refid="selectUser"></include>
+    </select>
+
+    <select id="findById" resultMap="userResult">
+        <include refid="selectUser"></include>
+        where user.id=#{id}
+    </select>
+
+    <select id="getTopicUsers" resultMap="userResult">
+        <include refid="selectUserBase"/>
+        inner join topic_user tu
+        on tu.user_id = user.id
+        and tu.topic_id = #{topicId}
+    </select>
+
+    <!--修改用户状态-->
+    <update id="updateUserStatus">
+        update user set status=#{status} where id=#{id}
+    </update>
+
+    <update id="unlockUser">
+        update user set status = 1, error_count = 0 where id = #{id}
+    </update>
+
+    <update id="resetPassword">
+        update user set status = 1, error_count = 0, password = #{password} where id = #{id}
+    </update>
+
+    <!-- 修改用户密码输入错误次数 -->
+    <update id="updateUser" parameterType="com.liuqi.tools.codelife.entity.User">
+        update user
+           <trim prefix="set" suffixOverrides=",">
+               <if test="username != null">name = #{username}, </if>
+               <if test="password != null">password = #{password}, </if>
+               <if test="status != null">status = #{status,
+                   typeHandler=com.liuqi.tools.codelife.db.dao.typehandler.UserStatusTypeHandler},
+               </if>
+               <if test="errorCount != null">error_count = #{errorCount}, </if>
+               <if test="realName != null">realname = #{realName},</if>
+           </trim>
+         where id = #{id}
+    </update>
+
+    <insert id="addUser" parameterType="com.liuqi.tools.codelife.entity.User">
+        insert into user(name, realname, password, status, error_count, register_time)
+        values(#{username}, #{realName}, #{password},
+            #{status, typeHandler=com.liuqi.tools.codelife.db.dao.typehandler.UserStatusTypeHandler},
+            #{errorCount}, #{registerTime})
+    </insert>
+
+    <insert id="addRole">
+        insert into user_role(user_id, role_id)
+        values(#{userId}, #{roleId})
+    </insert>
+</mapper>

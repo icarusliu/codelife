@@ -7,7 +7,7 @@ import com.liuqi.tools.codelife.entity.User;
 import com.liuqi.tools.codelife.entity.UserArticleStatInfo;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.*;
-import com.liuqi.tools.codelife.tool.ModelAndViewBuilder;
+import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -56,6 +56,11 @@ public class UserThymeleafController {
     @RequestMapping("/register")
     public String registerPage() {
         return "register";
+    }
+
+    @RequestMapping("/login")
+    public String login() {
+        return "login";
     }
     
     /**

@@ -7,6 +7,22 @@
     border: 1px solid #f3f3f3;
 }
 
+/*文章分类列表*/
+.article-type-item {
+    margin-left: 10px;
+    line-height: 30px;
+    font-size: 0.8em;
+}
+
+.article-type-item>a{
+    font-weight: normal!important;
+    color: #4D5593;
+}
+
+.article-type-block-title {
+    background: #D6F9E0!important;
+}
+
 /*文章列表*/
 .article-list-title {
     font-size: 0.9em;
@@ -59,6 +75,7 @@
     background: #F0F8FF;
     line-height: 2.4em;
     padding-left: 10px;
+    margin-bottom: 0px!important;
 }
 
 .block-title-topic {
@@ -71,22 +88,32 @@
 
 .article-item {
     border-bottom: 1px dotted #efefef;
-    margin-top: 10px;
+    padding-top: 10px;
     padding-left: 10px;
+}
+
+.article-item:hover {
+    background: #f8f8f8;
 }
 
 .article-item-title {
     font-size: 1em;
+    color: black;
+    margin-bottom: 10px;
 }
 
 .article-item-remark {
     font-size: 0.8em;
     margin-top: 4px;
-    color: #4682B4;
+    color: gray;
 }
 
 .article-item-info {
     font-size: 0.8em;
     color: #bbb;
     margin-top: 10px;
+}
+
+.article-item-info>span {
+    color: #3261A7;
 }

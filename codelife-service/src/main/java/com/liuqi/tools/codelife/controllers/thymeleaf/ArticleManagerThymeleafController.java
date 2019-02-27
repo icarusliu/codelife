@@ -7,7 +7,7 @@ import com.liuqi.tools.codelife.service.ArticleService;
 import com.liuqi.tools.codelife.service.ArticleTypeService;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
-import com.liuqi.tools.codelife.tool.ModelAndViewBuilder;
+import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

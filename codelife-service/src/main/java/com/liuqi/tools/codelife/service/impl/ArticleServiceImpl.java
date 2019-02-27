@@ -10,16 +10,16 @@ import com.liuqi.tools.codelife.exceptions.ErrorCodes;
 import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.*;
-import com.liuqi.tools.codelife.tool.ArticleBuilder;
-import com.liuqi.tools.codelife.tool.FileUtils;
+import com.liuqi.tools.codelife.util.ArticleBuilder;
+import com.liuqi.tools.codelife.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * 文章服务类的实现类
@@ -156,7 +156,7 @@ public class ArticleServiceImpl implements ArticleService {
         
         //将文章添加到专题
         if (null != topicId && 0 != topicId) {
-            topicService.addTopicArticls(topicId, List.of(article.getId()));
+            topicService.addTopicArticls(topicId, Arrays.asList(article.getId()));
         }
     }
     
@@ -172,6 +172,9 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public void deleteArticle(Integer id) {
+        // 如果文章已经加入专题，需要先将文章从专题中删除
+        topicService.deleteTopicArticle(id);
+
         articleDao.deleteArticle(id);
         
         //分类中文章数目减1

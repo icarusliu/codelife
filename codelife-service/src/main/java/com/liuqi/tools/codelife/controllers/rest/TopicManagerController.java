@@ -6,8 +6,8 @@ import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
-import com.liuqi.tools.codelife.tool.FileUtils;
-import com.liuqi.tools.codelife.tool.MapBuilder;
+import com.liuqi.tools.codelife.util.FileUtils;
+import com.liuqi.tools.codelife.util.MapBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  * @Version: V1.0
  **/
 @RestController
-@RequestMapping("/system/topicManager")
+@RequestMapping("/topic/manager")
 public class TopicManagerController {
     @Autowired
     private TopicService topicService;

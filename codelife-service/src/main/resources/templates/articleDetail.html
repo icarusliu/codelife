@@ -12,7 +12,7 @@
     <script th:src="@{/js/showdown/showdown.min.js}"></script>
 
     <link rel="stylesheet" th:href="@{/css/article-detail.css}">
-    <link rel="stylesheet" th:href="@{/js/highlight/styles/default.css}">
+    <link rel="stylesheet" th:href="@{/js/highlight/styles/atom-one-light.css}">
     <link rel="stylesheet" th:href="@{/css/comment.css}">
 
     <script th:src="@{/js/highlight/highlight.pack.js}"></script>
@@ -86,6 +86,17 @@
         <div class="hidden-xs-down col-sm-2 p-2 article-catalog fixed-top " style="z-index: 1000; margin-top: 60px; ">
             <div id="catalog" class="article-catalog-content ml-2">
 
+            </div>
+
+            <div class="side-block mt-4 mb-2">
+                <h5 class="side-block-title">文章专题</h5>
+                <a th:each="topic: ${topics}" class="side-block-item"
+                   th:href="@{'/topic/detail?id=' + ${topic.id}}"
+                   th:text="${topic.title}"></a>
+            </div>
+
+            <div class="side-block">
+                <h5 class="side-block-title">相关文章</h5>
             </div>
         </div>
 

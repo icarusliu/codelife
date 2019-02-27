@@ -12,8 +12,9 @@
     <link th:href="@{/css/article.css}" type="text/css" rel="stylesheet">
 
     <style>
-        .topic-detail-panel {
+        .topic-detail-panel, .left-panel {
             border: 1px solid #AFEEEE;
+            background: #fff;
         }
 
         .topic-detail-panel-info {
@@ -26,6 +27,7 @@
         .user-group {
             border-left: 1px solid #AFEEEE;
             padding-bottom: 1em;
+            background: #fff;
         }
 
         .group-title {
@@ -50,7 +52,6 @@
             margin-left: 1em;
             color: blue;
             line-height: 2.4em;
-            background: #fff;
         }
     </style>
 
@@ -92,12 +93,12 @@
     <div  th:if="${topic != null}"
           class="p-2 row">
         <!--我的专题列表-->
-        <div class="col-sm-2">
-            <h5 class="text-primary left-nav-title">
+        <div class="col-sm-2 mr-2 pt-3 left-panel">
+            <h5 class="ml-2 text-primary left-nav-title">
                 我订阅的专题
             </h5>
             <div class="list-group" id="topicList">
-                <a class="row list-group-item ml-2 mr-2"
+                <a class="row list-group-item ml-0 mr-0"
                    th:each="topic: ${myTopics}"
                         th:href="@{/topic/detail} + '?id=' + ${topic.id}">
                     <span  th:text="${topic.title}"></span>

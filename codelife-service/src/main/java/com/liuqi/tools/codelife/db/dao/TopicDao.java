@@ -2,12 +2,10 @@ package com.liuqi.tools.codelife.db.dao;
 
 import com.liuqi.tools.codelife.entity.Topic;
 import com.liuqi.tools.codelife.entity.TopicStatus;
-import com.liuqi.tools.codelife.entity.TopicType;
 import com.liuqi.tools.codelife.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -102,7 +100,7 @@ public interface TopicDao {
      * 清空专题的文章
      * @param id
      */
-    void clearTopicArticles(@Param("id")Integer id);
+    void clearTopicArticles(@Param("id") Integer id);
     
     /**
      * 获取用户未订阅的所有开放的专题
@@ -118,7 +116,7 @@ public interface TopicDao {
      * @param id
      * @param status
      */
-    void updateStatus(@Param("id") Integer id, @Param("status")TopicStatus status);
+    void updateStatus(@Param("id") Integer id, @Param("status") TopicStatus status);
     
     /**
      * 获取管理员为指定用户编号的专题清单
@@ -135,4 +133,18 @@ public interface TopicDao {
      * @return
      */
     List<Topic> search(@Param("key") String key);
+
+    /**
+     * 根据文章查找专题
+     *
+     * @param articleId
+     * @return
+     */
+    List<Topic> findByArticle(@Param("articleId") Integer articleId);
+
+    /**
+     * 根据文章编号删除文章专题关系
+     * @param articleId 文章编号
+     */
+    void deleteAllArticleTopics(@Param("articleId") Integer articleId);
 }

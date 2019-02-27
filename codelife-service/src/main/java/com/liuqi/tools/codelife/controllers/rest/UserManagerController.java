@@ -5,6 +5,7 @@ import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ import java.util.Collection;
  * @Created: 2018/4/2 15:25
  * @Version: V1.0
  **/
-@RequestMapping("/userManager")
+@RequestMapping("/manager/user")
 @RestController
 @PreAuthorize("hasAuthority('ADMIN')")
 public class UserManagerController {
@@ -65,5 +66,10 @@ public class UserManagerController {
     @RequestMapping("/approve")
     public void approve(@RequestParam("id") Integer id) throws RestException {
         userService.approveUser(id);
+    }
+
+    @PostMapping("/resetPassword")
+    public void resetPassword(@RequestParam("id") Integer id) {
+        userService.resetPassword(id);
     }
 }

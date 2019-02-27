@@ -10,7 +10,7 @@ import com.liuqi.tools.codelife.service.ArticleService;
 import com.liuqi.tools.codelife.service.ArticleTypeService;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
-import com.liuqi.tools.codelife.tool.MapBuilder;
+import com.liuqi.tools.codelife.util.MapBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @Version: V1.0
  **/
 @RestController
-@RequestMapping("/system/articleManager")
+@RequestMapping("/article/manager")
 @PreAuthorize("isAuthenticated()")
 public class ArticleManagerController {
     @Autowired
@@ -49,8 +49,8 @@ public class ArticleManagerController {
      *
      * @return
      */
-    @GetMapping("/getArticlesForManager")
-    public Map<String, Object> getArticlesForManager(@RequestParam(value = "offset", required = false) Integer offset,
+    @GetMapping("/list")
+    public Map<String, Object> list(@RequestParam(value = "offset", required = false) Integer offset,
                                                      @RequestParam(value = "limit", required = false) Integer pageSize) {
         
         //offset与limit为datastrap table的分页参数
@@ -75,8 +75,8 @@ public class ArticleManagerController {
      * @return
      * @throws RestException
      */
-    @PostMapping("/getNewArticleDatas")
-    public Map<String, Object> getNewArticleDatas(@RequestParam(value = "articleId", required = false) Integer articleId) throws RestException {
+    @PostMapping("/getDataForNew")
+    public Map<String, Object> getDataForNew(@RequestParam(value = "articleId", required = false) Integer articleId) throws RestException {
         User loginUser = authenticationService.getLoginUser();
         
         MapBuilder builder = MapBuilder.of()
@@ -104,8 +104,8 @@ public class ArticleManagerController {
      * @return
      * @throws RestException
      */
-    @PostMapping("/saveArticle")
-    public String saveArticle(@RequestParam("title") String title,
+    @PostMapping("/save")
+    public String save(@RequestParam("title") String title,
                               @RequestParam("type") Integer type,
                               @RequestParam("content") String content,
                               @RequestParam(value = "topic", required = false) Integer topicId,
@@ -135,16 +135,16 @@ public class ArticleManagerController {
      *
      * @param id 需要删除文章的ID
      */
-    @PostMapping("/deleteArticle")
-    public void deleteArticle(@RequestParam("id") Integer id) throws RestException {
+    @PostMapping("/delete")
+    public void delete(@RequestParam("id") Integer id) throws RestException {
         User loginUser = authenticationService.getLoginUser();
+
         Article article = articleService.findById(id);
-    
-        if (article.getAuthorID() != loginUser.getId()) {
+        if (article.getAuthorID() != loginUser.getId() && !loginUser.isSystemAdmin()) {
             logger.error("User is not the author, user: {}!", loginUser.getUsername());
             throw ExceptionTool.getException(ErrorCodes.ARTICLE_MANAGER_DELETE_NOT_AUTHOR);
         }
-        
+
         articleService.deleteArticle(id);
     }
     

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <package name="com.liuqi.tools.codelife.entity"/>
+    </typeAliases>
+
+    <!-- 注册Handler -->
+    <typeHandlers>
+        <typeHandler handler="com.liuqi.tools.codelife.db.dao.typehandler.ArticleStatusTypeHandler"/>
+        <typeHandler handler="com.liuqi.tools.codelife.db.dao.typehandler.UserStatusTypeHandler"/>
+        <typeHandler handler="com.liuqi.tools.codelife.db.dao.typehandler.TopicStatusTypeHandler"/>
+        <typeHandler handler="com.liuqi.tools.codelife.db.dao.typehandler.TopicTypeTypeHandler"/>
+        <typeHandler handler="com.liuqi.tools.codelife.db.dao.typehandler.CommentTypeHandler"/>
+    </typeHandlers>
+
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库-->
+            <property name="helperDialect" value="mysql"/>
+        </plugin>
+    </plugins>
+
+    <mappers>
+        <mapper resource="mybatis/userDao.xml"/>
+        <mapper resource="mybatis/articleDao.xml"/>
+        <mapper resource="mybatis/userLogDao.xml"/>
+        <mapper resource="mybatis/roleDao.xml"/>
+        <mapper resource="mybatis/topicDao.xml"/>
+        <mapper resource="mybatis/commentDao.xml"/>
+        <mapper resource="mybatis/articleTypeDao.xml"/>
+        <mapper resource="mybatis/systemDao.xml"/>
+    </mappers>
+
+</configuration>

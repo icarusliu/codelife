@@ -4,7 +4,7 @@
       xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">刘奇-Java程序员</title>
+    <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">icarusliu-Java</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="keywords" content="java, Spring, Spring Boot, Spring Cloud, 程序员, 个人网站, 开源知识库" />
     <meta name="description" content="免费的Java个人网站及Java开源知识库" />
@@ -20,10 +20,16 @@
     <script src="/js/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
     <script th:src="@{/js/common.js}"></script>
 
-    <script>
+    <script th:inline="javascript">
         //页面加载完成后设置主导航栏的选中
         $(function(){
             var url = $.getUrlPage();
+            if ("/" != url) {
+                var lastIndex = url.lastIndexOf('/');
+                if (0 != lastIndex && -1 != lastIndex) {
+                    url = url.substring(0, lastIndex);
+                }
+            }
 
             var as = $("#mainNavUl>li>a");
 
@@ -36,6 +42,11 @@
                     href = href.substring(0, href.indexOf("?"));
                 }
 
+                var hrefLastIndex = href.lastIndexOf('/');
+                if (0 < hrefLastIndex) {
+                    href = href.substring(0, hrefLastIndex);
+                }
+
                 if (('/' == url && 0 == i) || (0 != i && 0 == url.indexOf(href))) {
                    $(li).attr("class", "nav-item active");
                 } else {
@@ -43,17 +54,26 @@
                 }
             }
         });
+
+        function register() {
+            window.open([[@{/register}]], "_blank");
+        }
+
+        function login() {
+            window.open([[@{/login}]], "_self");
+        }
     </script>
 </head>
 <body>
 
-<nav class="navbar navbar-toggleable-md sticky-top navbar-light mb-2" id="mainNav">
-    <a class="navbar-brand" href="#"></a>
+<nav class="navbar navbar-toggleable-md navbar-light mb-6 fixed-top" id="mainNav">
+    <a th:href="@{/}"><img class="navbar-brand" th:src="@{/icons/mouse.png}" width="30" height="30"/></a>
     <!-- 小页面上时导航栏按下拉的方式展现 -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
             aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto" id="mainNavUl">
@@ -72,10 +92,10 @@
                    th:href="@{/userIndex} + '?userId=' + ${#authentication.details.user.id}">个人主页</a>
             </li>
 
-            <li class="nav-item" sec:authorize="isAuthenticated()"
-                th:if="${'anonymousUser' == #authentication.name || !#authentication.details.user.isSystemAdmin()}">
-                <a class="nav-link text-center font-weight-bold" th:href="@{/topic/detail}">我的专题<span class="sr-only">(current)</span></a>
-            </li>
+            <!--<li class="nav-item" sec:authorize="isAuthenticated()"-->
+                <!--th:if="${'anonymousUser' == #authentication.name || !#authentication.details.user.isSystemAdmin()}">-->
+                <!--<a class="nav-link text-center font-weight-bold" th:href="@{/topic/detail}">我的专题<span class="sr-only">(current)</span></a>-->
+            <!--</li>-->
 
             <li class="nav-item"
                 th:if="${'anonymousUser' == #authentication.name || !#authentication.details.user.isSystemAdmin()}">
@@ -104,13 +124,18 @@
         <form class="form-inline my-2 my-lg-0">
             <div th:if="${#authentication.name != 'anonymousUser'}" style="font-size: 0.8em; ">
                 登录用户：<font th:text="${#authentication.details.user.realName}" class="text-primary mr-4"></font>
-                <a th:href="@{/logout}">注销</a>
+                <a th:href="@{/logout}" class="my-nav-link">注销</a>
+            </div>
+
+            <div th:if="${#authentication.name == 'anonymousUser'}" style="font-size: 0.8em; ">
+                <input type="button" class="btn-link btn-xs my-nav-link" value="注册" onclick="javascript: register(); "/>
+                <input type="button" class="btn-xs btn-success login-button" value="登录" onclick="javascript: login();"/>
             </div>
         </form>
     </div>
 </nav>
 
-<div layout:fragment="content">
+<div layout:fragment="content" style="margin-top: 60px;">
 </div>
 
 <footer class="container-fluid text-center footer mt-4 pt-2">
