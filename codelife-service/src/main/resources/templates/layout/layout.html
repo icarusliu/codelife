@@ -92,10 +92,10 @@
                    th:href="@{/userIndex} + '?userId=' + ${#authentication.details.user.id}">个人主页</a>
             </li>
 
-            <li class="nav-item" sec:authorize="isAuthenticated()"
-                th:if="${'anonymousUser' == #authentication.name || !#authentication.details.user.isSystemAdmin()}">
-                <a class="nav-link text-center font-weight-bold" th:href="@{/topic/detail}">我的专题<span class="sr-only">(current)</span></a>
-            </li>
+            <!--<li class="nav-item" sec:authorize="isAuthenticated()"-->
+                <!--th:if="${'anonymousUser' == #authentication.name || !#authentication.details.user.isSystemAdmin()}">-->
+                <!--<a class="nav-link text-center font-weight-bold" th:href="@{/topic/detail}">我的专题<span class="sr-only">(current)</span></a>-->
+            <!--</li>-->
 
             <li class="nav-item"
                 th:if="${'anonymousUser' == #authentication.name || !#authentication.details.user.isSystemAdmin()}">

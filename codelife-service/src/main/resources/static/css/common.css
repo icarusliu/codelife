@@ -90,6 +90,7 @@ body {
 /*右侧内容区域样式调整*/
 .right-content {
     border: 1px solid #AFEEEE;
+    background: #fff;
 }
 
 /*底部*/

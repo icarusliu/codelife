@@ -30,7 +30,7 @@
 </head>
 <body>
 <div layout:fragment="subContent">
-    <div class="article-tool-bar col-sm-12 text-right m-0">
+    <div class="article-tool-bar col-sm-12 m-0">
         <div class="btn btn-link"
              th:if="${#authentication.name != 'anonymousUser'}">
             <a th:href="@{/system/articleManager/newArticle}" target="_blank">新建</a>

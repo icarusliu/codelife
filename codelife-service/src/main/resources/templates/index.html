@@ -100,7 +100,7 @@
                             <a th:text="${article.title}" class="article-item-title font-weight-bold"
                                th:href="@{'/article/detail?id=' + ${article.id}}"></a>
 
-                            <p class="article-item-remark" th:text="${article.remark}"></p>
+                            <p class="pr-2 article-item-remark" th:text="${article.remark}"></p>
                             <div class="article-item-info">
                                 <span th:text="${article.authorName}" class="mr-4"></span>
                                 发表于：<span th:text="${article.createDate}" class="mr-5"></span>

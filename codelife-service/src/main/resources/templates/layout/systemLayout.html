@@ -43,8 +43,8 @@
 <div layout:fragment="content" class="container-fluid">
     <div class="row">
         <!-- 左侧导航页面 -->
-        <div class="col-sm-3 col-md-2 bg-faded sidebar"
-             style="background: #fefefe; border-bottom: 1px solid #eeeeee; ">
+        <div class="col-sm-3 col-md-2 sidebar"
+             style="background: none; border-bottom: 1px solid #eeeeee; ">
             <div class="list-group" id="navUl" >
                 <a class="list-group-item" th:href="@{/system/roleManager}"
                    sec:authorize="hasAuthority('ADMIN')">角色管理</a>
@@ -63,7 +63,7 @@
         </div>
 
         <!-- 右侧文章列表 -->
-        <div layout:fragment="subContent" class="col-sm-9 col-md-10 right-content">
+        <div layout:fragment="subContent" class="col-sm col-md mr-2 right-content">
 
         </div>
     </div>
