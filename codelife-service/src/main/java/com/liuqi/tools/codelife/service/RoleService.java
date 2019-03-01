@@ -18,7 +18,7 @@ public interface RoleService {
      * 实现类需要保证返回的是非空的对象 在无角色时需要返回一个空的List
      * @return
      */
-    public Collection<Role> findAllRoles();
+    Collection<Role> findAllRoles();
     
     /**
      * 新增角色
@@ -27,7 +27,7 @@ public interface RoleService {
      * @param remark
      * @throws RestException
      */
-    public void add(String roleName, String remark) throws RestException;
+    void add(String roleName, String remark) throws RestException;
     
     /**
      * 更新角色
@@ -36,5 +36,5 @@ public interface RoleService {
      * @param remark
      * @throws RestException
      */
-    public void update(Integer id, String roleName, String remark) throws RestException;
+    void update(Integer id, String roleName, String remark) throws RestException;
 }

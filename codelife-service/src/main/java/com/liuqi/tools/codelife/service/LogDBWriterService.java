@@ -15,5 +15,5 @@ public interface LogDBWriterService {
      *
      * @param logMessage 需要记录的日志信息
      */
-    public void log(String logMessage);
+    void log(String logMessage);
 }

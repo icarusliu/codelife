@@ -21,7 +21,7 @@ public interface UserService {
      *
      * @return 返回所有用户
      */
-    public List<User> findAll();
+    List<User> findAll();
     
     /**
      * 通过用户名查找用户
@@ -29,7 +29,7 @@ public interface UserService {
      * @return 未找到时返回空
      * @throws RestException
      */
-    public User findByUsername(String username) throws RestException;
+    User findByUsername(String username) throws RestException;
     
     /**
      * 锁定用户
