@@ -119,7 +119,7 @@
             </table>
 
             <!-- 工具栏 -->
-            <div id="toolBar">
+            <div id="toolBar" class="ml-2 mr-2">
                 <input type="button" class="btn" value="新增" onclick="javascript: newArticle(); "
                        th:if="${null != #authentication.details.user && !#authentication.details.user.isSystemAdmin()}"/>
                 <input type="button" class="btn" value="刷新" onclick="javascript: table.refresh(); "/>

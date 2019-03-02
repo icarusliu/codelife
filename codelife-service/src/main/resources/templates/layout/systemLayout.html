@@ -43,7 +43,7 @@
 <div layout:fragment="content" class="container-fluid">
     <div class="row">
         <!-- 左侧导航页面 -->
-        <div class="col-sm-3 col-md-2 sidebar"
+        <div class="col-sm-3 col-md-2 ml-0 mr-0 pl-0 pr-0 ml-sm-2 mr-sm-2 sidebar"
              style="background: none; border-bottom: 1px solid #eeeeee; ">
             <div class="list-group" id="navUl" >
                 <a class="list-group-item" th:href="@{/system/roleManager}"
@@ -63,8 +63,10 @@
         </div>
 
         <!-- 右侧文章列表 -->
-        <div layout:fragment="subContent" class="col-sm col-md mr-2 right-content">
+        <div class="col-sm col-md  pl-0 pr-0 mr-sm-2">
+            <div layout:fragment="subContent" class="ml-0 mr-0 right-content">
 
+            </div>
         </div>
     </div>
 </div>
