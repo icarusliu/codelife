@@ -224,7 +224,7 @@ public class ArticleServiceImpl implements ArticleService {
         ArticleUtils.setRemark(article, content);
 
         //更新数据库信息 版块不进行更新
-        articleDao.updateArticle(id, title, type, article.getForum().getId());
+        articleDao.updateArticle(id, title, type, article.getForum().getId(), article.getRemark());
         
         //更新分类中的文章计数信息
         if (oldType.getId() != type) {

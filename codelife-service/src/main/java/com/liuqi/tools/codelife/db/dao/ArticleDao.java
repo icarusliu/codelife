@@ -113,9 +113,10 @@ public interface ArticleDao {
      * @param title
      * @param type
      * @param forumId
+     * @param remark
      */
     void updateArticle(@Param("id") Integer id, @Param("title") String title, @Param("type") Integer type,
-                       @Param("forumId") Integer forumId);
+                       @Param("forumId") Integer forumId, @Param("remark") String remark);
     
     /**
      * 点赞
