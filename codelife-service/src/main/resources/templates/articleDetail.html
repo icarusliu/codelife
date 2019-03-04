@@ -83,7 +83,7 @@
 <div layout:fragment="content" class="container-fluid mr-2">
     <div class="row">
         <!--文章目录-->
-        <div class="hidden-xs-down col-sm-2 p-2 article-catalog fixed-top " style="z-index: 1000; margin-top: 60px; ">
+        <div class="d-none d-sm-block col-sm-2 p-2 article-catalog fixed-top " style="z-index: 1000; margin-top: 60px; ">
             <div id="catalog" class="article-catalog-content ml-2">
 
             </div>
@@ -109,7 +109,7 @@
                     <p class="article-subtitle text-muted mr-4">
                         <span class="mr-2"
                                 th:text="${article.authorName}
-                            + '&nbsp; 发表于&nbsp;' + ${article.createDate}"></span>
+                            + '&nbsp; &nbsp;' + ${article.createDate}"></span>
                         <span  class="mr-2"
                                 th:text="'|&nbsp; &nbsp;' + ${article.readCount} + '&nbsp; 次阅读'"></span>
                         <span id="praiseCount" th:text="${article.praiseCount}"></span>&nbsp; 次点赞

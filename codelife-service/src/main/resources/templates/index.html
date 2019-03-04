@@ -67,16 +67,16 @@
 <body>
 <div layout:fragment="content" class="container-fluid">
     <form method="get" th:action="@{/search}"
-          class="row m-4 hidden-xs-down">
+          class="row d-none d-sm-block m-4">
         <input type="text"
                placeholder="搜索" name="key" required
-               class="form-control col-md-6 mr-md-2 offset-md-2"/>
+               class="form-control col-md-6 mr-md-2 offset-md-2 float-left"/>
         <input type="submit" value="搜索"
                class="btn btn-primary"/>
     </form>
 
     <div class="row">
-        <div class="col-sm-2 hidden-xs-down" th:if="${#authentication.name eq 'anonymousUser'}">
+        <div class="col-sm-2 d-none d-sm-block" th:if="${#authentication.name eq 'anonymousUser'}">
             <div class="block row ml-1">
                 <font class="block-title article-type-block-title col-12">文章分类</font>
                 <div class="w-100"></div>
@@ -89,7 +89,7 @@
 
         <div class="col-sm mr-0 pr-0">
             <div class="row mr-0">
-                <div class="col-sm pr-0">
+                <div class="col-sm pr-2 pl-2">
                     <div class="block" id="articleList">
                         <h5 class="block-title">热门文章</h5>
                         <div class="article-item" th:each="article: ${articles}">
@@ -115,7 +115,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-4 hidden-xs-down">
+                <div class="col-sm-4 d-none d-sm-block pl-0">
                     <div class="block mb-2" th:if="${null != myTopics && myTopics.size() != 0}">
                         <h5 class="block-title block-title-subscribed-topic">订阅专题</h5>
                         <div class="w-100"></div>

@@ -9,12 +9,12 @@
     <meta name="keywords" content="java, Spring, Spring Boot, Spring Cloud, 程序员, 个人网站, 开源知识库" />
     <meta name="description" content="免费的Java个人网站及Java开源知识库" />
 
-    <link rel="stylesheet" th:href="@{/js/bootstrap-4.0.0-alpha.6-dist/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/js/bootstrap-4.0.0/css/bootstrap.min.css}">
     <link rel="stylesheet" href="/js/bootstrap-table/bootstrap-table.min.css">
     <link rel="stylesheet" th:href="@{/css/common.css}">
 
     <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
-    <script th:src="@{/js/bootstrap-4.0.0-alpha.6-dist/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/bootstrap-4.0.0/js/bootstrap.min.js}"></script>
 
     <script src="/js/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="/js/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
@@ -66,7 +66,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-toggleable-md navbar-light mb-6 fixed-top" id="mainNav">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-6 fixed-top" id="mainNav">
     <!--<a th:href="@{/}"><img class="navbar-brand" th:src="@{/icons/mouse.png}" width="30" height="30"/></a>-->
     <!-- 小页面上时导航栏按下拉的方式展现 -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
@@ -128,8 +128,8 @@
             </div>
 
             <div th:if="${#authentication.name == 'anonymousUser'}" style="font-size: 0.8em; ">
-                <input type="button" class="btn-link btn-xs my-nav-link" value="注册" onclick="javascript: register(); "/>
-                <input type="button" class="btn-xs btn-success login-button" value="登录" onclick="javascript: login();"/>
+                <input type="button" class="btn btn-link btn-sm my-nav-link" value="注册" onclick="javascript: register(); "/>
+                <input type="button" class="btn btn-sm btn-success login-button" value="登录" onclick="javascript: login();"/>
             </div>
         </form>
     </div>
