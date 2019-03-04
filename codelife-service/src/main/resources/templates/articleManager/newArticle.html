@@ -12,8 +12,10 @@
 
     <script src="/js/simpleMDE/simplemde.min.js"></script>
     <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
-    <!--<script src="/js/markdown/markdown.js"></script>-->
     <script src="/js/showdown/showdown.min.js"></script>
+    <script src="/js/highlight/highlight.pack.js"></script>
+
+    <link rel="stylesheet" th:href="@{/js/highlight/styles/github.css}" crossorigin="anonymous">
 
     <link rel="stylesheet" th:href="@{/js/bootstrap-4.0.0-alpha.6-dist/css/bootstrap.min.css}" crossorigin="anonymous">
 
@@ -26,11 +28,13 @@
 
         $(function(){
             var editor = new SimpleMDE({
-                element: $("#editor")[0]
+                element: $("#editor")[0],
+                 renderingConfig: {
+                    codeSyntaxHighlighting: true
+                }
             });
-            editor.codemirror.on("change", function(){
-                $("#htmlContent").html(converter.makeHtml(editor.value()));
-            });
+
+            editor.toggleSideBySide();
 
             //如果是编辑某个文章，则设置标题、分类等
             if (undefined != article) {
@@ -73,20 +77,33 @@
             border: 1px solid #eee;
             margin-top: 20px;
         }
+
+        .fullscreen {
+            top: 100px!important;
+        }
+
+        .editor-toolbar {
+            border-top: 1px solid #efefef!important;
+        }
+
+        .CodeMirror-fullscreen,.editor-preview-side {
+            top: 150px!important;
+        }
     </style>
 </head>
 <body>
-    <form class="container-fluid" id="form">
+<div  class="container-fluid" id="container">
+    <form id="form" class="container-fluid">
         <input type="text" id="formSubmitUrl" th:value="@{/article/manager/save}" hidden/>
         <div class="row mt-1">
-            <label class="col-sm-1 text-right mt-2">标题：</label>
+            <label class="col-sm-1 text-left mt-2">标题：</label>
             <input type="text" size="50"
                    name="title" id="title"
                    class="col-sm-5 form-control mb-2" placeholder="标题" required/>
         </div>
 
         <div class="row mb-2">
-            <label class="col-sm-1 text-right mt-2">分类：</label>
+            <label class="col-sm-1 text-left mt-2">分类：</label>
             <select name="type" class="col-sm-2 form-control" id="type">
                 <option th:value="${type.id}"  th:each="type: ${types}" th:text="${type.name}"></option>
             </select>
@@ -94,23 +111,12 @@
             <select name="forumId" class="col-sm-2 form-control" id="forum" required th:if="${null == article}">
                 <option th:value="${forum.id}"  th:each="forum: ${forums}" th:text="${forum.name}"></option>
             </select>
-            <!--<label class="col-sm-1 text-right mt-2" th:if="${null == article}">专题：</label>-->
-            <!--<select name="topic" id="topic"-->
-                    <!--class="col-sm-2 form-control"  th:if="${null == article}">-->
-                <!--&lt;!&ndash;编辑文章时，不能修改发表的专题&ndash;&gt;-->
-                <!--<option value="0">不发表到专题</option>-->
-                <!--<option th:each="topic: ${myTopics}" th:value="${topic.id}" th:text="${topic.title}"></option>-->
-            <!--</select>-->
             <div class="col-sm-1">
                 <button type="submit" class="btn btn-primary">发表</button>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <textarea id="editor" rows="40" cols="200" th:text="${article} ? ${article.content} : ''"></textarea>
-            </div>
-            <div id="htmlContent" class="col-sm-6"></div>
-        </div>
     </form>
+    <textarea class="row" id="editor" rows="40" cols="200" th:text="${article} ? ${article.content} : ''"></textarea>
+</div>
 </body>
 </html>
