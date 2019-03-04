@@ -54,10 +54,9 @@ public final class ArticleBuilder {
     public ArticleBuilder setContent(String content, String contentFilePath) throws RestException {
         String fileName = FileUtils.saveToFile(content, contentFilePath);
         article.setContentUrl(fileName);
-        
-        String html = FileUtils.htmlToText(content);
-        article.setRemark(html.substring(0, Math.min(200, html.length())));
-        
+
+        ArticleUtils.setRemark(article, content);
+
         return this;
     }
     

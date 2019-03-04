@@ -11,6 +11,7 @@ import com.liuqi.tools.codelife.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.exceptions.RestException;
 import com.liuqi.tools.codelife.service.*;
 import com.liuqi.tools.codelife.util.ArticleBuilder;
+import com.liuqi.tools.codelife.util.ArticleUtils;
 import com.liuqi.tools.codelife.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -220,7 +221,8 @@ public class ArticleServiceImpl implements ArticleService {
         
         //更新文件内容
         FileUtils.saveToFile(content, contentFilePath, article.getContentUrl());
-        
+        ArticleUtils.setRemark(article, content);
+
         //更新数据库信息 版块不进行更新
         articleDao.updateArticle(id, title, type, article.getForum().getId());
         

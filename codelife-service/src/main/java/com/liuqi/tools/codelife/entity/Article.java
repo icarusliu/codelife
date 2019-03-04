@@ -1,5 +1,7 @@
 package com.liuqi.tools.codelife.entity;
 
+import com.liuqi.tools.codelife.util.FileUtils;
+
 import java.io.Serializable;
 
 /**
