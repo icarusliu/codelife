@@ -374,5 +374,16 @@ public class TopicServiceImpl implements TopicService {
         topicDao.deleteAllArticleTopics(articleId);
     }
 
+    /**
+     * 查找热门的专题
+     *
+     * @param i
+     * @return
+     */
+    @Override
+    public List<Topic> findHotTopics(int i) {
+        return topicDao.findHotTopic(i);
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(TopicServiceImpl.class);
 }

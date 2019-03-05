@@ -8,6 +8,7 @@
         <result property="title" column="title"/>
         <result property="introduction" column="introduction"/>
         <result property="img" column="img"/>
+        <result property="readCount" column="read_count"/>
         <result property="status" column="status" jdbcType="INTEGER"
             typeHandler="com.liuqi.tools.codelife.db.dao.typehandler.TopicStatusTypeHandler"/>
         <result property="type" column="type" jdbcType="INTEGER"
@@ -16,6 +17,8 @@
                      select="com.liuqi.tools.codelife.db.dao.UserDao.findById"></association>
         <association property="admin" javaType="User" column="admin"
                      select="com.liuqi.tools.codelife.db.dao.UserDao.findById"></association>
+        <collection property="articles" column="id" select="com.liuqi.tools.codelife.db.dao.ArticleDao.findByTopicForExplorer">
+        </collection>
     </resultMap>
 
     <sql id="selectSql">
@@ -26,6 +29,7 @@
             t1.img,
             t1.creator,
             t1.admin,
+            t1.read_count,
             t1.status,
             t1.type
         from
@@ -80,6 +84,14 @@
         <include refid="selectSql"/>
         where (t1.title like concat('%', #{key}, '%') or t1.introduction like concat('%', #{key}, '%'))
         and t1.type=0 and t1.status = 1
+    </select>
+
+    <select id="findHotTopic" resultMap="topicResult">
+        <include refid="selectSql"/>
+        where t1.status = 1
+          and t1.type = 0
+        order by t1.read_count desc
+        limit ${topicLimit}
     </select>
 
     <insert id="insert" parameterType="Topic">

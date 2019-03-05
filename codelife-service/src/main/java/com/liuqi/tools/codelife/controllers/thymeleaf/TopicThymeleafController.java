@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -53,15 +54,15 @@ public class TopicThymeleafController {
         } else {
             myTopics = Collections.EMPTY_LIST;
         }
-        if (0 != myTopics.size()) {
-            myTopics.forEach(topic -> topic.setArticles(topicService.getTopicArticles(topic.getId())));
-        }
-        
+
+        List<Topic> hotTopics = topicService.findHotTopics(5);
+
         //获取所有的未订阅并且类型是开放的专题，私有的专题不能直接展现
         List<Topic> topics = topicService.findUserNotSubscribed(loginUser, 1, 20).getList();
-        
-        return ModelAndViewBuilder.of("topic")
+
+        return ModelAndViewBuilder.of("topics")
                 .setData("myTopics", myTopics)
+                .setData("hotTopics", hotTopics)
                 .setData("topics", topics)
                 .build();
     }

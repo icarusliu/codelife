@@ -103,3 +103,50 @@ body {
     color: red;
     display: none;
 }
+
+.block {
+    border: 1px solid #B0E0E6;
+    padding: 0px;
+    background: #fff;
+}
+
+.block-title {
+    font-size: 1em;
+    border-bottom: 1px solid #B0E0E6;
+    color: #4682B4;
+    background: #F0F8FF;
+    line-height: 2.4em;
+    padding-left: 10px;
+    margin-bottom: 0px!important;
+}
+
+.block-item-a {
+    margin-left: 10px;
+    line-height: 30px;
+    font-size: 0.8em;
+}
+
+.block-item-a>a{
+    font-weight: normal!important;
+    color: #4D5593;
+}
+
+/*面板元素包含内容的类型*/
+.block-item-c {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.block>.block-item-c:not(:last-child) {
+    border-bottom: 1px dotted #B0E0E6;;
+}
+
+.block-item-c-title {
+    color: #000;
+    line-height: 40px;
+}
+
+.block-item-c-remark {
+    color: gray;
+    font-size: 0.8em;
+}

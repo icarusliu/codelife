@@ -1,0 +1,55 @@
+.topic-title-main {
+    font-size: 1.1em;
+    color: gray;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+ /*TOPIC清单中的TOPIC块*/
+.topic-block {
+    margin-right: 1px;
+    margin-bottom: 10px;
+    border: 1px solid #fff;
+    background: #fbfbfb;
+    box-shadow: 2px 2px 8px #ccc;
+    padding: 10px;
+    font-size: 0.9em;
+}
+
+.topic-block-title {
+    border-bottom: 1px dotted #ccc;
+    padding-bottom: 5px;
+}
+
+.topic-block img {
+    box-shadow: 1px 1px 1px #bfbfbf;
+    border: 1px solid #efefef;
+}
+
+.topic-block p {
+    color: #483D8B;
+}
+
+.topic-block ul {
+    list-style: circle;
+    margin: 0px;
+    padding-left: 20px;
+}
+
+.topic-block ul li{
+    margin: 4px;
+}
+
+.topic-block span{
+
+}
+
+/*订阅按钮样式*/
+.topic-subscribe-button {
+    font-size: 0.8em;
+    cursor: pointer;
+    color: blue;
+}
+
+.topic-subscribe-button:hover{
+    color: red;
+}

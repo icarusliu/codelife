@@ -176,4 +176,11 @@ public interface TopicService {
      * @param articleId 文章编号
      */
     void deleteTopicArticle(Integer articleId);
+
+    /**
+     * 查找热门的专题
+     * @param i
+     * @return
+     */
+    List<Topic> findHotTopics(int i);
 }

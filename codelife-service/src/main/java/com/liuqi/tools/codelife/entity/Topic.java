@@ -38,6 +38,8 @@ Topic implements Serializable {
     private User creator;
     
     private User admin;
+
+    private Long readCount;
     
     public int getId() {
         return id;
@@ -130,5 +132,13 @@ Topic implements Serializable {
     
     public void setArticles(Collection<Article> articles) {
         this.articles = articles;
+    }
+
+    public Long getReadCount() {
+        return readCount;
+    }
+
+    public void setReadCount(Long readCount) {
+        this.readCount = readCount;
     }
 }
