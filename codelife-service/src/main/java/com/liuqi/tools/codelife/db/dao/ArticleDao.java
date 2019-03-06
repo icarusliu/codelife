@@ -1,12 +1,10 @@
 package com.liuqi.tools.codelife.db.dao;
 
-import com.liuqi.tools.codelife.entity.*;
+import com.liuqi.tools.codelife.db.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 文章Mapper

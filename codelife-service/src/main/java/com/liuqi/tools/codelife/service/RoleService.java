@@ -1,7 +1,7 @@
 package com.liuqi.tools.codelife.service;
 
-import com.liuqi.tools.codelife.entity.Role;
-import com.liuqi.tools.codelife.exceptions.RestException;
+import com.liuqi.tools.codelife.db.entity.Role;
+import com.liuqi.tools.codelife.util.exceptions.RestException;
 
 import java.util.Collection;
 

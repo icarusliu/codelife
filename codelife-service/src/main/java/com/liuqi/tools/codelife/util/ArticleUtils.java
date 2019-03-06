@@ -2,8 +2,8 @@ package com.liuqi.tools.codelife.util;/**
  * Created by icaru on 2019/3/4.
  */
 
-import com.liuqi.tools.codelife.entity.Article;
-import com.liuqi.tools.codelife.exceptions.RestException;
+import com.liuqi.tools.codelife.db.entity.Article;
+import com.liuqi.tools.codelife.util.exceptions.RestException;
 
 /**
  * <p>

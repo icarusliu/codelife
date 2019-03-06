@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.liuqi.tools.codelife.db.dao.ArticleTypeDao">
-    <resultMap id="articleResult" type="com.liuqi.tools.codelife.entity.ArticleType">
+    <resultMap id="articleResult" type="com.liuqi.tools.codelife.db.entity.ArticleType">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="userId" column="userId"/>
@@ -21,12 +21,12 @@
     </sql>
 
     <!-- 通过类型ID查找类型 -->
-    <select id="findById" resultType="com.liuqi.tools.codelife.entity.ArticleType">
+    <select id="findById" resultType="com.liuqi.tools.codelife.db.entity.ArticleType">
         <include refid="selectType"/>
         where id = #{id}
     </select>
 
-    <select id="findByName" resultType="com.liuqi.tools.codelife.entity.ArticleType">
+    <select id="findByName" resultType="com.liuqi.tools.codelife.db.entity.ArticleType">
         <include refid="selectType"/>
         where name = #{name}
     </select>
@@ -37,7 +37,7 @@
     </select>
 
     <!-- 新增文章分类对象 -->
-    <insert id="add" parameterType="com.liuqi.tools.codelife.entity.ArticleType">
+    <insert id="add" parameterType="com.liuqi.tools.codelife.db.entity.ArticleType">
         insert into article_type(name, user) values(#{name}, #{userId})
     </insert>
 

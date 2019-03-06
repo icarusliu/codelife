@@ -59,6 +59,8 @@
                    sec:authorize="hasAuthority('ADMIN') or hasAuthority('TOPIC_ADMIN')">专题管理</a>
                 <a class="list-group-item" th:href="@{/system/indexManager}"
                    sec:authorize="hasAuthority('ADMIN')">首页管理</a>
+                <a class="list-group-item" th:href="@{/system/visitlogs}"
+                   sec:authorize="hasAuthority('ADMIN')">访问日志</a>
             </div>
         </div>
 

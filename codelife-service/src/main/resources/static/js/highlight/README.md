@@ -122,7 +122,7 @@ it can be added manually:
 example:
 
 ```
-r.js -o name=hljs paths.hljs=/path/to/highlight out=highlight.js
+repository.js -o name=hljs paths.hljs=/path/to/highlight out=highlight.js
 ```
 
 

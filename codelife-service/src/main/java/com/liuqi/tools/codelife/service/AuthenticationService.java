@@ -1,7 +1,6 @@
 package com.liuqi.tools.codelife.service;
 
-import com.liuqi.tools.codelife.entity.User;
-import com.liuqi.tools.codelife.exceptions.RestException;
+import com.liuqi.tools.codelife.db.entity.User;
 
 /**
  * 授权对象服务类

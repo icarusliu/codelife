@@ -2,12 +2,12 @@ package com.liuqi.tools.codelife.service.impl;
 
 import com.liuqi.tools.codelife.util.AppConstants;
 import com.liuqi.tools.codelife.db.dao.UserDao;
-import com.liuqi.tools.codelife.entity.Role;
-import com.liuqi.tools.codelife.entity.User;
-import com.liuqi.tools.codelife.entity.UserStatus;
-import com.liuqi.tools.codelife.exceptions.ErrorCodes;
-import com.liuqi.tools.codelife.exceptions.ExceptionTool;
-import com.liuqi.tools.codelife.exceptions.RestException;
+import com.liuqi.tools.codelife.db.entity.Role;
+import com.liuqi.tools.codelife.db.entity.User;
+import com.liuqi.tools.codelife.db.entity.UserStatus;
+import com.liuqi.tools.codelife.util.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.util.exceptions.ExceptionTool;
+import com.liuqi.tools.codelife.util.exceptions.RestException;
 import com.liuqi.tools.codelife.service.UserService;
 import com.liuqi.tools.codelife.util.DateUtils;
 import org.slf4j.Logger;

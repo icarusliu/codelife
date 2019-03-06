@@ -1,14 +1,10 @@
 package com.liuqi.tools.codelife.service.impl;
 
-import com.liuqi.tools.codelife.configuration.security.RealUserDetails;
-import com.liuqi.tools.codelife.entity.User;
-import com.liuqi.tools.codelife.exceptions.RestException;
+import com.liuqi.tools.codelife.config.security.RealUserDetails;
+import com.liuqi.tools.codelife.db.entity.User;
 import com.liuqi.tools.codelife.service.AuthenticationService;
-import com.liuqi.tools.codelife.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
 

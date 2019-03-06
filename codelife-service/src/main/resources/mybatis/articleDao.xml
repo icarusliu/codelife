@@ -119,7 +119,7 @@
     </select>
 
     <!-- 新增Article对象   -->
-    <insert id="save" parameterType="com.liuqi.tools.codelife.entity.Article" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.liuqi.tools.codelife.db.entity.Article" useGeneratedKeys="true" keyProperty="id">
         insert into article(title, type, author, create_date, status, content_url, read_count, remark
         <if test="null != forum">, forum</if>
         )
@@ -130,7 +130,7 @@
         )
     </insert>
 
-    <update id="addReadCount" parameterType="com.liuqi.tools.codelife.entity.Article">
+    <update id="addReadCount" parameterType="com.liuqi.tools.codelife.db.entity.Article">
         update article set read_count = read_count + 1 where id = #{id}
     </update>
 

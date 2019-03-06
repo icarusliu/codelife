@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.liuqi.tools.codelife.db.dao.TopicDao">
-    <resultMap id="topicResult" type="com.liuqi.tools.codelife.entity.Topic">
+    <resultMap id="topicResult" type="com.liuqi.tools.codelife.db.entity.Topic">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="introduction" column="introduction"/>

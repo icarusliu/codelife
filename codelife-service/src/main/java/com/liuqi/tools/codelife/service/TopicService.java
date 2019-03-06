@@ -1,8 +1,8 @@
 package com.liuqi.tools.codelife.service;
 
 import com.github.pagehelper.PageInfo;
-import com.liuqi.tools.codelife.entity.*;
-import com.liuqi.tools.codelife.exceptions.RestException;
+import com.liuqi.tools.codelife.db.entity.*;
+import com.liuqi.tools.codelife.util.exceptions.RestException;
 
 import java.util.List;
 
