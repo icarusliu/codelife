@@ -3,6 +3,7 @@ package com.liuqi.tools.codelife.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
@@ -33,6 +34,19 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .allowedMethods("*")
                 .allowedOrigins("http://localhost:8080")
                 .allowCredentials(true);
+    }
 
+    /**
+     * Add handlers to serve static resources such as images, js, and, css
+     * files from specific locations under web application root, the classpath,
+     * and others.
+     *
+     * @param registry
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/")
+                .setCachePeriod(3600*24);
     }
 }
