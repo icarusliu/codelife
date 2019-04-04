@@ -271,6 +271,16 @@ public class ArticleServiceImpl implements ArticleService {
     public UserArticleStatInfo getStatisticInfoByAuthor(int authorId) {
         return articleDao.getStatisticInfoByAuthor(authorId);
     }
-    
+
+    /**
+     * 查询热闹文章
+     *
+     * @return 热闹文章清单
+     */
+    @Override
+    public PageInfo<Article> findHotArticles(int nowPage, int pageSize) {
+        return PageInfo.of(articleDao.findHotArticles());
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
 }

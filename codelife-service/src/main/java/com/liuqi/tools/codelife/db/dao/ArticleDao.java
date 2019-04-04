@@ -148,4 +148,10 @@ public interface ArticleDao {
      * @return
      */
     UserArticleStatInfo getStatisticInfoByAuthor(@Param("authorId") int authorId);
+
+    /**
+     * 查找热闹文章清单
+     * @return  热闹文章清单
+     */
+    List<Article> findHotArticles();
 }

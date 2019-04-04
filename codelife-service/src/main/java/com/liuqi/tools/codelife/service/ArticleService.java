@@ -183,4 +183,10 @@ public interface ArticleService {
      * @return
      */
     UserArticleStatInfo getStatisticInfoByAuthor(int authorId);
+
+    /**
+     * 查询热闹文章
+     * @return  热闹文章清单
+     */
+    PageInfo<Article> findHotArticles(int nowPage, int pageSize);
 }

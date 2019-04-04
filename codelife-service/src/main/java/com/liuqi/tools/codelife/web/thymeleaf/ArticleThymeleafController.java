@@ -97,6 +97,7 @@ public class ArticleThymeleafController {
                 .setData("article", article)
                 .setData("comments", commentService.findByDestination(CommentType.ARTICLE, id))
                 .setData("topics", topicService.findByArticle(id))
+                .setData("hotArticles", articleService.findHotArticles(0, 5).getList())
                 .build();
     }
 

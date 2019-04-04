@@ -118,6 +118,11 @@
         where author = #{authorId}
     </select>
 
+    <select id="findHotArticles" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        order by read_count desc
+    </select>
+
     <!-- 新增Article对象   -->
     <insert id="save" parameterType="com.liuqi.tools.codelife.db.entity.Article" useGeneratedKeys="true" keyProperty="id">
         insert into article(title, type, author, create_date, status, content_url, read_count, remark

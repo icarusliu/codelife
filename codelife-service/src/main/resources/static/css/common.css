@@ -66,11 +66,12 @@ body {
     border: 1px solid #F0F8FF;
     background: #fff;
     padding: 0.4em;
+
+    box-shadow: 1px 1px 5px gray;
 }
 
 .side-block-title {
     font-size: 0.8em;
-    color: blue;
     line-height: 1.4em;
     border-left: 4px solid #A52A2A;
 
@@ -84,12 +85,14 @@ body {
     line-height: 2.4em;
     padding-left: 2.2em;
     margin-left: 0em;
+    color: #000;
 }
 
 /*右侧内容区域样式调整*/
 .right-content {
-    border: 1px solid #AFEEEE;
     background: #fff;
+
+    box-shadow: 1px 1px 5px gray;
 }
 
 /*底部*/
@@ -149,4 +152,9 @@ body {
 .block-item-c-remark {
     color: gray;
     font-size: 0.8em;
+}
+
+/*通用边框样式*/
+.border-left-color-red {
+    border-left-color: #e44444 !important;
 }
