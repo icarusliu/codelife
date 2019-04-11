@@ -6,6 +6,8 @@ import com.liuqi.tools.codelife.db.entity.User;
 import com.liuqi.tools.codelife.db.entity.UserArticleStatInfo;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
 
+import java.util.List;
+
 /**
  * 文章服务类
  *
@@ -108,9 +110,10 @@ public interface ArticleService {
      * @param type 文章类型
      * @param topicId 专题 可以为空
      * @param forumId 版块，可以为空，文章可以不发表到任何版块
+     * @param fileIds
      * @throws RestException
      */
-    void saveArticle(String title, String content, Integer type, Integer topicId, Integer forumId) throws RestException;
+    void saveArticle(String title, String content, Integer type, Integer topicId, Integer forumId, List<Integer> fileIds) throws RestException;
     
     /**
      * 对应文章的阅读次数加1
@@ -131,9 +134,10 @@ public interface ArticleService {
      * @param title 文章标题，不能为空
      * @param content 文章内容，不能为空
      * @param type  文章分类，不能为空
+     * @param fileIds
      * @throws RestException
      */
-    void updateArticle(Integer id, String title, String content, Integer type) throws RestException;
+    void updateArticle(Integer id, String title, String content, Integer type, List<Integer> fileIds) throws RestException;
     
     /**
      * 对文章进行点赞

@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class VisitLog {
     @Id
     @GeneratedValue
-    private Long id;
+    private Integer id;
 
     @Column(name = "user_id", columnDefinition = "varchar(255) comment '用户地址'")
     private String userIp;
@@ -35,11 +35,11 @@ public class VisitLog {
     @Column(name = "params", columnDefinition = "varchar(1000) comment '请求参数'")
     private String params;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public VisitLog setId(Long id) {
+    public VisitLog setId(Integer id) {
         this.id = id;
         return this;
     }

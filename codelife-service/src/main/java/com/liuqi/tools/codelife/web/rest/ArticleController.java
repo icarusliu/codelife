@@ -2,6 +2,7 @@ package com.liuqi.tools.codelife.web.rest;
 
 import com.liuqi.tools.codelife.db.entity.Article;
 import com.liuqi.tools.codelife.db.entity.CommentType;
+import com.liuqi.tools.codelife.service.FileInfoService;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
 import com.liuqi.tools.codelife.service.ArticleService;
 import com.liuqi.tools.codelife.service.CommentService;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
+
+import static com.liuqi.tools.codelife.util.AppConstants.MODULE_ARTICLE;
 
 /**
  * 文章控制器
@@ -29,6 +32,9 @@ public class ArticleController {
     
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private FileInfoService fileInfoService;
     
     @PostMapping("/getForExplorer")
     @ResponseBody
@@ -66,6 +72,7 @@ public class ArticleController {
         return MapBuilder.of()
                 .put("article", article)
                 .put("comments", commentService.findByDestination(CommentType.ARTICLE, articleId))
+                .put("files", fileInfoService.findByItem(MODULE_ARTICLE, articleId))
                 .build();
     }
     

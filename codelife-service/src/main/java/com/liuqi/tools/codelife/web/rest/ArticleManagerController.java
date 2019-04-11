@@ -18,6 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -110,9 +111,10 @@ public class ArticleManagerController {
                               @RequestParam("content") String content,
                               @RequestParam(value = "topic", required = false) Integer topicId,
                               @RequestParam(value = "forumId", required = false) Integer forumId,
-                              @RequestParam(name = "id", required = false) Integer id) throws RestException {
+                              @RequestParam(name = "id", required = false) Integer id,
+                             @RequestParam(name = "fileIds", required = false) List<Integer> fileIds) throws RestException {
         if (null == id) {
-            articleService.saveArticle(title, content, type, topicId, forumId);
+            articleService.saveArticle(title, content, type, topicId, forumId, fileIds);
         } else {
             //判断登录用户是否是作者，如果不是则不能进行保存
             User loginUser = authenticationService.getLoginUser();
@@ -124,7 +126,7 @@ public class ArticleManagerController {
             }
             
             //只允许更新标题与内容
-            articleService.updateArticle(id, title, content, type);
+            articleService.updateArticle(id, title, content, type, fileIds);
         }
         
         return "succeed";

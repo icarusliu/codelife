@@ -12,6 +12,6 @@ import org.springframework.data.repository.NoRepositoryBean;
  * @version V1.0
  **/
 @NoRepositoryBean
-public interface BaseRepository<E> extends JpaRepository<E, Long>, JpaSpecificationExecutor<E> {
+public interface BaseRepository<E> extends JpaRepository<E, Integer>, JpaSpecificationExecutor<E> {
 }
 

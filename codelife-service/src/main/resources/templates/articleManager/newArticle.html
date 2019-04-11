@@ -18,6 +18,7 @@
     <link rel="stylesheet" th:href="@{/js/highlight/styles/github.css}" crossorigin="anonymous">
 
     <link rel="stylesheet" th:href="@{/js/bootstrap-4.0.0/css/bootstrap.min.css}" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/common.css}" crossorigin="anonymous">
 
     <script th:src="@{/js/common.js}"></script>
 
@@ -70,6 +71,14 @@
                 return false;
             });
         });
+
+        function fileManager() {
+            $("#fileManager").show();
+        }
+
+        function uploadFile() {
+
+        }
     </script>
 
     <style>
@@ -111,12 +120,26 @@
             <select name="forumId" class="col-sm-2 form-control" id="forum" required th:if="${null == article}">
                 <option th:value="${forum.id}"  th:each="forum: ${forums}" th:text="${forum.name}"></option>
             </select>
-            <div class="col-sm-1">
+            <div class="col-sm">
+                <button type="button" class="btn btn-gray" onclick="fileManager();">文件管理</button>
                 <button type="submit" class="btn btn-primary">发表</button>
             </div>
         </div>
     </form>
     <textarea class="row" id="editor" rows="40" cols="200" th:text="${article} ? ${article.content} : ''"></textarea>
+
+    <div id="fileManager" class="dialog-mask" style="display: none;">
+        <div class="dialog">
+            <h5 class="dialog-title">文件管理</h5>
+            <div class="dialog-content">
+                <input type="file" id="file"/>
+                <input type="button" class="btn btn-primary btn-sm" value="上传" onclick="uploadFile();"/>
+                <ul>
+                    <li th:each="file: ${files}" th:text="${file.name}: ${file.uploadDir + file.path}"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

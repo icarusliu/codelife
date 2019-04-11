@@ -12,6 +12,6 @@ import org.mapstruct.Mapper;
  * @version V1.0
  **/
 @Mapper(componentModel = "spring")
-public interface VisitLogMapper extends EntityMapper<VisitLogDTO, VisitLog> {
+public interface VisitLogMapper extends EntityMapper<VisitLog, VisitLogDTO> {
 
 }

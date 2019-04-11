@@ -14,13 +14,15 @@ import java.util.Optional;
 public interface EntityService<D> {
     void save(List<D> list);
 
-    void save(D d);
+    D save(D d);
 
     List<D> findAll();
 
+    List<D> findList(D example);
+
     PageData<D> pageQuery(int offset, int pageSize);
 
-    Optional<D> findOne(Long id);
+    Optional<D> findOne(Integer id);
 
-    void delete(Long id);
+    void delete(Integer id);
 }

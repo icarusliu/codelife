@@ -12,7 +12,7 @@ import java.util.List;
  * @version V1.0
  **/
 public abstract class BaseEntityController<D, S extends EntityService> {
-    private S entityService;
+    protected S entityService;
 
     public BaseEntityController(S entityService) {
         this.entityService = entityService;
@@ -29,7 +29,7 @@ public abstract class BaseEntityController<D, S extends EntityService> {
     }
 
     @DeleteMapping
-    public void delete(@RequestParam("id") Long id) {
+    public void delete(@RequestParam("id") Integer id) {
         entityService.delete(id);
     }
 

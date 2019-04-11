@@ -18,9 +18,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * 文章服务类的实现类
@@ -48,6 +50,9 @@ public class ArticleServiceImpl implements ArticleService {
     
     @Autowired
     private ArticleTypeService articleTypeService;
+
+    @Autowired
+    private FileInfoService fileInfoService;
     
     @Override
     public Article findById(int id) throws RestException {
@@ -123,7 +128,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
     
     @Override
-    public void saveArticle(String title, String content, Integer type, Integer topicId, Integer forumId) throws RestException {
+    public void saveArticle(String title, String content, Integer type, Integer topicId, Integer forumId, List<Integer> fileIds) throws RestException {
         if (null == title || "".equals(title.trim())) {
             logger.error("Title cannot be null or empty");
             throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章标题");
@@ -150,14 +155,19 @@ public class ArticleServiceImpl implements ArticleService {
         if (null != forumId) {
             article.setForum(articleTypeService.findById(forumId));
         }
-        articleDao.save(article);
+        Integer articleId = articleDao.save(article);
         
         //文章分类对象中文章数目加1
         articleTypeService.addArticleCount(topicId);
         
         //将文章添加到专题
         if (null != topicId && 0 != topicId) {
-            topicService.addTopicArticls(topicId, Arrays.asList(article.getId()));
+            topicService.addTopicArticls(topicId, Collections.singletonList(article.getId()));
+        }
+
+        // 绑定文件与文章的关系
+        if (!CollectionUtils.isEmpty(fileIds)) {
+            fileInfoService.batchUpdateItemId(fileIds, articleId);
         }
     }
     
@@ -184,12 +194,13 @@ public class ArticleServiceImpl implements ArticleService {
     
     /**
      * 更新文章
-     *  @param id
+     * @param id
      * @param title
      * @param content
+     * @param fileIds
      */
     @Override
-    public void updateArticle(Integer id, String title, String content, Integer type) throws RestException {
+    public void updateArticle(Integer id, String title, String content, Integer type, List<Integer> fileIds) throws RestException {
         if (null == id) {
             logger.error("Id cannot be null!");
             throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章编号");
@@ -230,6 +241,11 @@ public class ArticleServiceImpl implements ArticleService {
         if (oldType.getId() != type) {
             articleTypeService.addArticleCount(type);
             articleTypeService.deduceArticleCount(oldType.getId());
+        }
+
+        // 更新文章附件
+        if (!CollectionUtils.isEmpty(fileIds)) {
+            fileInfoService.batchUpdateItemId(fileIds, id);
         }
     }
     
