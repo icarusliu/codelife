@@ -5,6 +5,7 @@ out/
 db-h2/
 target/
 topicFiles/
+upload/
 
 *.iml
 codelife-service/codelife-service.iml
