@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  * @author LiuQI 2019/4/10 18:21
  * @version V1.0
  **/
-public class FileInfoDTO {
+public class FileInfoVO {
     private Integer Id;
 
     private String name;
@@ -29,7 +29,7 @@ public class FileInfoDTO {
         return Id;
     }
 
-    public FileInfoDTO setId(Integer id) {
+    public FileInfoVO setId(Integer id) {
         Id = id;
         return this;
     }
@@ -38,7 +38,7 @@ public class FileInfoDTO {
         return name;
     }
 
-    public FileInfoDTO setName(String name) {
+    public FileInfoVO setName(String name) {
         this.name = name;
         return this;
     }
@@ -47,7 +47,7 @@ public class FileInfoDTO {
         return path;
     }
 
-    public FileInfoDTO setPath(String path) {
+    public FileInfoVO setPath(String path) {
         this.path = path;
         return this;
     }
@@ -56,7 +56,7 @@ public class FileInfoDTO {
         return module;
     }
 
-    public FileInfoDTO setModule(String module) {
+    public FileInfoVO setModule(String module) {
         this.module = module;
         return this;
     }
@@ -65,7 +65,7 @@ public class FileInfoDTO {
         return itemId;
     }
 
-    public FileInfoDTO setItemId(Integer itemId) {
+    public FileInfoVO setItemId(Integer itemId) {
         this.itemId = itemId;
         return this;
     }
@@ -74,7 +74,7 @@ public class FileInfoDTO {
         return uploadTime;
     }
 
-    public FileInfoDTO setUploadTime(LocalDateTime uploadTime) {
+    public FileInfoVO setUploadTime(LocalDateTime uploadTime) {
         this.uploadTime = uploadTime;
         return this;
     }
@@ -83,7 +83,7 @@ public class FileInfoDTO {
         return uploadUser;
     }
 
-    public FileInfoDTO setUploadUser(Integer uploadUser) {
+    public FileInfoVO setUploadUser(Integer uploadUser) {
         this.uploadUser = uploadUser;
         return this;
     }
@@ -92,14 +92,14 @@ public class FileInfoDTO {
         return uploadDir;
     }
 
-    public FileInfoDTO setUploadDir(String uploadDir) {
+    public FileInfoVO setUploadDir(String uploadDir) {
         this.uploadDir = uploadDir;
         return this;
     }
 
     @Override
     public String toString() {
-        return "FileInfoDTO{" +
+        return "FileInfoVO{" +
                 "Id=" + Id +
                 ", name='" + name + '\'' +
                 ", path='" + path + '\'' +

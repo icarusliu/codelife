@@ -4,7 +4,7 @@ import com.liuqi.commons.service.AbstractEntityService;
 import com.liuqi.tools.codelife.db.entity.FileInfo;
 import com.liuqi.tools.codelife.db.repository.FileInfoRepository;
 import com.liuqi.tools.codelife.service.FileInfoService;
-import com.liuqi.tools.codelife.service.dto.FileInfoDTO;
+import com.liuqi.tools.codelife.service.dto.FileInfoVO;
 import com.liuqi.tools.codelife.service.mapper.FileInfoMapper;
 import com.liuqi.tools.codelife.util.FileUtils;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
@@ -26,7 +26,7 @@ import java.util.List;
 @Service
 @Transactional
 public class FileInfoServiceImpl
-        extends AbstractEntityService<FileInfo, FileInfoDTO, FileInfoRepository, FileInfoMapper>
+        extends AbstractEntityService<FileInfo, FileInfoVO, FileInfoRepository, FileInfoMapper>
         implements FileInfoService {
     @Value("${app.file.uploadPath}")
     private String uploadPath;
@@ -41,13 +41,13 @@ public class FileInfoServiceImpl
      * @param file        文件内容
      */
     @Override
-    public FileInfoDTO upload(FileInfoDTO fileInfo, MultipartFile file) throws RestException {
+    public FileInfoVO upload(FileInfoVO fileInfo, MultipartFile file) throws RestException {
         String fileName = FileUtils.saveToFile(file, uploadPath);
         fileInfo.setName(file.getOriginalFilename())
                 .setPath(fileName);
-        FileInfoDTO savedFileInfoDTO = this.save(fileInfo);
-        savedFileInfoDTO.setUploadDir(uploadPath);
-        return savedFileInfoDTO;
+        FileInfoVO savedFileInfoVO = this.save(fileInfo);
+        savedFileInfoVO.setUploadDir(uploadPath);
+        return savedFileInfoVO;
     }
 
     /**
@@ -58,8 +58,8 @@ public class FileInfoServiceImpl
      * @return 文件列表
      */
     @Override
-    public List<FileInfoDTO> findByItem(String module, Integer itemId) {
-        return findList(new FileInfoDTO()
+    public List<FileInfoVO> findByItem(String module, Integer itemId) {
+        return findList(new FileInfoVO()
                 .setModule(module)
                 .setItemId(itemId));
     }
@@ -83,10 +83,10 @@ public class FileInfoServiceImpl
      */
     @Override
     public void batchUpdateItemId(List<Integer> fileIds, Integer itemId) {
-        List<FileInfoDTO> fileInfoDTOList = findByIds(fileIds);
-        if (!CollectionUtils.isEmpty(fileInfoDTOList)) {
-            fileInfoDTOList.forEach(fileInfo -> fileInfo.setItemId(itemId));
-            this.save(fileInfoDTOList);
+        List<FileInfoVO> fileInfoVOList = findByIds(fileIds);
+        if (!CollectionUtils.isEmpty(fileInfoVOList)) {
+            fileInfoVOList.forEach(fileInfo -> fileInfo.setItemId(itemId));
+            this.save(fileInfoVOList);
         }
     }
 
@@ -100,7 +100,7 @@ public class FileInfoServiceImpl
         return uploadPath;
     }
 
-    private List<FileInfoDTO> findByIds(List<Integer> fileIds) {
+    private List<FileInfoVO> findByIds(List<Integer> fileIds) {
         Specification<FileInfo> specification = Specification.where((Specification<FileInfo>) (root, criteriaQuery, criteriaBuilder)
                 -> root.get("id").in(fileIds));
         return mapper.toDto(repository.findAll(specification));

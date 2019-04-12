@@ -2,7 +2,7 @@ package com.liuqi.tools.codelife.service.mapper;
 
 import com.liuqi.commons.service.EntityMapper;
 import com.liuqi.tools.codelife.db.entity.FileInfo;
-import com.liuqi.tools.codelife.service.dto.FileInfoDTO;
+import com.liuqi.tools.codelife.service.dto.FileInfoVO;
 import org.mapstruct.Mapper;
 
 /**
@@ -12,5 +12,5 @@ import org.mapstruct.Mapper;
  * @version V1.0
  **/
 @Mapper(componentModel = "spring")
-public interface FileInfoMapper extends EntityMapper<FileInfo, FileInfoDTO> {
+public interface FileInfoMapper extends EntityMapper<FileInfo, FileInfoVO> {
 }

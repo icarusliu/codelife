@@ -2,7 +2,7 @@ package com.liuqi.tools.codelife.service.mapper;
 
 import com.liuqi.commons.service.EntityMapper;
 import com.liuqi.tools.codelife.db.entity.VisitLog;
-import com.liuqi.tools.codelife.service.dto.VisitLogDTO;
+import com.liuqi.tools.codelife.service.dto.VisitLogVO;
 import org.mapstruct.Mapper;
 
 /**
@@ -12,6 +12,6 @@ import org.mapstruct.Mapper;
  * @version V1.0
  **/
 @Mapper(componentModel = "spring")
-public interface VisitLogMapper extends EntityMapper<VisitLog, VisitLogDTO> {
+public interface VisitLogMapper extends EntityMapper<VisitLog, VisitLogVO> {
 
 }

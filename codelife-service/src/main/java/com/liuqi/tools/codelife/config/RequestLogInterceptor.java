@@ -1,7 +1,7 @@
 package com.liuqi.tools.codelife.config;
 
 import com.liuqi.tools.codelife.service.VisitLogService;
-import com.liuqi.tools.codelife.service.dto.VisitLogDTO;
+import com.liuqi.tools.codelife.service.dto.VisitLogVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -50,13 +50,13 @@ public class RequestLogInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        VisitLogDTO visitLogDTO = new VisitLogDTO()
+        VisitLogVO visitLogVO = new VisitLogVO()
                 .setVisitTime(LocalDateTime.now())
                 .setRequestUrl(requestUrl)
                 .setUser(remoteUser)
                 .setUserIp(remoteHost)
                 .setParams(request.getParameterMap().toString());
-        visitLogService.save(visitLogDTO);
+        visitLogService.save(visitLogVO);
 
         return true;
     }

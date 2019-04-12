@@ -2,7 +2,7 @@ package com.liuqi.tools.codelife.web.rest;
 
 import com.liuqi.commons.web.rest.BaseEntityController;
 import com.liuqi.tools.codelife.service.FileInfoService;
-import com.liuqi.tools.codelife.service.dto.FileInfoDTO;
+import com.liuqi.tools.codelife.service.dto.FileInfoVO;
 import com.liuqi.tools.codelife.util.FileUtils;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
 import org.slf4j.Logger;
@@ -14,8 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 /**
  * 文件管理控制器
@@ -25,7 +23,7 @@ import java.net.URLEncoder;
  **/
 @RestController
 @RequestMapping("/file")
-public class FileInfoController extends BaseEntityController<FileInfoDTO, FileInfoService> {
+public class FileInfoController extends BaseEntityController<FileInfoVO, FileInfoService> {
     private static final Logger logger = LoggerFactory.getLogger(FileInfoController.class);
 
     public FileInfoController(FileInfoService entityService) {
@@ -34,10 +32,10 @@ public class FileInfoController extends BaseEntityController<FileInfoDTO, FileIn
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/upload", consumes = "multipart/form-data")
-    public FileInfoDTO upload(@RequestParam(value = "file", required = false)MultipartFile file,
-                              @RequestParam("uploadUser") Integer uploadUser,
-                              @RequestParam("module") String module) throws RestException {
-        return this.entityService.upload(new FileInfoDTO()
+    public FileInfoVO upload(@RequestParam(value = "file", required = false)MultipartFile file,
+                             @RequestParam("uploadUser") Integer uploadUser,
+                             @RequestParam("module") String module) throws RestException {
+        return this.entityService.upload(new FileInfoVO()
                 .setModule(module)
                 .setUploadUser(uploadUser), file);
     }

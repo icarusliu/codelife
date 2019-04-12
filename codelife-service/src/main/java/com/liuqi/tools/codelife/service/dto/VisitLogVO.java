@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  * @author LiuQI 2019/3/6 15:33
  * @version V1.0
  **/
-public class VisitLogDTO {
+public class VisitLogVO {
     private Long id;
 
     private String userIp;
@@ -25,7 +25,7 @@ public class VisitLogDTO {
         return id;
     }
 
-    public VisitLogDTO setId(Long id) {
+    public VisitLogVO setId(Long id) {
         this.id = id;
         return this;
     }
@@ -34,7 +34,7 @@ public class VisitLogDTO {
         return userIp;
     }
 
-    public VisitLogDTO setUserIp(String userIp) {
+    public VisitLogVO setUserIp(String userIp) {
         this.userIp = userIp;
         return this;
     }
@@ -43,7 +43,7 @@ public class VisitLogDTO {
         return requestUrl;
     }
 
-    public VisitLogDTO setRequestUrl(String requestUrl) {
+    public VisitLogVO setRequestUrl(String requestUrl) {
         this.requestUrl = requestUrl;
         return this;
     }
@@ -52,7 +52,7 @@ public class VisitLogDTO {
         return visitTime;
     }
 
-    public VisitLogDTO setVisitTime(LocalDateTime visitTime) {
+    public VisitLogVO setVisitTime(LocalDateTime visitTime) {
         this.visitTime = visitTime;
         return this;
     }
@@ -61,7 +61,7 @@ public class VisitLogDTO {
         return user;
     }
 
-    public VisitLogDTO setUser(String user) {
+    public VisitLogVO setUser(String user) {
         this.user = user;
         return this;
     }
@@ -70,7 +70,7 @@ public class VisitLogDTO {
         return params;
     }
 
-    public VisitLogDTO setParams(String params) {
+    public VisitLogVO setParams(String params) {
         this.params = params;
         return this;
     }
