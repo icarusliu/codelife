@@ -32,7 +32,7 @@ public abstract class AbstractEntityService<E, D, R extends BaseRepository<E>, M
 
     @Override
     public D save(D d) {
-        return mapper.toDto(repository.save(mapper.toEntity(d)));
+        return mapper.toDto(repository.saveAndFlush(mapper.toEntity(d)));
     }
 
     @Override

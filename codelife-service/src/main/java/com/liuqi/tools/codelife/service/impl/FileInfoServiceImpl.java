@@ -90,6 +90,16 @@ public class FileInfoServiceImpl
         }
     }
 
+    /**
+     * 获取上传路径
+     *
+     * @return 上传路径
+     */
+    @Override
+    public String getUploadPath() {
+        return uploadPath;
+    }
+
     private List<FileInfoDTO> findByIds(List<Integer> fileIds) {
         Specification<FileInfo> specification = Specification.where((Specification<FileInfo>) (root, criteriaQuery, criteriaBuilder)
                 -> root.get("id").in(fileIds));

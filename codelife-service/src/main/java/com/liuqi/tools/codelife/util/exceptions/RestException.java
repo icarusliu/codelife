@@ -5,7 +5,7 @@ package com.liuqi.tools.codelife.util.exceptions;
  * @Created: 2018/3/17 22:22
  * @Version: V1.0
  **/
-public class RestException extends Exception {
+public class RestException extends RuntimeException {
     private String code;
     private String message;
     private Throwable t;

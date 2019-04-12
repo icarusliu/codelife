@@ -181,6 +181,7 @@ body {
     box-shadow: 2px 2px 2px gray;
     border: 1px solid #fff;
     font-size: 12px;
+    border-radius: 2px;
 }
 
 .dialog-title {
@@ -189,7 +190,27 @@ body {
     background: #efefef;
     padding-left: 10px;
     font-size: 14px;
-    border-bottom: 1px solid #bbb;
+    border-bottom: 1px solid #ddd;
+}
+
+.dialog-title>.close-icon {
+    float: right;
+    width: 30px;
+    height: 30px;
+    line-height: 24px;
+    color: #000;
+    font-size: 20px;
+    text-align: center;
+    background: lightgray;
+    margin-top: -1px;
+    margin-right: -1px;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.dialog-title>.close-icon:hover{
+    background: crimson;
+    color: #fff;
 }
 
 .dialog-content {

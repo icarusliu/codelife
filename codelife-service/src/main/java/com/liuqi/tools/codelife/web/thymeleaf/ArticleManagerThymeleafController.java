@@ -2,11 +2,8 @@ package com.liuqi.tools.codelife.web.thymeleaf;
 
 import com.liuqi.tools.codelife.db.entity.Article;
 import com.liuqi.tools.codelife.db.entity.User;
+import com.liuqi.tools.codelife.service.*;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
-import com.liuqi.tools.codelife.service.ArticleService;
-import com.liuqi.tools.codelife.service.ArticleTypeService;
-import com.liuqi.tools.codelife.service.AuthenticationService;
-import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +12,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import static com.liuqi.tools.codelife.util.AppConstants.MODULE_ARTICLE;
 
 /**
  * 文章管理Controller
@@ -38,6 +37,9 @@ public class ArticleManagerThymeleafController {
     
     @Autowired
     private ArticleTypeService typeService;
+
+    @Autowired
+    private FileInfoService fileInfoService;
     
     /**
      * 打开文章管理页面
@@ -72,10 +74,11 @@ public class ArticleManagerThymeleafController {
             try {
                 article = articleService.findById(id);
             } catch (RestException e) {
-                logger.error("Article with the special id({}) does not exist!", e);
+                logger.error("Article with the special id({}) does not exist!", id, e);
             }
             if (null != article) {
-                builder.setData("article", article);
+                builder.setData("article", article)
+                    .setData("files", fileInfoService.findByItem(MODULE_ARTICLE, article.getId()));
             }
         }
         

@@ -33,7 +33,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                     .accessDecisionManager(getAccessDecisionManager())
-                    .antMatchers("/*", "/css/**/*", "/js/**/*", "/icons/**/*",
+                    .antMatchers("/*", "/css/**/*", "/js/**/*", "/icons/**/*", "/upload/*",
                             "/h2-console/", "/h2-console/**/*", "/topic/**/*").permitAll()
                     .anyRequest().authenticated()
                 .and()

@@ -42,4 +42,10 @@ public interface FileInfoService extends EntityService<FileInfoDTO> {
      * @param itemId        <>
      */
     void batchUpdateItemId(List<Integer> fileIds, Integer itemId);
+
+    /**
+     * 获取上传路径
+     * @return  上传路径
+     */
+    String getUploadPath();
 }

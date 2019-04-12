@@ -11,12 +11,14 @@ import com.liuqi.tools.codelife.service.ArticleTypeService;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.util.MapBuilder;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -112,7 +114,13 @@ public class ArticleManagerController {
                               @RequestParam(value = "topic", required = false) Integer topicId,
                               @RequestParam(value = "forumId", required = false) Integer forumId,
                               @RequestParam(name = "id", required = false) Integer id,
-                             @RequestParam(name = "fileIds", required = false) List<Integer> fileIds) throws RestException {
+                             @RequestParam(name = "fileIds", required = false) String fileIdsStr) throws RestException {
+        List<Integer> fileIds = new ArrayList<>(16);
+        if (StringUtils.isNotBlank(fileIdsStr)) {
+            for (String s : fileIdsStr.split(",")) {
+                fileIds.add(Integer.valueOf(s));
+            }
+        }
         if (null == id) {
             articleService.saveArticle(title, content, type, topicId, forumId, fileIds);
         } else {

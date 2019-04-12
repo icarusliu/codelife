@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class FileInfo {
     @Id
     @GeneratedValue
-    private Integer Id;
+    private Integer id;
 
     @Column(name = "name", columnDefinition = "varchar(64) comment '文件名称'")
     private String name;
@@ -34,11 +34,11 @@ public class FileInfo {
     private Integer uploadUser;
 
     public Integer getId() {
-        return Id;
+        return id;
     }
 
     public FileInfo setId(Integer id) {
-        Id = id;
+        this.id = id;
         return this;
     }
 

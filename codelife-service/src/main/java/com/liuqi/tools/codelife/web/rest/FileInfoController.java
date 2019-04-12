@@ -3,13 +3,19 @@ package com.liuqi.tools.codelife.web.rest;
 import com.liuqi.commons.web.rest.BaseEntityController;
 import com.liuqi.tools.codelife.service.FileInfoService;
 import com.liuqi.tools.codelife.service.dto.FileInfoDTO;
+import com.liuqi.tools.codelife.util.FileUtils;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * 文件管理控制器
@@ -19,14 +25,16 @@ import org.springframework.web.multipart.MultipartFile;
  **/
 @RestController
 @RequestMapping("/file")
-@PreAuthorize("isAuthenticated()")
 public class FileInfoController extends BaseEntityController<FileInfoDTO, FileInfoService> {
+    private static final Logger logger = LoggerFactory.getLogger(FileInfoController.class);
+
     public FileInfoController(FileInfoService entityService) {
         super(entityService);
     }
 
-    @PostMapping("/upload")
-    public FileInfoDTO upload(@RequestParam("file")MultipartFile file,
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/upload", consumes = "multipart/form-data")
+    public FileInfoDTO upload(@RequestParam(value = "file", required = false)MultipartFile file,
                               @RequestParam("uploadUser") Integer uploadUser,
                               @RequestParam("module") String module) throws RestException {
         return this.entityService.upload(new FileInfoDTO()
@@ -34,9 +42,31 @@ public class FileInfoController extends BaseEntityController<FileInfoDTO, FileIn
                 .setUploadUser(uploadUser), file);
     }
 
-    @PostMapping("/updateItemId")
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/updateItemId")
     public void updateItemId(@RequestParam("id") Integer id,
                              @RequestParam("itemId") Integer itemId) {
         this.entityService.updateItemId(id, itemId);
+    }
+
+    @GetMapping(value = "/download/{id}")
+    public void download(@PathVariable("id") Integer id,
+                         HttpServletResponse response) {
+        this.entityService.findOne(id).ifPresent(fileInfo -> {
+            String fileName = fileInfo.getName();
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("application/x-download");
+//            try {
+//                fileName = URLEncoder.encode(fileName, "utf-8");
+//            } catch (UnsupportedEncodingException ignored) {
+//            }
+
+            response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+            try (OutputStream outputStream = response.getOutputStream()) {
+                FileUtils.outputFileContent(entityService.getUploadPath(), fileInfo.getPath(), outputStream);
+            } catch (IOException e) {
+                logger.error("写文件流失败", e);
+            }
+        });
     }
 }
