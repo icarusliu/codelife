@@ -13,17 +13,19 @@
     <script th:src="@{/js/axios.min.js}"></script>
 </head>
 <body>
-<div layout:fragment="content" id="container" class="container-fluid">
-    <div >
+<div layout:fragment="content" id="container" class="row">
+    <div class="left col-sm-3">
 
     </div>
 
-    <div class="center">
-        <div v-for="tool in toolList">
-            <h5>{{tool.name}}</h5>
-            <p>{{tool.desc}}</p>
-            <a href="@{/file/download/}">下载</a>
-            <div>
+    <div class="center col-sm">
+        <div v-for="tool in toolList" class="row">
+            <h5 class="w-100">{{tool.name}}</h5>
+            <div class="col-sm-8">
+                <p>{{tool.desc}}</p>
+                <a href="@{/file/download/}">下载</a>
+            </div>
+            <div class="col-sm-4 border-light">
             </div>
         </div>
     </div>
@@ -37,7 +39,12 @@
         },
         methods: {
             getToolList: function() {
-
+                axios.get("/tool")
+                    .then(resp => {
+                        console.log(resp)
+                    }).catch(error => {
+                        console.error(error)
+                    })
             }
         },
         created: function(){
