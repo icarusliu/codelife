@@ -1,56 +1,62 @@
 Manifest-Version: 1.0
-Class-Path: libs/spring-boot-test-autoconfigure-2.0.2.RELEASE.jar libs
- /byte-buddy-1.7.11.jar libs/attoparser-2.0.4.RELEASE.jar libs/groovy-
- 2.4.15.jar libs/android-json-0.0.20131108.vaadin1.jar libs/spring-boo
- t-starter-data-redis-2.0.2.RELEASE.jar libs/spring-boot-starter-secur
- ity-2.0.2.RELEASE.jar libs/spring-webmvc-5.0.6.RELEASE.jar libs/thyme
- leaf-expression-processor-1.1.3.jar libs/logback-classic-1.2.3.jar li
- bs/spring-boot-starter-web-2.0.2.RELEASE.jar libs/mybatis-spring-boot
- -autoconfigure-1.3.1.jar libs/jsqlparser-1.0.jar libs/pagehelper-5.1.
- 3.jar libs/spring-aop-5.0.6.RELEASE.jar libs/jackson-datatype-jdk8-2.
- 9.5.jar libs/HikariCP-2.7.9.jar libs/spring-data-redis-2.0.7.RELEASE.
- jar libs/validation-api-2.0.1.Final.jar libs/spring-boot-starter-jdbc
- -2.0.2.RELEASE.jar libs/netty-resolver-4.1.24.Final.jar libs/spring-e
- xpression-5.0.6.RELEASE.jar libs/json-path-2.4.0.jar libs/spring-boot
- -starter-logging-2.0.2.RELEASE.jar libs/spring-boot-starter-json-2.0.
- 2.RELEASE.jar libs/jackson-module-parameter-names-2.9.5.jar libs/aspe
- ctjweaver-1.8.13.jar libs/thymeleaf-layout-dialect-2.3.0.jar libs/let
- tuce-core-5.0.4.RELEASE.jar libs/assertj-core-3.9.1.jar libs/mybatis-
- 3.4.5.jar libs/junit-4.12.jar libs/byte-buddy-agent-1.7.11.jar libs/t
- omcat-embed-core-8.5.31.jar libs/logback-core-1.2.3.jar libs/spring-d
- ata-commons-2.0.7.RELEASE.jar libs/spring-jdbc-5.0.6.RELEASE.jar libs
- /spring-core-5.0.6.RELEASE.jar libs/json-smart-2.3.jar libs/jackson-d
- atatype-jsr310-2.9.5.jar libs/tomcat-embed-el-8.5.31.jar libs/xmlunit
- -core-2.5.1.jar libs/netty-buffer-4.1.24.Final.jar libs/thymeleaf-spr
- ing5-3.0.9.RELEASE.jar libs/tomcat-embed-websocket-8.5.31.jar libs/ja
- ckson-core-2.9.5.jar libs/spring-context-5.0.6.RELEASE.jar libs/thyme
- leaf-extras-java8time-3.0.1.RELEASE.jar libs/asm-5.0.4.jar libs/react
- or-core-3.1.7.RELEASE.jar libs/jsonassert-1.5.0.jar libs/jackson-anno
- tations-2.9.0.jar libs/reactive-streams-1.0.2.jar libs/log4j-api-2.10
- .0.jar libs/spring-boot-2.0.2.RELEASE.jar libs/thymeleaf-3.0.9.RELEAS
- E.jar libs/objenesis-2.6.jar libs/hamcrest-library-1.3.jar libs/sprin
- g-boot-starter-tomcat-2.0.2.RELEASE.jar libs/spring-boot-autoconfigur
- e-2.0.2.RELEASE.jar libs/netty-transport-4.1.24.Final.jar libs/spring
- -jcl-5.0.6.RELEASE.jar libs/spring-test-5.0.6.RELEASE.jar libs/netty-
- handler-4.1.24.Final.jar libs/spring-web-5.0.6.RELEASE.jar libs/netty
- -codec-4.1.24.Final.jar libs/accessors-smart-1.2.jar libs/unbescape-1
- .1.5.RELEASE.jar libs/classmate-1.3.4.jar libs/jul-to-slf4j-1.7.25.ja
- repository libs/spring-boot-starter-test-2.0.2.RELEASE.jar libs/h2-1.4.197.jar
-  libs/spring-data-keyvalue-2.0.7.RELEASE.jar libs/snakeyaml-1.19.jar 
- libs/spring-boot-starter-thymeleaf-2.0.2.RELEASE.jar libs/spring-secu
- rity-config-5.0.5.RELEASE.jar libs/netty-common-4.1.24.Final.jar libs
- /log4j-to-slf4j-2.10.0.jar libs/spring-tx-5.0.6.RELEASE.jar libs/slf4
- j-api-1.7.25.jar libs/spring-boot-test-2.0.2.RELEASE.jar libs/mybatis
- -spring-1.3.1.jar libs/hamcrest-core-1.3.jar libs/spring-boot-starter
- -aop-2.0.2.RELEASE.jar libs/mockito-core-2.15.0.jar libs/spring-boot-
- devtools-2.0.2.RELEASE.jar libs/spring-boot-starter-2.0.2.RELEASE.jar
-  libs/jboss-logging-3.3.2.Final.jar libs/javax.annotation-api-1.3.1.j
- ar libs/thymeleaf-extras-springsecurity4-3.0.2.RELEASE.jar libs/hiber
- nate-validator-6.0.9.Final.jar libs/spring-context-support-5.0.6.RELE
- ASE.jar libs/ognl-3.1.12.jar libs/spring-security-web-5.0.5.RELEASE.j
- ar libs/spring-security-core-5.0.5.RELEASE.jar libs/javassist-3.20.0-
- GA.jar libs/mybatis-spring-boot-starter-1.3.1.jar libs/spring-oxm-5.0
- .6.RELEASE.jar libs/spring-beans-5.0.6.RELEASE.jar libs/jackson-datab
- ind-2.9.5.jar
+Class-Path: libs/mybatis-spring-1.3.1.jar libs/unbescape-1.1.5.RELEASE
+ .jar libs/spring-boot-starter-jdbc-2.0.2.RELEASE.jar libs/hibernate-v
+ alidator-6.0.9.Final.jar libs/spring-security-config-5.0.5.RELEASE.ja
+ r libs/log4j-api-2.10.0.jar libs/ognl-3.1.12.jar libs/spring-boot-sta
+ rter-data-jpa-2.0.2.RELEASE.jar libs/netty-handler-4.1.24.Final.jar l
+ ibs/HikariCP-2.7.9.jar libs/aspectjweaver-1.8.13.jar libs/netty-buffe
+ r-4.1.24.Final.jar libs/byte-buddy-1.7.11.jar libs/pagehelper-5.1.3.j
+ ar libs/hamcrest-core-1.3.jar libs/assertj-core-3.9.1.jar libs/dom4j-
+ 1.6.1.jar libs/jackson-datatype-jdk8-2.9.5.jar libs/spring-tx-5.0.6.R
+ ELEASE.jar libs/mybatis-spring-boot-autoconfigure-1.3.1.jar libs/log4
+ j-to-slf4j-2.10.0.jar libs/spring-boot-devtools-2.0.2.RELEASE.jar lib
+ s/xmlunit-core-2.5.1.jar libs/spring-data-jpa-2.0.7.RELEASE.jar libs/
+ android-json-0.0.20131108.vaadin1.jar libs/netty-resolver-4.1.24.Fina
+ l.jar libs/mybatis-3.4.5.jar libs/spring-boot-test-2.0.2.RELEASE.jar 
+ libs/mapstruct-jdk8-1.2.0.Final.jar libs/spring-aop-5.0.6.RELEASE.jar
+  libs/jackson-annotations-2.9.0.jar libs/tomcat-embed-core-8.5.31.jar
+  libs/spring-data-redis-2.0.7.RELEASE.jar libs/json-path-2.4.0.jar li
+ bs/spring-core-5.0.6.RELEASE.jar libs/spring-boot-2.0.2.RELEASE.jar l
+ ibs/thymeleaf-spring5-3.0.9.RELEASE.jar libs/thymeleaf-extras-springs
+ ecurity4-3.0.2.RELEASE.jar libs/snakeyaml-1.19.jar libs/spring-securi
+ ty-web-5.0.5.RELEASE.jar libs/logback-core-1.2.3.jar libs/spring-boot
+ -starter-2.0.2.RELEASE.jar libs/spring-test-5.0.6.RELEASE.jar libs/ja
+ ckson-databind-2.9.5.jar libs/jsqlparser-1.0.jar libs/spring-webmvc-5
+ .0.6.RELEASE.jar libs/thymeleaf-layout-dialect-2.3.0.jar libs/tomcat-
+ embed-websocket-8.5.31.jar libs/thymeleaf-3.0.9.RELEASE.jar libs/juni
+ t-4.12.jar libs/jboss-logging-3.3.2.Final.jar libs/spring-boot-starte
+ r-tomcat-2.0.2.RELEASE.jar libs/spring-beans-5.0.6.RELEASE.jar libs/h
+ 2-1.4.197.jar libs/javax.annotation-api-1.3.1.jar libs/spring-context
+ -5.0.6.RELEASE.jar libs/jsonassert-1.5.0.jar libs/reactive-streams-1.
+ 0.2.jar libs/mybatis-spring-boot-starter-1.3.1.jar libs/hibernate-jpa
+ -2.1-api-1.0.0.Final.jar libs/json-smart-2.3.jar libs/thymeleaf-extra
+ s-java8time-3.0.1.RELEASE.jar libs/asm-5.0.4.jar libs/jackson-core-2.
+ 9.5.jar libs/spring-orm-5.0.6.RELEASE.jar libs/netty-codec-4.1.24.Fin
+ al.jar libs/netty-common-4.1.24.Final.jar libs/spring-data-commons-2.
+ 0.7.RELEASE.jar libs/logback-classic-1.2.3.jar libs/mockito-core-2.15
+ .0.jar libs/hibernate-core-5.2.17.Final.jar libs/spring-data-keyvalue
+ -2.0.7.RELEASE.jar libs/validation-api-2.0.1.Final.jar libs/jul-to-sl
+ f4j-1.7.25.jar libs/byte-buddy-agent-1.7.11.jar libs/spring-boot-star
+ ter-thymeleaf-2.0.2.RELEASE.jar libs/spring-web-5.0.6.RELEASE.jar lib
+ s/spring-boot-starter-aop-2.0.2.RELEASE.jar libs/attoparser-2.0.4.REL
+ EASE.jar libs/antlr-2.7.7.jar libs/groovy-2.4.15.jar libs/thymeleaf-e
+ xpression-processor-1.1.3.jar libs/spring-boot-starter-logging-2.0.2.
+ RELEASE.jar libs/commons-lang3-3.7.jar libs/spring-jcl-5.0.6.RELEASE.
+ jar libs/spring-oxm-5.0.6.RELEASE.jar libs/accessors-smart-1.2.jar li
+ bs/slf4j-api-1.7.25.jar libs/jackson-datatype-jsr310-2.9.5.jar libs/j
+ andex-2.0.3.Final.jar libs/jackson-module-parameter-names-2.9.5.jar l
+ ibs/spring-boot-starter-security-2.0.2.RELEASE.jar libs/spring-boot-s
+ tarter-web-2.0.2.RELEASE.jar libs/reactor-core-3.1.7.RELEASE.jar libs
+ /classmate-1.3.4.jar libs/spring-boot-starter-json-2.0.2.RELEASE.jar 
+ libs/spring-expression-5.0.6.RELEASE.jar libs/netty-transport-4.1.24.
+ Final.jar libs/spring-boot-autoconfigure-2.0.2.RELEASE.jar libs/sprin
+ g-boot-test-autoconfigure-2.0.2.RELEASE.jar libs/javassist-3.22.0-GA.
+ jar libs/spring-boot-starter-data-redis-2.0.2.RELEASE.jar libs/hibern
+ ate-commons-annotations-5.0.1.Final.jar libs/javax.transaction-api-1.
+ 2.jar libs/objenesis-2.6.jar libs/spring-context-support-5.0.6.RELEAS
+ E.jar libs/spring-security-core-5.0.5.RELEASE.jar libs/tomcat-embed-e
+ l-8.5.31.jar libs/spring-boot-starter-test-2.0.2.RELEASE.jar libs/ham
+ crest-library-1.3.jar libs/lettuce-core-5.0.4.RELEASE.jar libs/spring
+ -jdbc-5.0.6.RELEASE.jar libs/spring-aspects-5.0.6.RELEASE.jar
 Main-Class: com.liuqi.tools.codelife.Application
 

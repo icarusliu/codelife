@@ -216,3 +216,14 @@ body {
 .dialog-content {
     padding: 10px;
 }
+
+/*bootstrap 弹框*/
+.form-group>label {
+    line-height: 40px;
+    text-align: right!important;
+    padding-right: 0px;
+}
+
+.form-group>div{
+    padding-left: 0px;
+}

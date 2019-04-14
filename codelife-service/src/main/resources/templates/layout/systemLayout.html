@@ -57,6 +57,8 @@
                    sec:authorize="isAuthenticated()">文章分类管理</a>
                 <a class="list-group-item" th:href="@{/system/topicManager}"
                    sec:authorize="hasAuthority('ADMIN') or hasAuthority('TOPIC_ADMIN')">专题管理</a>
+                <a class="list-group-item" th:href="@{/system/toolManager}"
+                   sec:authorize="hasAuthority('ADMIN')">工具管理</a>
                 <a class="list-group-item" th:href="@{/system/indexManager}"
                    sec:authorize="hasAuthority('ADMIN')">首页管理</a>
                 <a class="list-group-item" th:href="@{/system/visitlogs}"

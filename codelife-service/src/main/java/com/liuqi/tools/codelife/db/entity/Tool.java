@@ -1,6 +1,7 @@
 package com.liuqi.tools.codelife.db.entity;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -20,6 +21,16 @@ public class Tool {
 
     @Column(name = "desc", columnDefinition = "varchar(255) comment '工具描述'")
     private String desc;
+
+    @Column(name = "version", columnDefinition = "varchar(10) comment '版本'")
+    private String version;
+
+    @Column(name = "create_time", columnDefinition = "timestamp default current_timestamp comment '创建时间'")
+    private LocalDateTime createTime;
+
+    @Column(name = "update_time", columnDefinition = "timestamp default current_timestamp " +
+            "on update current_timestamp comment '更新时间'")
+    private LocalDateTime updateTime;
 
     /**
      * 附件信息
@@ -78,6 +89,33 @@ public class Tool {
 
     public Tool setImages(List<FileInfo> images) {
         this.images = images;
+        return this;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public Tool setVersion(String version) {
+        this.version = version;
+        return this;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public Tool setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+        return this;
+    }
+
+    public LocalDateTime getUpdateTime() {
+        return updateTime;
+    }
+
+    public Tool setUpdateTime(LocalDateTime updateTime) {
+        this.updateTime = updateTime;
         return this;
     }
 }

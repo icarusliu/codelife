@@ -61,4 +61,14 @@ public class SystemManagerThymeleafController {
     public String logStatistics() {
         return "system/visitlogs";
     }
+
+    /**
+     * 工具管理界面
+     * @return
+     */
+    @RequestMapping("/toolManager")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String toolManager() {
+        return "system/toolManager";
+    }
 }
