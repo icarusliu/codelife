@@ -110,4 +110,12 @@ public interface UserService {
      * @param id 用户编号
      */
     void resetPassword(Integer id);
+
+    /**
+     * 重置密码
+     * @param userId        用户编号
+     * @param password      原密码
+     * @param newPassword   新密码
+     */
+    void resetPassword(Integer userId, String password, String newPassword) throws RestException;
 }

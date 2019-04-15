@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -272,6 +273,25 @@ public class UserServiceImpl implements UserService{
     @Override
     public void resetPassword(Integer id) {
         userDao.resetPassword(id, AppConstants.DEF_PASSWORD);
+    }
+
+    @Override
+    public void resetPassword(Integer userId, String password, String newPassword) throws RestException {
+        User user = this.findById(userId);
+        if (null == user) {
+            logger.error("用户不存在，用户编号：{}", userId);
+            throw ExceptionTool.getException(ErrorCodes.USER_ID_NOT_EXISTS, userId);
+        }
+
+        if (!user.getPassword().equals(password)) {
+            logger.error("密码不正确");
+            throw ExceptionTool.getException(ErrorCodes.USER_PASSWORD_INCORRECT);
+        }
+
+        if (!StringUtils.isEmpty(newPassword)) {
+            user.setPassword(newPassword);
+            userDao.updateUser(user);
+        }
     }
 
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);

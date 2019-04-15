@@ -216,6 +216,20 @@ public class UserController {
                 .put("user", user)
                 .build();
     }
+
+    /**
+     * 密码重置
+     * @param userId
+     * @param password
+     * @param newPassword
+     */
+    @PostMapping("/user/resetPassword")
+    @PreAuthorize("isAuthenticated()")
+    public void resetPassword(@RequestParam("userId") Integer userId,
+                              @RequestParam("password") String password,
+                              @RequestParam("newPassword") String newPassword) throws RestException {
+        userService.resetPassword(userId, password, newPassword);
+    }
     
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 }

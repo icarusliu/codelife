@@ -130,7 +130,12 @@ public enum ErrorCodes {
     /**
      * 管理员不能被注销
      */
-    USER_ADMIN_CANNOT_BE_REGISTED("user.admin.cannot.beUnregisted");
+    USER_ADMIN_CANNOT_BE_REGISTED("user.admin.cannot.beUnregisted"),
+
+    /**
+     * 密码不正确
+     */
+    USER_PASSWORD_INCORRECT("user.password.incorrect");
 
     private String errorName;
     ErrorCodes(String errorName) {
