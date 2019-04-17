@@ -1,0 +1,91 @@
+.content {
+    padding-top: 10px;
+}
+
+.login-form {
+    background: #fafafa;
+    border: 1px solid #f3f3f3;
+}
+
+/*文章列表*/
+.article-list-title {
+    font-size: 0.9em;
+    border-bottom: 1px solid #bbb;
+    padding-bottom: 10px;
+
+    color: #4682B4;
+    font-weight: bold;
+}
+
+.article-list-group {
+    list-style: none;
+}
+
+.article-list-item {
+    font-size: 0.8em;
+}
+
+.article-list-item a {
+    color: #483D8B;
+}
+
+/*网站介绍段落中的表格风格*/
+.desc-table {
+    border-color: #AFEEEE;
+}
+
+.desc-table th {
+    background: #F0F8FF;
+    text-align: center;
+}
+
+.desc-table th, .desc-table td {
+    padding: 4px;
+    padding-left: 10px;
+    min-width: 100px;
+    border-color: #AFEEEE;
+}
+
+.block {
+    border: 1px solid #B0E0E6;
+    padding: 0px;
+}
+
+.block-title {
+    font-size: 1em;
+    border-bottom: 1px solid #B0E0E6;
+    color: #4682B4;
+    background: #F0F8FF;
+    line-height: 2.4em;
+    padding-left: 10px;
+}
+
+.block-title-topic {
+    background: #F0FFFF;
+}
+
+.block-title-subscribed-topic {
+    background: #FFFAF0;
+}
+
+.article-item {
+    border-bottom: 1px dotted #efefef;
+    margin-top: 10px;
+    padding-left: 10px;
+}
+
+.article-item-title {
+    font-size: 1em;
+}
+
+.article-item-remark {
+    font-size: 0.8em;
+    margin-top: 4px;
+    color: #4682B4;
+}
+
+.article-item-info {
+    font-size: 0.8em;
+    color: #bbb;
+    margin-top: 10px;
+}

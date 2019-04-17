@@ -1,8 +1,8 @@
 package com.liuqi.tools.codelife.service;
 
 import com.github.pagehelper.PageInfo;
-import com.liuqi.tools.codelife.entity.*;
-import com.liuqi.tools.codelife.exceptions.RestException;
+import com.liuqi.tools.codelife.db.entity.*;
+import com.liuqi.tools.codelife.util.exceptions.RestException;
 
 import java.util.List;
 
@@ -176,4 +176,11 @@ public interface TopicService {
      * @param articleId 文章编号
      */
     void deleteTopicArticle(Integer articleId);
+
+    /**
+     * 查找热门的专题
+     * @param i
+     * @return
+     */
+    List<Topic> findHotTopics(int i);
 }

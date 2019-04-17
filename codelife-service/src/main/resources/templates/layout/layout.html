@@ -4,17 +4,18 @@
       xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">icarusliu-Java</title>
+    <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">刘奇的个人网站</title>
+    <meta http-equiv="Cache-Control" content="max-age=7200" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="keywords" content="java, Spring, Spring Boot, Spring Cloud, 程序员, 个人网站, 开源知识库" />
     <meta name="description" content="免费的Java个人网站及Java开源知识库" />
 
-    <link rel="stylesheet" th:href="@{/js/bootstrap-4.0.0-alpha.6-dist/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/js/bootstrap-4.0.0/css/bootstrap.min.css}">
     <link rel="stylesheet" href="/js/bootstrap-table/bootstrap-table.min.css">
     <link rel="stylesheet" th:href="@{/css/common.css}">
 
     <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
-    <script th:src="@{/js/bootstrap-4.0.0-alpha.6-dist/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/bootstrap-4.0.0/js/bootstrap.min.js}"></script>
 
     <script src="/js/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="/js/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
@@ -66,8 +67,8 @@
 </head>
 <body>
 
-<nav class="navbar navbar-toggleable-md navbar-light mb-6 fixed-top" id="mainNav">
-    <a th:href="@{/}"><img class="navbar-brand" th:src="@{/icons/mouse.png}" width="30" height="30"/></a>
+<nav class="navbar navbar-toggleable-md sticky-top navbar-light m-0 mb-2" id="mainNav">
+    <!--<a th:href="@{/}"><img class="navbar-brand" th:src="@{/icons/mouse.png}" width="30" height="30"/></a>-->
     <!-- 小页面上时导航栏按下拉的方式展现 -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
             aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,6 +103,10 @@
                 <a class="nav-link text-center font-weight-bold" th:href="@{/topic/explorer}">专题浏览</a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link text-center font-weight-bold" th:href="@{/tool/explorer}">常用工具</a>
+            </li>
+
             <!-- 只有管理员才能看到系统管理界面 -->
             <li class="nav-item" sec:authorize="isAuthenticated()">
                 <a class="nav-link text-center font-weight-bold" th:href="@{/system}">系统管理</a>
@@ -128,8 +133,8 @@
             </div>
 
             <div th:if="${#authentication.name == 'anonymousUser'}" style="font-size: 0.8em; ">
-                <input type="button" class="btn-link btn-xs my-nav-link" value="注册" onclick="javascript: register(); "/>
-                <input type="button" class="btn-xs btn-success login-button" value="登录" onclick="javascript: login();"/>
+                <input type="button" class="btn btn-link btn-sm my-nav-link" value="注册" onclick="javascript: register(); "/>
+                <input type="button" class="btn btn-sm btn-success login-button" value="登录" onclick="javascript: login();"/>
             </div>
         </form>
     </div>

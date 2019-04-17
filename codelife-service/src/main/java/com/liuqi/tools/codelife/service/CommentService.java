@@ -1,10 +1,9 @@
 package com.liuqi.tools.codelife.service;
 
-import com.liuqi.tools.codelife.entity.Comment;
-import com.liuqi.tools.codelife.entity.CommentType;
-import com.liuqi.tools.codelife.entity.User;
-import com.liuqi.tools.codelife.exceptions.RestException;
-import org.apache.ibatis.annotations.Param;
+import com.liuqi.tools.codelife.db.entity.Comment;
+import com.liuqi.tools.codelife.db.entity.CommentType;
+import com.liuqi.tools.codelife.db.entity.User;
+import com.liuqi.tools.codelife.util.exceptions.RestException;
 
 import java.util.Collection;
 

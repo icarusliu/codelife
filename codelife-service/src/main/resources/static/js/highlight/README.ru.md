@@ -113,7 +113,7 @@ Highlight.js можно использовать в браузере прямо 
 **Про Almond.** Нужно задать имя модуля в оптимизаторе, например:
 
 ```
-r.js -o name=hljs paths.hljs=/path/to/highlight out=highlight.js
+repository.js -o name=hljs paths.hljs=/path/to/highlight out=highlight.js
 ```
 
 

@@ -929,7 +929,7 @@ New languages:
 
 Improvements:
 
-- Ruby's got support for characters like `?A`, `?1`, `?\012` etc. and `%r{..}`
+- Ruby's got support for characters like `?A`, `?1`, `?\012` etc. and `%repository{..}`
   regexps.
 - Clojure now allows a function call in the beginning of s-expressions
   `(($filter "myCount") (arr 1 2 3 4 5))`.

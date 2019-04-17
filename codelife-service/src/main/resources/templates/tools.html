@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+        xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+        layout:decorator="layout/layout">
+<head>
+    <meta charset="UTF-8"/>
+    <title>常用工具</title>
+
+    <script th:src="@{/js/vue.min.js}"></script>
+    <script th:src="@{/js/axios.min.js}"></script>
+</head>
+<body>
+<div layout:fragment="content" id="container" class="row">
+    <div class="left col-sm-3">
+
+    </div>
+
+    <div class="center col-sm">
+        <div v-for="tool in toolList" class="row">
+            <h5 class="w-100">{{tool.name}}</h5>
+            <div class="col-sm-8">
+                <p>{{tool.desc}}</p>
+                <a href="@{/file/download/}">下载</a>
+            </div>
+            <div class="col-sm-4 border-light">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    new Vue({
+        el: "#container",
+        data: {
+            toolList: []
+        },
+        methods: {
+            getToolList: function() {
+                axios.get("/tool")
+                    .then(resp => {
+                        console.log(resp)
+                    }).catch(error => {
+                        console.error(error)
+                    })
+            }
+        },
+        created: function(){
+            this.getToolList()
+        }
+    })
+</script>
+</html>

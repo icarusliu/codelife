@@ -1,9 +1,8 @@
 package com.liuqi.tools.codelife.service;
 
-import com.liuqi.tools.codelife.entity.Role;
-import com.liuqi.tools.codelife.entity.Topic;
-import com.liuqi.tools.codelife.entity.User;
-import com.liuqi.tools.codelife.exceptions.RestException;
+import com.liuqi.tools.codelife.db.entity.Role;
+import com.liuqi.tools.codelife.db.entity.User;
+import com.liuqi.tools.codelife.util.exceptions.RestException;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,7 +20,7 @@ public interface UserService {
      *
      * @return 返回所有用户
      */
-    public List<User> findAll();
+    List<User> findAll();
     
     /**
      * 通过用户名查找用户
@@ -29,7 +28,7 @@ public interface UserService {
      * @return 未找到时返回空
      * @throws RestException
      */
-    public User findByUsername(String username) throws RestException;
+    User findByUsername(String username) throws RestException;
     
     /**
      * 锁定用户
@@ -111,4 +110,12 @@ public interface UserService {
      * @param id 用户编号
      */
     void resetPassword(Integer id);
+
+    /**
+     * 重置密码
+     * @param userId        用户编号
+     * @param password      原密码
+     * @param newPassword   新密码
+     */
+    void resetPassword(Integer userId, String password, String newPassword) throws RestException;
 }

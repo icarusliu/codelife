@@ -1,12 +1,10 @@
 package com.liuqi.tools.codelife.db.dao;
 
-import com.liuqi.tools.codelife.entity.*;
+import com.liuqi.tools.codelife.db.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 文章Mapper
@@ -113,9 +111,10 @@ public interface ArticleDao {
      * @param title
      * @param type
      * @param forumId
+     * @param remark
      */
     void updateArticle(@Param("id") Integer id, @Param("title") String title, @Param("type") Integer type,
-                       @Param("forumId") Integer forumId);
+                       @Param("forumId") Integer forumId, @Param("remark") String remark);
     
     /**
      * 点赞
@@ -149,4 +148,10 @@ public interface ArticleDao {
      * @return
      */
     UserArticleStatInfo getStatisticInfoByAuthor(@Param("authorId") int authorId);
+
+    /**
+     * 查找热闹文章清单
+     * @return  热闹文章清单
+     */
+    List<Article> findHotArticles();
 }

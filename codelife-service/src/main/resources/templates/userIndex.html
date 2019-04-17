@@ -16,7 +16,7 @@
     <style>
         .stat-info-title {
             font-size: 1em;
-            line-height: 4em;
+            line-height: 2em;
             color: black;
             font-weight: bold;
             border-bottom: 1px solid #fafafa;
@@ -24,7 +24,6 @@
 
         .stat-info-item {
             font-size: 0.8em;
-            color: #483D8B;
         }
     </style>
 
@@ -46,35 +45,35 @@
 <body>
 <div layout:fragment="content" class="container-fluid">
     <div class="row">
-        <div class="col-md-2 col-lg-3 hidden-xs-down sidebar">
-            <div class="container side-block container mb-2">
-                <div class="row p-1">
-                    <span th:text="${realName}" class="stat-info-title col-sm text-center"></span>
+        <div class="col-md-2 col-lg-3 d-none d-sm-block sidebar">
+            <div class="container side-block mb-2 pr-4 pl-4">
+                <div class="row p-2">
+                    <span th:text="${realName}" class="stat-info-title col-sm"></span>
 
-                    <div class="w-100 mb-2"></div>
+                    <hr class="w-100 m-2"/>
 
                     <div class="stat-info-item col-sm-3">
-                        <div class="row text-center"><span class="col">文章总数</span></div>
-                        <div class="row text-center"><span class="col" th:text="${totalArticles}"></span></div>
+                        <div class="row text-center"><span class="col">文章</span></div>
+                        <div class="row text-center mt-1"><span class="col font-weight-bold" th:text="${totalArticles}"></span></div>
                     </div>
 
                     <div class="stat-info-item col-sm-3">
-                        <div class="row text-center"><span class="col">点赞总数</span></div>
-                        <div class="row text-center">
-                            <span class="col"
+                        <div class="row text-center"><span class="col">点赞</span></div>
+                        <div class="row text-center mt-1">
+                            <span class="col font-weight-bold"
                                   th:text="${null == statInfo ? 0 : statInfo.praiseCount}"></span></div>
                     </div>
 
                     <div class="stat-info-item col-sm-3">
-                        <div class="row text-center"><span class="col">阅读总数</span></div>
-                        <div class="row text-center">
-                            <span class="col"
+                        <div class="row text-center"><span class="col">阅读</span></div>
+                        <div class="row text-center mt-1">
+                            <span class="col font-weight-bold"
                                   th:text="${null == statInfo ? 0 : statInfo.readCount}"></span></div>
                     </div>
 
                     <div class="stat-info-item col-sm-3">
-                        <div class="row text-center"><span class="col">评论总数</span></div>
-                        <div class="row text-center"><span class="col" th:text="${commentCount}"></span></div>
+                        <div class="row text-center"><span class="col">评论</span></div>
+                        <div class="row text-center mt-1"><span class="col font-weight-bold" th:text="${commentCount}"></span></div>
                     </div>
                 </div>
             </div>
@@ -99,18 +98,18 @@
                 </div>
             </div>
 
-            <div class="row article-list-group pt-2" th:each="article: ${articles}">
+            <div class="row article-item pt-2" th:each="article: ${articles}">
                 <div class="col">
                     <sup th:if="${article.fixTop}" style="color: red; ">[置顶]</sup>
-                    <a th:text="${article.title}" class="article-list-item-title font-weight-bold"
+                    <a th:text="${article.title}" class="article-item-title font-weight-bold"
                        th:href="@{'/article/detail?id=' + ${article.id}}"></a>
-                    <div th:text="${article.remark}" class="mt-2 mb-2 article-list-item-remark"></div>
+                    <div th:text="${article.remark}" class="mt-2 mb-2 article-item-remark"></div>
                     <div class="row pt-3">
-                        <div class="article-list-item-info col-sm-10">
+                        <div class="article-item-info col-sm-10">
                             <span th:text="${article.authorName}" class="mr-4"></span>
-                            发表于：<cite th:text="${article.createDate}" class="mr-5"></cite>
-                            阅读次数：<cite th:text="${article.readCount}" class="mr-5"></cite>
-                            点赞数：<cite th:text="${article.praiseCount}"></cite>
+                            <span th:text="${article.createDate}" class="mr-5"></span>
+                            阅读次数：<span th:text="${article.readCount}" class="mr-5"></span>
+                            点赞数：<span th:text="${article.praiseCount}"></span>
                         </div>
                         <div class="article-list-item-buttons col-sm-2 text-right" >
                             <div class="btn btn-link mb-2" th:if="${#authentication.name != 'anonymousUser' && #authentication.details.user.id == article.authorID}">

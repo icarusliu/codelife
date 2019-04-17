@@ -1,6 +1,6 @@
 package com.liuqi.tools.codelife.db.dao.typehandler;
 
-import com.liuqi.tools.codelife.entity.UserStatus;
+import com.liuqi.tools.codelife.db.entity.UserStatus;
 import org.apache.ibatis.type.EnumOrdinalTypeHandler;
 
 /**

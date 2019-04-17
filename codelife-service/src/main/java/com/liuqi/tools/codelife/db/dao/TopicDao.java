@@ -1,8 +1,8 @@
 package com.liuqi.tools.codelife.db.dao;
 
-import com.liuqi.tools.codelife.entity.Topic;
-import com.liuqi.tools.codelife.entity.TopicStatus;
-import com.liuqi.tools.codelife.entity.User;
+import com.liuqi.tools.codelife.db.entity.Topic;
+import com.liuqi.tools.codelife.db.entity.TopicStatus;
+import com.liuqi.tools.codelife.db.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -147,4 +147,11 @@ public interface TopicDao {
      * @param articleId 文章编号
      */
     void deleteAllArticleTopics(@Param("articleId") Integer articleId);
+
+    /**
+     * 查找热门专题
+     * @param i
+     * @return
+     */
+    List<Topic> findHotTopic(@Param("topicLimit") int i);
 }

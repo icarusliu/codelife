@@ -1,10 +1,10 @@
 package com.liuqi.tools.codelife.util;
 
-import com.liuqi.tools.codelife.entity.Article;
-import com.liuqi.tools.codelife.entity.ArticleStatus;
-import com.liuqi.tools.codelife.entity.ArticleType;
-import com.liuqi.tools.codelife.entity.User;
-import com.liuqi.tools.codelife.exceptions.RestException;
+import com.liuqi.tools.codelife.db.entity.Article;
+import com.liuqi.tools.codelife.db.entity.ArticleStatus;
+import com.liuqi.tools.codelife.db.entity.ArticleType;
+import com.liuqi.tools.codelife.db.entity.User;
+import com.liuqi.tools.codelife.util.exceptions.RestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,10 +54,9 @@ public final class ArticleBuilder {
     public ArticleBuilder setContent(String content, String contentFilePath) throws RestException {
         String fileName = FileUtils.saveToFile(content, contentFilePath);
         article.setContentUrl(fileName);
-        
-        String html = FileUtils.htmlToText(content);
-        article.setRemark(html.substring(0, Math.min(200, html.length())));
-        
+
+        ArticleUtils.setRemark(article, content);
+
         return this;
     }
     

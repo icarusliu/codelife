@@ -1,7 +1,7 @@
 package com.liuqi.tools.codelife.service.impl;
 
 import com.liuqi.tools.codelife.db.dao.UserLogDao;
-import com.liuqi.tools.codelife.entity.User;
+import com.liuqi.tools.codelife.db.entity.User;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import com.liuqi.tools.codelife.service.LogDBWriterService;
 import com.liuqi.tools.codelife.util.DateUtils;

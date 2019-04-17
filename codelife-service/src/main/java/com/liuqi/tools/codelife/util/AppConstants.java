@@ -8,4 +8,6 @@ package com.liuqi.tools.codelife.util;
  **/
 public final class AppConstants {
     public static final String DEF_PASSWORD = "123456";
+
+    public static final String MODULE_ARTICLE = "article";
 }

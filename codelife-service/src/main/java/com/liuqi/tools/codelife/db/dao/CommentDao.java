@@ -1,7 +1,7 @@
 package com.liuqi.tools.codelife.db.dao;
 
-import com.liuqi.tools.codelife.entity.Comment;
-import com.liuqi.tools.codelife.entity.CommentType;
+import com.liuqi.tools.codelife.db.entity.Comment;
+import com.liuqi.tools.codelife.db.entity.CommentType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

@@ -9,6 +9,7 @@
     <title>首页</title>
 
     <link rel="stylesheet" href="/css/index.css"/>
+    <link rel="stylesheet" href="/css/article.css"/>
 
     <script th:inline="javascript">
         var isLoading = false;
@@ -67,32 +68,29 @@
 <body>
 <div layout:fragment="content" class="container-fluid">
     <form method="get" th:action="@{/search}"
-          class="row m-4">
+          class="row d-none d-sm-block m-4">
         <input type="text"
                placeholder="搜索" name="key" required
-               class="form-control col-md-6 mr-md-2 offset-md-2"/>
+               class="form-control col-md-6 mr-md-2 offset-md-2 float-left"/>
         <input type="submit" value="搜索"
                class="btn btn-primary"/>
     </form>
 
     <div class="row">
-        <!-- 登录框 -->
-        <div class="col-sm-2" th:if="${#authentication.name eq 'anonymousUser'}">
+        <div class="col-sm-2 d-none d-sm-block">
             <div class="block row ml-1">
-                <font class="block-title article-type-block-title col-12">文章分类</font>
+                <font class="block-title block-title-forum col-12">系统版块</font>
                 <div class="w-100"></div>
-                <div class="article-type-item col-12" th:each="articleType: ${articleTypes}">
+                <div class="block-item-a col-12" th:each="articleType: ${articleTypes}">
                     <a th:text="${articleType.name}" class="article-type-title font-weight-bold"
                        th:href="@{/article/articles} + '?forumId=' + ${articleType.id}"></a>
                 </div>
             </div>
         </div>
 
-        <div class="col-sm">
-            <!--搜索操作-->
-
-            <div class="row">
-                <div class="col-sm-8 pr-0">
+        <div class="col-sm mr-0 pr-0">
+            <div class="row mr-0">
+                <div class="col-sm pr-2 pl-2">
                     <div class="block" id="articleList">
                         <h5 class="block-title">热门文章</h5>
                         <div class="article-item" th:each="article: ${articles}">
@@ -103,7 +101,7 @@
                             <p class="pr-2 article-item-remark" th:text="${article.remark}"></p>
                             <div class="article-item-info">
                                 <span th:text="${article.authorName}" class="mr-4"></span>
-                                发表于：<span th:text="${article.createDate}" class="mr-5"></span>
+                                <span th:text="${article.createDate}" class="mr-5"></span>
                                 阅读次数：<span th:text="${article.readCount}" class="mr-5"></span>
                                 点赞数：<span th:text="${article.praiseCount}"></span>
                             </div>
@@ -118,24 +116,24 @@
                     </div>
                 </div>
 
-                <div class="col-sm">
+                <div class="col-sm-4 d-none d-sm-block pl-0">
                     <div class="block mb-2" th:if="${null != myTopics && myTopics.size() != 0}">
                         <h5 class="block-title block-title-subscribed-topic">订阅专题</h5>
                         <div class="w-100"></div>
-                        <div class="article-item" th:each="myTopic: ${myTopics}">
-                            <a th:text="${myTopic.title}" class="article-item-title font-weight-bold"
+                        <div class="block-item-c" th:each="myTopic: ${myTopics}">
+                            <a th:text="${myTopic.title}" class="block-item-c-title font-weight-bold"
                                th:href="@{/topic/detail} + '?id=' + ${myTopic.id}"></a>
-                            <p class="article-item-remark" th:text="${myTopic.introduction}"></p>
+                            <p class="block-item-c-remark" th:text="${myTopic.introduction}"></p>
                         </div>
                     </div>
 
                     <div class="block">
                         <h5 class="block-title block-title-topic">热门专题</h5>
                         <div class="w-100"></div>
-                        <div class="article-item" th:each="topic: ${topics}">
-                            <a th:text="${topic.title}" class="article-item-title font-weight-bold"
+                        <div class="block-item-c" th:each="topic: ${topics}">
+                            <a th:text="${topic.title}" class="block-item-c-title font-weight-bold"
                                th:href="@{/topic/detail} + '?id=' + ${topic.id}"></a>
-                            <p class="article-item-remark" th:text="${topic.introduction}"></p>
+                            <p class="block-item-c-remark" th:text="${topic.introduction}"></p>
                         </div>
                     </div>
                 </div>

@@ -1,10 +1,8 @@
 package com.liuqi.tools.codelife.db.dao;
 
-import com.liuqi.tools.codelife.entity.User;
+import com.liuqi.tools.codelife.db.entity.User;
 import org.apache.ibatis.annotations.*;
-import org.springframework.security.core.parameters.P;
 
-import java.util.Collection;
 import java.util.List;
 
 /**

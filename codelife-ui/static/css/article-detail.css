@@ -1,0 +1,70 @@
+/*文章目录样式*/
+.article-catalog-title {
+    font-size: 0.8em;
+    line-height: 2em;
+    border-bottom: 1px solid #bbb;
+    color: #00008B;
+}
+
+.article-catalog-content a{
+    font-size: 0.8em;
+    line-height: 2em;
+    color: #4169E1;
+}
+
+#title {
+    line-height: 80px;
+}
+
+.article-block {
+    background: #fff;
+    box-shadow: 0px 0px 4px #ddd;
+    margin-right: 10px;
+}
+
+.article-subtitle {
+    font-size: 0.8em;
+}
+
+#content {
+    padding: 40px;
+    background: #fcfcfc;
+}
+
+#content pre{
+    border: 1px solid #eee;
+    padding: 10px;
+    background: #fefefe;
+}
+
+#content blockquote{
+    border: 1px solid #eeeeef;
+    border-left: 10px solid #ddd;
+    padding: 10px;
+    background: #f8f8f8;
+    color: #777;
+}
+
+#content table{
+    border: 1px solid gray;
+    padding: 0px;
+
+    margin: 20px;
+}
+
+#content table thead{
+    background: #efefef;
+}
+
+#content table th, td {
+    border: 1px solid gray;
+    min-width: 100px;
+}
+
+/*文章尾部栏，如点赞按钮、转发按钮等*/
+.article-detail-footer button {
+    cursor: pointer;
+}
+.article-detail-footer button:hover {
+    background: #bbb;
+}

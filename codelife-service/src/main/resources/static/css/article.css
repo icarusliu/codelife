@@ -5,34 +5,37 @@
 .article-tool-bar {
     border-bottom: 1px solid #efefef;
 }
-.article-list-group {
-    border-bottom: 1px solid #efffff;
+
+.article-item {
+    border-bottom: 1px dotted #efefef;
+    padding-top: 10px;
+    padding-left: 10px;
 }
 
-.article-list-group:nth-child(even){
-    background: #FaFFFF;
+.article-item:hover {
+    background: #f8f8f8;
 }
 
-.article-list-group:nth-child(odd){
-    background: #fff;
+.article-item-title {
+    font-size: 1em;
+    color: black;
+    margin-bottom: 10px;
 }
 
-.article-list-group:hover {
-    background: #f9f9f9;
-}
-
-.article-list-item-title {
-    color: #483D8B;
-}
-
-.article-list-item-remark {
-    color: #483D8B;
-    font-size: 0.9em;
-}
-
-.article-list-item-info {
-    color: #aaa;
+.article-item-remark {
     font-size: 0.8em;
+    margin-top: 4px;
+    color: gray;
+}
+
+.article-item-info {
+    font-size: 0.9em;
+    color: #bbb;
+    margin-top: 10px;
+}
+
+.article-item-info>span, .article-item-info>cite {
+    color: #3261A7;
 }
 
 .article-list-item-buttons .btn {

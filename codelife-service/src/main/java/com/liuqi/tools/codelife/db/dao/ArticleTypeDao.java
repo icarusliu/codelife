@@ -1,8 +1,6 @@
 package com.liuqi.tools.codelife.db.dao;
 
-import com.liuqi.tools.codelife.entity.Article;
-import com.liuqi.tools.codelife.entity.ArticleType;
-import com.liuqi.tools.codelife.entity.User;
+import com.liuqi.tools.codelife.db.entity.ArticleType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

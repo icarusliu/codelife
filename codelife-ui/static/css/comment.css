@@ -1,0 +1,26 @@
+.comment-list {
+    border-top: 1px solid #efefef;
+}
+
+.comment-list-item {
+    padding-top: 20px;
+    border-bottom: 1px dotted #efefef;
+}
+
+.comment-list-item-info {
+    font-size: 0.6em;
+    color: #bbb;
+}
+
+.comment-list-item-content {
+
+}
+
+.comment-list-item-buttons input {
+    font-size: 0.6em;
+    cursor: pointer;
+}
+
+.sub-comment-list {
+    background: #fafafa;
+}

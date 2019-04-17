@@ -5,10 +5,10 @@ import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.db.dao.ArticleDao;
 import com.liuqi.tools.codelife.db.dao.TopicDao;
 import com.liuqi.tools.codelife.db.dao.UserDao;
-import com.liuqi.tools.codelife.entity.*;
-import com.liuqi.tools.codelife.exceptions.ErrorCodes;
-import com.liuqi.tools.codelife.exceptions.ExceptionTool;
-import com.liuqi.tools.codelife.exceptions.RestException;
+import com.liuqi.tools.codelife.db.entity.*;
+import com.liuqi.tools.codelife.util.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.util.exceptions.ExceptionTool;
+import com.liuqi.tools.codelife.util.exceptions.RestException;
 import com.liuqi.tools.codelife.service.RoleService;
 import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.service.UserService;
@@ -372,6 +372,17 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public void deleteTopicArticle(Integer articleId) {
         topicDao.deleteAllArticleTopics(articleId);
+    }
+
+    /**
+     * 查找热门的专题
+     *
+     * @param i
+     * @return
+     */
+    @Override
+    public List<Topic> findHotTopics(int i) {
+        return topicDao.findHotTopic(i);
     }
 
     private static final Logger logger = LoggerFactory.getLogger(TopicServiceImpl.class);

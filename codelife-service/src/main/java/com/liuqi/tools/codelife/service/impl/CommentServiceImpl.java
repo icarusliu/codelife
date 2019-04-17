@@ -1,12 +1,12 @@
 package com.liuqi.tools.codelife.service.impl;
 
 import com.liuqi.tools.codelife.db.dao.CommentDao;
-import com.liuqi.tools.codelife.entity.Comment;
-import com.liuqi.tools.codelife.entity.CommentType;
-import com.liuqi.tools.codelife.entity.User;
-import com.liuqi.tools.codelife.exceptions.ErrorCodes;
-import com.liuqi.tools.codelife.exceptions.ExceptionTool;
-import com.liuqi.tools.codelife.exceptions.RestException;
+import com.liuqi.tools.codelife.db.entity.Comment;
+import com.liuqi.tools.codelife.db.entity.CommentType;
+import com.liuqi.tools.codelife.db.entity.User;
+import com.liuqi.tools.codelife.util.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.util.exceptions.ExceptionTool;
+import com.liuqi.tools.codelife.util.exceptions.RestException;
 import com.liuqi.tools.codelife.service.CommentService;
 import com.liuqi.tools.codelife.util.DateUtils;
 import org.slf4j.Logger;

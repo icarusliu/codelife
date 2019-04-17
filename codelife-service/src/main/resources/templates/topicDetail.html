@@ -108,7 +108,7 @@
             </div>
         </div>
 
-        <div class="col-sm topic-detail-panel mr-4">
+        <div class="col-sm topic-detail-panel mr-2">
         <!--上面专题信息-->
             <section class="row topic-detail-panel-info">
                 <h1 class="col-sm">
@@ -131,12 +131,12 @@
                     <h6 class="group-title article-group-title row mb-0">文章清单</h6>
                     <div class="row article-list-group pb-2 pt-2 mt-0" th:each="article: ${articles}">
                         <div class="col">
-                            <a th:text="${article.title}" class="article-list-item-title font-weight-bold"
+                            <a th:text="${article.title}" class="article-item-title font-weight-bold"
                                th:href="@{'/article/detail?id=' + ${article.id}}"></a>
-                            <div th:text="${article.remark}" class="mt-2 mb-2 article-list-item-remark"></div>
-                            <div class="article-list-item-info">
+                            <div th:text="${article.remark}" class="mt-2 mb-2 article-item-remark"></div>
+                            <div class="article-item-info">
                                 <span th:text="${article.authorName}" class="mr-4"></span>
-                                发表于：<cite th:text="${article.createDate}" class="mr-5"></cite>
+                                <cite th:text="${article.createDate}" class="mr-5"></cite>
                                 阅读次数：<cite th:text="${article.readCount}" class="mr-5"></cite>
                                 点赞数：<cite th:text="${article.praiseCount}"></cite>
                             </div>

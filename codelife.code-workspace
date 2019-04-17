@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "codelife-ui"
+		},
+		{
+			"path": "codelife-service\\src\\main\\resources\\static\\js\\bootstrap-4.0.0"
+		}
+	],
+	"settings": {}
+}

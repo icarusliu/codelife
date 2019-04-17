@@ -1,10 +1,10 @@
 package com.liuqi.tools.codelife.service.impl;
 
 import com.liuqi.tools.codelife.db.dao.RoleDao;
-import com.liuqi.tools.codelife.entity.Role;
-import com.liuqi.tools.codelife.exceptions.ErrorCodes;
-import com.liuqi.tools.codelife.exceptions.ExceptionTool;
-import com.liuqi.tools.codelife.exceptions.RestException;
+import com.liuqi.tools.codelife.db.entity.Role;
+import com.liuqi.tools.codelife.util.exceptions.ErrorCodes;
+import com.liuqi.tools.codelife.util.exceptions.ExceptionTool;
+import com.liuqi.tools.codelife.util.exceptions.RestException;
 import com.liuqi.tools.codelife.service.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
