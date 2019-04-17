@@ -1,0 +1,113 @@
+Axios发送数据与JQuery不一样，需要使用以下方式进行转换：　
+
+Axios.defaults.transformRequest = function (data) {
+  var result = new URLSearchParams(); 
+
+  for (var i in data) {
+    result.append(i, data[i]); 
+  }
+
+  return result; 
+}
+
+使用Vue前后端分离时，如果还是使用/login来登录，那么登录后不管成功失败都会跳转到某个地址去。  
+可以自定义一个Controller来处理登录事项，其中最关键的就是AuthenticationManager的获取  
+username = username.trim();
+password = password.trim();
+if ("".equals(username)) {
+    logger.error("Username cannot be empty!");
+    throw new RestException("用户名不能为空！");
+}
+
+UsernamePasswordAuthenticationToken authenticationToken =
+        new UsernamePasswordAuthenticationToken(username, password);
+authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+try {
+    Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+} catch (AuthenticationException ex) {
+    throw new RestException(ex.getMessage());
+} catch (Exception e) {
+    logger.error("Build authenticationManager failed!", e);
+    throw new RestException(e.getMessage());
+}
+
+return "succeed";
+
+此时由于Vue中axios未带Cookie信息，因此如果已经登录时请求服务器不会带Session信息会导致登录失效，需要这样配置：
+Axios.defaults.withCredentials = true
+同时服务器端做相应的配置 
+
+使用Vuex在组件中通信  
+一是创建在store  
+import Vue from 'vue'
+import Vuex from 'vuex'
+import axios from 'axios'
+
+Vue.use(Vuex)
+
+const store = new Vuex.Store({
+  state: {
+    loginUser: null
+  },
+  actions: {
+    updateLoginUser: function ({commit, state}) {
+      axios.post('/getLoginUser').then((resp) => {
+        commit('setLoginUser', resp.data)
+      })
+    }
+  },
+  mutations: {
+    setLoginUser: (state, loginUser) => {
+      state.loginUser = loginUser
+    }
+  },
+  getters: {
+    getLoginUser: state => {
+      return state.loginUser
+    }
+  },
+  modules: {
+  }
+})
+export default store
+
+其中，actions用于处理事件，事件分发使用$store.dispatch('updateLoginUser')来进行 
+state是数据  
+mutations是集中修改数据的地方  
+getters是获取数据
+获取数据通过以下方式进行：
+import { mapState } from 'vuex'
+
+export default {
+  name: 'mainNav',
+  computed: mapState([
+    'loginUser'
+  ])
+}
+
+vue监听route中的路径参数变化：
+ watch: {
+    '$route.params.forumId': (newValue, oldValue) => {
+      alert(newValue)
+    }
+  },
+
+父子组件传输数据：
+子组件：
+props: ['forumId'],
+watch: {
+    forumId: function (newValue, oldValue) {
+
+    }
+  },
+父组件
+<article-list class="col-sm" :forumId="forumId"></article-list>
+
+
+引入bootstrap:  
+npm install bootstrap --save-dev
+npm install --save popper.js

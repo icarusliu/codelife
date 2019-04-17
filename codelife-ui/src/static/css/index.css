@@ -1,0 +1,38 @@
+.content {
+    padding-top: 10px;
+}
+
+.login-form {
+    background: #fafafa;
+    border: 1px solid #f3f3f3;
+}
+
+/*网站介绍段落中的表格风格*/
+.desc-table {
+    border-color: #AFEEEE;
+}
+
+.desc-table th {
+    background: #F0F8FF;
+    text-align: center;
+}
+
+.desc-table th, .desc-table td {
+    padding: 4px;
+    padding-left: 10px;
+    min-width: 100px;
+    border-color: #AFEEEE;
+}
+
+/*面板标题背景色定制*/
+.block-title-forum {
+    background: #D6F9E0!important;
+}
+
+.block-title-topic {
+    background: #F0FFFF;
+}
+
+.block-title-subscribed-topic {
+    background: #FFFAF0;
+}
