@@ -27,13 +27,7 @@
 
         <!-- 文章内容  -->
         <div class="row">
-            <div class="col m-0 p-0" id="content">
-                <mavon-editor v-model="article.content"
-                    :toolbarsFlag=false
-                    defaultOpen="preview"
-                    :navigation="false"
-                    :subfield="false">
-                </mavon-editor>
+            <div class="col ml-1 mr-1" id="content" v-html="htmlContent">
             </div>
         </div>
 
@@ -103,12 +97,19 @@
 <script>
 import ajax from '@/components/Ajax.js'
 import Vue from 'vue'
-import mavonEditor from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
 import '@/static/css/article-detail.css'
 import '@/static/css/comment.css'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/googlecode.css'
+import showdown from 'showdown'
+import {processHtml} from '@/static/js/markdown.js'
 
-Vue.use(mavonEditor)
+Vue.directive('highlight', function (el) {
+  let blocks = el.querySelectorAll('pre code')
+  blocks.forEach((block) => {
+    hljs.highlightBlock(block)
+  })
+})
 
 export default {
   data () {
@@ -122,7 +123,8 @@ export default {
         type: 'article',
         id: this.articleId ? this.articleId : -1
       },
-      catalog: ''
+      catalog: '',
+      htmlContent: ''
     }
   },
   watch: {
@@ -148,8 +150,13 @@ export default {
         _this.article = data.article
         _this.comments = data.comments
 
-        let catalogHtml = processHtml(_this.article.content)
+        var html = data.article.content
+        html = _this.getConverter().makeHtml(html)
+        let result = processHtml(html)
+
+        let catalogHtml = result.catalog
         _this.catalog = '<h5 class="article-catalog-title">目录</h5>' + catalogHtml
+        _this.htmlContent = result.html
       })
 
       // 获取评论清单
@@ -170,78 +177,38 @@ export default {
       ajax.post('/comment/add', this.comment, data => {
         console.log(data)
       })
+    },
+
+    /**
+     * 获取MD转换器
+     */
+    getConverter: () => {
+      return new showdown.Converter({extensions: (function () {
+        function htmlunencode (text) {
+          return (
+            text.replace(/&amp/g, '&').replace(/&lt/g, '<').replace(/&gt/g, '>')
+          )
+        }
+        return [
+          {
+            type: 'output',
+            filter: function (text, converter, options) {
+              //  use new shodown's regexp engine to conditionally parse codeblocks
+              let left = '<pre><code\\b[^>]*>'
+              let right = '</code></pre>'
+              let flags = 'g'
+              let replacement = function (wholeMatch, match, left, right) {
+                //  unescape match to prevent double escaping
+                match = htmlunencode(match)
+                return left + hljs.highlightAuto(match).value + right
+              }
+              return showdown.helper.replaceRecursiveRegExp(text, replacement, left, right, flags)
+            }
+          }
+        ]
+      })()})
     }
   }
-}
-
-/**
- * 判断指定行是否是目录
- * 以<h数字>开头且</h数字>结尾的行
- **/
-function isCatalog (line) {
-  // 至少15个字符才是标题行
-  if (line < 15) {
-    return false
-  }
-
-  // 至少要包含id=""这样的字符才是标题行
-  if (line.indexOf('id="') === -1) {
-    return false
-  }
-
-  return /<h\d.*>.*<\/h\d+>/.test(line)
-}
-
-/**
- * 获取标题行的ID及标题内容
- **/
-export function processCatalog (line) {
-  var result = Object()
-
-  // 获取标题的层级，主要是h后的数字，如<h6 id="test">...</h6>
-  // 取第三位的数字就可以了
-  var level = line.substring(2, 3)
-  result.level = level
-
-  // 先去掉第一个引号前的内容
-  line = line.substring(line.indexOf('"') + 1)
-
-  // 获取剩下的第一个引号前的内容为ID
-  result.id = line.substring(0, line.indexOf('"'))
-
-  // 获取>与<之间的内容
-  line = />.*</.exec(line)
-  line = line.toString()
-  line = line.substring(1, line.length - 1)
-
-  result.title = line
-
-  return result
-}
-
-/**
- * 获取并组装目录
- **/
-function processHtml (content) {
-  // 1. 章节转换 #开头的部分 其中#转换成h1，##转换成h2等；
-  var lines = content.split('\n')
-  var catalogHtml = '' // 存储目录
-
-  for (var j in lines) {
-    var line = lines[j]
-
-    // 如果是目录
-    if (isCatalog(line)) {
-      // 是目录时生成目录的HTML
-      var titleObject = processCatalog(line)
-      for (var i = 1; i < titleObject.level; i++) {
-        catalogHtml += '&nbsp &nbsp '
-      }
-      catalogHtml += '<a href="#"' + titleObject.id + '>' + titleObject.title + '</a></br>'
-    }
-  }
-
-  return catalogHtml
 }
 </script>
 

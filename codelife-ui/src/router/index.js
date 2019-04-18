@@ -39,6 +39,7 @@ Axios.defaults.transformRequest = function (data) {
 }
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
