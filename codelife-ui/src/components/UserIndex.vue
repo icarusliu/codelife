@@ -45,11 +45,10 @@
             </div>
         </div>
 
-        <div class="right-content col-sm mr-2">
+        <div class="right-content col-sm mr-0">
             <div class="article-tool-bar row text-right m-0">
                 <div class="btn btn-link"
-                     th:if="${#authentication.name != 'anonymousUser'
-                        && userId == #authentication.details.user.id}">
+                     v-if="loginUser.id === userId">
                     <router-link tag="a" target="_blank" :to="{name: 'newArticle', params: {articleId: -1}}">新建</router-link>
                 </div>
             </div>

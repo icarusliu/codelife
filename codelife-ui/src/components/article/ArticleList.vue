@@ -8,11 +8,19 @@
               :to="{name: 'articleDetail', params: {id: article.id}}">{{ article.title }}</router-link>
 
           <p class="article-item-remark">{{article.remark}}</p>
-          <div class="article-item-info">
+          <div class="row ml-0 mr-0">
+            <div class="article-item-info col-sm">
               <span class="mr-4">{{article.authorName}}</span>
               发表于：<span class="mr-5">{{article.createDate}}</span>
               阅读次数：<span class="mr-5">{{article.readCount}}</span>
               点赞数：<span>{{article.praiseCount}}</span>
+            </div>
+            <div class="article-list-item-buttons col-sm-2 text-right">
+              <div class="btn btn-link mb-2 mr-2" @click="editArticle(article.id)"
+                v-if="null != loginUser && article.authorID === loginUser.id">
+                编辑
+              </div>
+            </div>
           </div>
       </div>
     </div>
@@ -27,12 +35,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import axios from 'axios'
 import $ from 'jquery'
 
 export default {
   props: ['forumId'],
   name: 'articleList',
+  computed: mapState([
+    'loginUser'
+  ]),
   data () {
     return {
       articles: [],
@@ -87,6 +99,11 @@ export default {
             alert('请求服务器异常，异常信息：[' + error + ']')
           }
         })
+    },
+    editArticle: function (id) {
+      // 打开编辑界面
+      let route = this.$router.resolve({name: '/'})
+      window.open(route.href + 'newArticle/' + id, '_blank')
     }
   },
   created () {

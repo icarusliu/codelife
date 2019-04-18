@@ -82,6 +82,7 @@ export default {
       // 退出登录
       axios.post('/customLogout').then((resp) => {
         this.$store.dispatch('updateLoginUser')
+        window.open('/', '_self')
       })
     },
     login: function () {
