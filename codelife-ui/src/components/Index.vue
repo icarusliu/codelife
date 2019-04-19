@@ -1,9 +1,9 @@
 <template>
     <div>
         <!-- <login class="col-sm-2"></login> -->
-        <div class="block col-sm ml-1">
-          <h5 class="block-title mb-0">热门文章</h5>
-          <article-list class="col-sm p-0" :forumId="-1" :title="title"></article-list>
+        <div class="block col-sm">
+          <h5 class="row block-title mb-0 mr-0 ml-0">热门文章</h5>
+          <article-list class="mr-0 ml-0"  :forumId="-1" :title="title"></article-list>
         </div>
         <div class="col-sm-3 ml-1 mr-0 pl-0 pr-0">
           <div class="block">

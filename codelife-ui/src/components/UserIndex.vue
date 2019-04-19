@@ -53,11 +53,8 @@
                 </div>
             </div>
 
-            <article-list class="row" :forumId="-1">
+            <article-list :forumId="-1">
             </article-list>
-            <!-- <pager class="page-bar row mt-2 justify-content-center pt-2" :nowPage="nowPage" :pageSize="pageSize"
-                :url="url" :params="{userId: userId, typeId: typeId}" :pages="pages">
-            </pager> -->
         </div>
     </div>
 </template>
