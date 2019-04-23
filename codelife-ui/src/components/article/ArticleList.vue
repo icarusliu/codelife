@@ -25,11 +25,11 @@
             </div>
         </div>
       </div>
-      <div class="article-item text-center hidden" id="loadingInfo" v-if="isLoading">
+      <div class="article-item text-center hidden" id="loadingInfo" v-if="isLoading && !noPage">
           <p class="article-item-remark">加载中...</p>
       </div>
 
-      <div class="article-item text-center hidden" id="noMoreDataInfo" v-if="noMoreData">
+      <div class="article-item text-center hidden" id="noMoreDataInfo" v-if="noMoreData && !noPage">
         <p class="article-item-remark">无更多数据</p>
       </div>
     </div>
@@ -42,7 +42,7 @@ import axios from 'axios'
 import $ from 'jquery'
 
 export default {
-  props: ['forumId'],
+  props: ['forumId', 'noPage', 'topicId'],
   name: 'articleList',
   computed: mapState([
     'loginUser'
@@ -51,7 +51,7 @@ export default {
     return {
       articles: [],
       nowPage: 1,
-      pageSize: 12,
+      pageSize: 20,
       noMoreData: false,
       isLoading: false
     }
@@ -72,6 +72,10 @@ export default {
       var params = {nowPage: this.nowPage, pageSize: this.pageSize}
       if (this.forumId !== -1) {
         params.forumId = this.forumId
+      } 
+
+      if (this.topicId && this.topicId !== -1) {
+        params.topicId = this.topicId
       }
 
       axios.post('/article/getForExplorer', params)

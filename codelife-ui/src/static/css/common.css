@@ -139,7 +139,7 @@ body {
     margin-bottom: 0px!important;
 }
 
-.block-item-a {
+.block-item-a,.block-item {
     margin-left: 10px;
     line-height: 30px;
     font-size: 0.8em;

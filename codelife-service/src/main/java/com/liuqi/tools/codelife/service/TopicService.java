@@ -24,11 +24,12 @@ public interface TopicService {
      * 获取用户未订阅的所有开放的专题
      *
      * @param user
+     * @param key
      * @param nowPage
      * @param pageSize
      * @return
      */
-    PageInfo<Topic> findUserNotSubscribed(User user, int nowPage, int pageSize);
+    PageInfo<Topic> findUserNotSubscribed(User user, String key, int nowPage, int pageSize);
     
     /**
      * 获取专题下的所有文章清单

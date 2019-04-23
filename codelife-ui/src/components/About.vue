@@ -106,5 +106,5 @@ export default {
 </script>
 
 <style>
-@import url('../../static/css/index.css');
+@import url('../static/css/index.css');
 </style>

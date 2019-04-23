@@ -3,6 +3,7 @@ package com.liuqi.tools.codelife.web.rest;
 import com.liuqi.tools.codelife.db.entity.Article;
 import com.liuqi.tools.codelife.db.entity.CommentType;
 import com.liuqi.tools.codelife.service.FileInfoService;
+import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
 import com.liuqi.tools.codelife.service.ArticleService;
 import com.liuqi.tools.codelife.service.CommentService;
@@ -29,6 +30,9 @@ import static com.liuqi.tools.codelife.util.AppConstants.MODULE_ARTICLE;
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private TopicService topicService;
     
     @Autowired
     private CommentService commentService;
@@ -39,12 +43,15 @@ public class ArticleController {
     @PostMapping("/getForExplorer")
     @ResponseBody
     public List<Article> getForExplorer(@RequestParam(value = "forumId", required = false) Integer forumId,
+                                        @RequestParam(value = "topicId", required = false) Integer topicId,
                                         @RequestParam("nowPage") Integer nowPage,
                                                 @RequestParam("pageSize") Integer pageSize) {
-        if (null == forumId) {
+        if (null == forumId && null == topicId) {
             return articleService.findForExplorer(nowPage, pageSize).getList();
-        } else {
+        } else if (null == topicId) {
             return articleService.findForExplorer(forumId, nowPage, pageSize).getList();
+        } else {
+            return topicService.getTopicArticles(topicId);
         }
     }
     

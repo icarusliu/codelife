@@ -3,10 +3,11 @@
   <div>
     <div class="col">
       <!--搜索操作-->
-      <form method="get"
+      <form method="get" @submit.prevent="search"
             class="row m-4">
         <input type="text"
-              placeholder="搜索专题" name="key" required
+              placeholder="搜索专题" name="key"
+              v-model="searchKey"
               class="form-control col-md-4 mr-md-2 offset-md-3"/>
         <input type="submit" value="搜索"
             class="btn btn-primary"/>
@@ -14,20 +15,40 @@
 
       <div class="row">
         <div class="col-sm-3 d-none d-sm-block">
-          <div class="block row ml-0 mr-0">
-            <font class="block-title col-sm">热门专题</font>
+          <div class="block ml-0 mr-0 mb-1" v-if="null != loginUser">
+            <h5 class="block-title">订阅专题</h5>
+            <div class="col-100"></div>
+            <div class="block-content">
+              <div class="block-item-a" v-for="topic in myTopics" :key="topic.id">
+                <router-link :to="{name: 'myTopics', params: {topicId: topic.id}}">{{topic.title}}</router-link>
+              </div>
+            </div>
+          </div>
+
+          <div class="block ml-0 mr-0">
+            <h5 class="block-title">热门专题</h5>
+            <div class="col-100"></div>
+            <div class="block-content">
+              <div class="block-item-a" v-for="topic in hotTopics" :key="topic.id">
+                <router-link :to="{name: 'myTopics', params: {topicId: topic.id}}">{{topic.title}}</router-link>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="col-sm">
+          <div class="row" v-if="topics === null || topics.length === 0">
+            无数据
+          </div>
           <div class="row topic-block" v-for="topic in topics" :key="topic.id">
-            <router-link class="col-sm-12 topic-block-title" :to="{name: 'topicExplorer'}">{{ topic.title }}</router-link>
+            <router-link class="col-sm-12 topic-block-title" :to="{name: 'myTopics', params: {topicId: topic.id}}">
+              {{ topic.title }}
+              </router-link>
 
-            <img class="col-sm-4 p-0" v-if="topic.img != ''"
+            <img class="col-sm-3 p-0" v-if="topic.img != ''"
                 :src="baseUrl + 'topic/getImg' + '?fileName=' + topic.img"/>
 
-            <img class="col-sm-4 p-0" v-if="topic.img == ''"
-                height="200px"/>
+            <img class="col-sm-3 p-0" v-if="topic.img == ''"/>
 
             <div class="col-sm m-0">
               <p>{{topic.introduction}}</p>
@@ -55,7 +76,9 @@ export default {
     return {
       topics: [], // 未订阅的专题清单
       myTopics: [], // 我订阅的专题清单
-      baseUrl: axios.defaults.baseURL
+      hotTopics: [], // 热门专题清单
+      baseUrl: axios.defaults.baseURL,
+      searchKey: ''
     }
   },
   computed: mapState([
@@ -68,10 +91,14 @@ export default {
     refreshData: function () {
       var that = this
 
-      axios.post('/topic/getExplorerData').then(function (resp) {
+      axios.post('/topic/getExplorerData', {key: this.searchKey}).then(function (resp) {
         that.topics = resp.data.topics
         that.myTopics = resp.data.myTopics
+        that.hotTopics = resp.data.hotTopics
       })
+    },
+    search: function () {
+      this.refreshData()
     }
   }
 }

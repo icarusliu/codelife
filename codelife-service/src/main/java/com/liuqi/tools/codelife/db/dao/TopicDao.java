@@ -105,10 +105,11 @@ public interface TopicDao {
     /**
      * 获取用户未订阅的所有开放的专题
      *
-     * @param user
-     * @return
+     * @param userId    用户编号
+     * @param key       关键字
+     * @return          符合条件专题清单
      */
-    List<Topic> findUserNotSubscribed(User user);
+    List<Topic> findUserNotSubscribed(@Param("userId") Integer userId, @Param("key") String key);
     
     /**
      * 更新专题状态

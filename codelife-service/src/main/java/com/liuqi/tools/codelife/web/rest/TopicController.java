@@ -15,13 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.OutputStream;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 专题控制器
@@ -47,24 +45,25 @@ public class TopicController {
      * 获取REST模式下专题浏览页面需要的数据
      */
     @PostMapping("/getExplorerData")
-    public Map<String, Object> getExplorerData() {
+    public Map<String, Object> getExplorerData(@RequestParam(value = "key", required = false) String key) {
         //获取用户订阅专题及其更新的文章
         User loginUser = authenticationService.getLoginUser();
         Collection<Topic> myTopics;
         if (null != loginUser) {
             myTopics = topicService.getUserTopics(loginUser.getId());
         } else {
-            myTopics = Collections.EMPTY_LIST;
+            myTopics = new ArrayList<>(0);
         }
-        if (0 != myTopics.size()) {
-            myTopics.forEach(topic -> topic.setArticles(topicService.getTopicArticles(topic.getId())));
-        }
+
+        // 获取热门专题
+        List<Topic> hotTopics = topicService.findHotTopics(5);
     
         //获取所有的未订阅并且类型是开放的专题，私有的专题不能直接展现
-        List<Topic> topics = topicService.findUserNotSubscribed(loginUser, 1, 20).getList();
+        List<Topic> topics = topicService.findUserNotSubscribed(loginUser, key, 1, 20).getList();
         return MapBuilder.of()
                 .put("myTopics", myTopics)
                 .put("topics", topics)
+                .put("hotTopics", hotTopics)
                 .build();
     }
     
@@ -76,25 +75,45 @@ public class TopicController {
     @PostMapping("/getForIndex")
     public Map<String, Object> getForIndex() {
         //获取用户订阅专题及其更新的文章
+        Collection<Topic> myTopics = getMyTopics();
         User loginUser = authenticationService.getLoginUser();
-        Collection<Topic> myTopics;
-        if (null != loginUser) {
-            myTopics = topicService.getUserTopics(loginUser.getId());
-        } else {
-            myTopics = Collections.EMPTY_LIST;
-        }
-        if (0 != myTopics.size()) {
-            myTopics.forEach(topic -> topic.setArticles(topicService.getTopicArticles(topic.getId())));
-        }
     
         //获取所有的未订阅并且类型是开放的专题，私有的专题不能直接展现
-        List<Topic> topics = topicService.findUserNotSubscribed(loginUser, 1, 20).getList();
+        List<Topic> topics = topicService.findUserNotSubscribed(loginUser, "", 1, 20).getList();
     
         return MapBuilder.of().put("myTopic", myTopics)
                 .put("topics", topics)
                 .build();
     }
-    
+
+    /**
+     * 获取登录用户订阅的专题清单
+     * @return  登录用户订阅的专题清单，如果未登录返回为空的List
+     */
+    private Collection<Topic> getMyTopics() {
+        User loginUser = authenticationService.getLoginUser();
+        Collection<Topic> myTopics;
+        if (null != loginUser) {
+            myTopics = topicService.getUserTopics(loginUser.getId());
+        } else {
+            myTopics = new ArrayList<>(0);
+        }
+        if (0 != myTopics.size()) {
+            myTopics.forEach(topic -> topic.setArticles(topicService.getTopicArticles(topic.getId())));
+        }
+
+        return myTopics;
+    }
+
+    @GetMapping("/getForDetail")
+    public Map<String, Object> getForDetail(@RequestParam("id") Integer id) {
+        return MapBuilder.of()
+                .put("topic", topicService.findById(id))
+                .put("hotTopics", topicService.findHotTopics(6))
+                .put("myTopics", getMyTopics())
+                .build();
+    }
+
     /**
      * 获取专题下的文章
      *
@@ -165,8 +184,10 @@ public class TopicController {
         if (null != loginUser) {
             myTopics = topicService.getUserTopics(loginUser.getId());
         } else {
-            myTopics = Collections.EMPTY_LIST;
+            myTopics = new ArrayList(0);
         }
+
+        List<Topic> hotTopics = topicService.findHotTopics(5);
     
         //如果专题编号未传入，且用户已经登录，则获取用户订阅的第一个专题进行展示
         Topic topic = null;
@@ -176,8 +197,11 @@ public class TopicController {
                 topic = topics.get(0);
                 topicId = topic.getId();
             }
-        } else {
+        } else if (null != topicId){
             topic = topicService.findById(topicId);
+        } else if (!CollectionUtils.isEmpty(hotTopics)){
+            topic = hotTopics.get(0);
+            topicId = topic.getId();
         }
     
         //获取专题订阅用户清单
@@ -185,7 +209,7 @@ public class TopicController {
         if (null != topicId) {
             userList = topicService.getTopicUsers(topicId);
         } else {
-            userList = Collections.EMPTY_LIST;
+            userList = new ArrayList(0);
         }
     
         //获取专题文章清单
@@ -193,7 +217,7 @@ public class TopicController {
         if (null != topicId) {
             articleList = topicService.getTopicArticles(topicId);
         } else {
-            articleList = Collections.EMPTY_LIST;
+            articleList = new ArrayList(0);
         }
     
         return MapBuilder.of()
@@ -201,6 +225,7 @@ public class TopicController {
                 .put("articles", articleList)
                 .put("myTopics", myTopics)
                 .put("userList", userList)
+                .put("hotTopics", hotTopics)
                 .build();
     }
 

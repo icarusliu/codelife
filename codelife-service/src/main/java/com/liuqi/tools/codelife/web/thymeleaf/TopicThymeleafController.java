@@ -57,7 +57,7 @@ public class TopicThymeleafController {
         List<Topic> hotTopics = topicService.findHotTopics(5);
 
         //获取所有的未订阅并且类型是开放的专题，私有的专题不能直接展现
-        List<Topic> topics = topicService.findUserNotSubscribed(loginUser, 1, 20).getList();
+        List<Topic> topics = topicService.findUserNotSubscribed(loginUser, "", 1, 20).getList();
 
         return ModelAndViewBuilder.of("topics")
                 .setData("myTopics", myTopics)
