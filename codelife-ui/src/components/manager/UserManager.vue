@@ -1,19 +1,20 @@
 <!-- 专题管理界面 -->
 <template>
   <div class="row">
-    <data-table class="col"
+    <data-table 
+      class="col"
       :columns="columns"
       :dataUrl="dataUrl"
       :buttons="buttons"
-      :paged=false>
+      :paged="false">
     </data-table>
   </div>
 </template>
 
 <script>
-import DataTable from '@/components/DataTable'
-import ajax from '@/components/Ajax.js'
+import DataTable from '@/components/common/DataTable'
 import { mapState } from 'vuex'
+import axios from 'axios'
 
 export default {
   name: 'systemUserManager',
@@ -22,7 +23,7 @@ export default {
   ]),
   data () {
     return {
-      dataUrl: '/userManager/getAll',
+      dataUrl: '/manager/user/getAll',
       columns: [
         {
           title: '用户名',
@@ -64,7 +65,8 @@ export default {
         }
       ],
       buttons: [
-      ]
+      ],
+      refreshTable: null
     }
   },
   created () {
@@ -73,20 +75,29 @@ export default {
     DataTable
   },
   methods: {
-    approve: function (item) {
+    approve: function (item, refreshTable) {
+      this.refreshTable = refreshTable
+
       // 审批通过
-      ajax.post('/userManager/approve', {id: item.id}, () => {
-        item.status = 'NORMAL'
+      let self = this
+      axios.post('/manager/user/approve', {id: item.id}).then(function (resp) {
+        self.refreshTable && self.refreshTable()
       })
     },
-    unlock: function (item) {
-      ajax.post('/userManager/unlock', {id: item.id}, () => {
-        item.status = 'NORMAL'
+    unlock: function (item, refreshTable) {
+      this.refreshTable = refreshTable
+
+      let self = this
+      axios.post('/manager/user/unlock', {id: item.id}).then(function (resp) {
+        self.refreshTable && self.refreshTable()
       })
     },
-    unregister: function (item) {
-      ajax.post('/userManager/unregister', {id: item.id}, () => {
-        item.status = 'CANCEL'
+    unregister: function (item, refreshTable) {
+      this.refreshTable = refreshTable
+
+      let self = this
+      axios.post('/manager/user/unregister', {id: item.id}).then(function (resp) {
+        self.refreshTable && self.refreshTable()
       })
     }
   }

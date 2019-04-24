@@ -5,14 +5,15 @@
       :columns="columns"
       :dataUrl="dataUrl"
       :buttons="buttons"
-      :paged=false>
+      :paged="false">
     </data-table>
   </div>
 </template>
 
 <script>
-import DataTable from '@/components/DataTable'
+import DataTable from '@/components/common/DataTable'
 import { mapState } from 'vuex'
+import axios from 'axios'
 
 export default {
   name: 'systemTopicManager',
@@ -21,7 +22,7 @@ export default {
   ]),
   data () {
     return {
-      dataUrl: '/system/topicManager/getAll',
+      dataUrl: '/topic/manager/getAll',
       columns: [
         {
           id: 1,
@@ -63,15 +64,10 @@ export default {
         },
         {
           id: 7,
-          title: '封面',
-          field: 'img',
-          width: 100
-        },
-        {
-          id: 8,
           title: '操作',
           buttons: [
-            {value: '重命名', event: this.renameType}
+            {value: '删除', event: this.delete},
+            {value: '编辑', event: this.edit}
           ],
           width: 100
         }
@@ -89,8 +85,22 @@ export default {
   methods: {
     add: function () {
       // 打开新增界面
+      let route = this.$router.resolve({name: '/'})
+      window.open(route.href + 'topic/topicEdit/-1', '_blank')
     },
-    renameType: function (item) {
+    delete: function (item, refreshTable) {
+      if (!confirm('确定删除专题？')) {
+        return
+      }
+
+      axios.post('/topic/manager/delete', {id: item.id}).then(resp => {
+        refreshTable && refreshTable()
+      })
+    },
+    edit: function (item) {
+      // 打开编辑界面
+      let route = this.$router.resolve({name: '/'})
+      window.open(route.href + 'topic/topicEdit/' + item.id, '_blank')
     }
   }
 }

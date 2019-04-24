@@ -10,8 +10,8 @@
       </my-dialog>
 -->
 <template>
-  <div class="dialog container">
-    <div class="row justify-content-center" style="height: 100%;">
+  <div class="dialog" id="mask">
+    <div class="row justify-content-center" id="container">
       <div class="content col-sm-4 align-self-center">
         <div class="header row pb-1">
           <b class="col-sm text-left">{{ title }}</b>
@@ -20,7 +20,7 @@
           <slot class="col"></slot>
         </div>
         <div class="row justify-content-end mr-2 mb-2">
-          <input type='button' class='btn mr-2' value='关闭' @click="$emit('close')"/>
+          <input type='button' class='btn mr-2' value='关闭' @click="close"/>
           <input type='button' class='btn btn-primary' value='确定' v-on:click="submit"/>
         </div>
       </div>
@@ -29,13 +29,31 @@
 </template>
 
 <script>
+import $ from 'jquery'
+
 export default {
-  props: ['title', 'submit'],
+  props: ['title', 'submit', 'show'],
   data () {
     return {
     }
   },
+  watch: {
+    show: function (newValue, oldValue) {
+      alert(newValue)
+    }
+  },
   methods: {
+    close: function () {
+      this.$emit('close')
+    },
+    init: function () {
+      let height = $('#container').height()
+      let maskHeight = $('#mask').height()
+      $('#container').css('margin-top', (maskHeight - height) / 2)
+    }
+  },
+  mounted () {
+    this.init()
   }
 }
 </script>
