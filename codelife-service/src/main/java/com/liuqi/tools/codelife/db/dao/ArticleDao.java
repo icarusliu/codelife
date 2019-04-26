@@ -154,4 +154,13 @@ public interface ArticleDao {
      * @return  热闹文章清单
      */
     List<Article> findHotArticles();
+
+    /**
+     * 查找不在专题中的文章清单
+     * @param topicId   专题
+     * @param key       关键字
+     * @return          文章清单
+     */
+    List<Article> findNotInTopic(@Param("topicId") Integer topicId,
+                                 @Param("key") String key);
 }

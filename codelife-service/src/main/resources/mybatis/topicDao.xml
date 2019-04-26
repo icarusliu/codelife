@@ -14,9 +14,9 @@
         <result property="type" column="type" jdbcType="INTEGER"
                 typeHandler="com.liuqi.tools.codelife.db.dao.typehandler.TopicTypeTypeHandler"/>
         <association property="creator" javaType="User" column="creator"
-                     select="com.liuqi.tools.codelife.db.dao.UserDao.findById"></association>
+                     select="com.liuqi.tools.codelife.db.dao.UserDao.findById"/>
         <association property="admin" javaType="User" column="admin"
-                     select="com.liuqi.tools.codelife.db.dao.UserDao.findById"></association>
+                     select="com.liuqi.tools.codelife.db.dao.UserDao.findById"/>
         <collection property="articles" column="id" select="com.liuqi.tools.codelife.db.dao.ArticleDao.findByTopicForExplorer">
         </collection>
     </resultMap>

@@ -49,7 +49,7 @@
             <div class="w-100 mb-2"></div>
             <p class="col-sm-8">{{topic.introduction}}</p>
             <img class="col-sm-3" height="200px"
-                  :src="'/topic/getImg?fileName=' + topic.img" id="img"/>
+                  :src="baseUrl + 'topic/getImg?fileName=' + topic.img" id="img"/>
         </section>
 
         <!--下面文章清单-->
@@ -87,7 +87,8 @@ export default {
       topic: null, // 显示的专题
       articles: [], // 显示的专题的文章清单
       userList: [], // 显示的专题的订阅用户清单
-      topicId: null // 显示的专题
+      topicId: null, // 显示的专题
+      baseUrl: axios.defaults.baseURL
     }
   },
   components: {
