@@ -102,6 +102,14 @@ public interface ArticleService {
      * @throws RestException
      */
     Article findById(int id) throws RestException;
+
+    /**
+     * 查找不在专题中的文章清单
+     * @param topicId   专题编号
+     * @param key       关键字
+     * @return          不在指定专题中的文章清单
+     */
+    PageInfo<Article> findNotInTopic(Integer topicId, String key, int nowPage, int pageSize);
     
     /**
      * 保存文章

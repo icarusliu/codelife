@@ -29,6 +29,10 @@ Axios.defaults.withCredentials = true
 
 // 转换数据成标准格式
 Axios.defaults.transformRequest = function (data) {
+  if (data instanceof FormData) {
+    return data
+  }
+
   var result = new URLSearchParams()
 
   for (var i in data) {
@@ -39,6 +43,7 @@ Axios.defaults.transformRequest = function (data) {
 }
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',

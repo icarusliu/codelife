@@ -99,6 +99,18 @@ body {
     box-shadow: 1px 1px 5px gray;
 }
 
+.right-content-toolbar {
+    border-bottom: 1px solid #efefef;
+    line-height: 40px;
+    height: 40px;
+    font-size: 12px;
+}
+
+.right-content-title {
+    font-size: 14px;
+    color: #000;
+}
+
 /*底部*/
 .footer {
     border-top: 1px solid #ddd;
@@ -127,7 +139,7 @@ body {
     margin-bottom: 0px!important;
 }
 
-.block-item-a {
+.block-item-a,.block-item {
     margin-left: 10px;
     line-height: 30px;
     font-size: 0.8em;

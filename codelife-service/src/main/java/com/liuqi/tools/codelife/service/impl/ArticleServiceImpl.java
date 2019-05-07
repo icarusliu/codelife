@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -296,6 +295,18 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public PageInfo<Article> findHotArticles(int nowPage, int pageSize) {
         return PageInfo.of(articleDao.findHotArticles());
+    }
+
+    /**
+     * 查找不在专题中的文章清单
+     *
+     * @param topicId 专题编号
+     * @param key     关键字
+     * @return 不在指定专题中的文章清单
+     */
+    @Override
+    public PageInfo<Article> findNotInTopic(Integer topicId, String key, int nowPage, int pageSize) {
+        return PageInfo.of(articleDao.findNotInTopic(topicId, key));
     }
 
     private static final Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);

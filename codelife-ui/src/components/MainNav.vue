@@ -27,10 +27,10 @@
                         class="nav-link text-center font-weight-bold">个人主页</router-link>
                 </li>
 
-                <li class="nav-item" v-if="null != loginUser && '' != loginUser && !loginUser.systemAdmin">
+                <!-- <li class="nav-item" v-if="null != loginUser && '' != loginUser && !loginUser.systemAdmin">
                     <router-link class="nav-link text-center font-weight-bold"
                         :to="{name: 'myTopics', params: {topicId: -1}}">我的专题</router-link>
-                </li>
+                </li> -->
 
                 <li class="nav-item"
                     v-if="null == loginUser || !loginUser.systemAdmin">
@@ -51,9 +51,14 @@
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
-                <div style="font-size: 0.8em; " v-if="null != loginUser && '' != loginUser">
-                    登录用户：<font class="text-primary mr-4">{{ loginUser.realName }}</font>
-                    <a href="#" @click="logout">注销</a>
+                <router-link tag="a" target="_blank" v-if="null != loginUser" class="btn btn-sm btn-link mr-4" 
+                    style="color: rgb(151, 229, 255); line-height: 24px; font-size: 0.8em;" :to="{name: 'newArticle', params: {articleId: -1}}">
+                    <img src="/static/icons/write.png" width="15px" height="15px">写文章  
+                </router-link>
+
+                <div style="font-size: 0.8em; color: #fff;" v-if="null != loginUser && '' != loginUser">
+                    登录用户：<font class="mr-4" style="color: #fc3962;">{{ loginUser.realName }}</font>
+                    <a href="#" @click="logout" style="color: rgb(245, 222, 222);">注销</a>
                 </div>
 
                  <div v-if="null == loginUser || '' == loginUser" style="font-size: 0.8em; ">
@@ -82,6 +87,7 @@ export default {
       // 退出登录
       axios.post('/customLogout').then((resp) => {
         this.$store.dispatch('updateLoginUser')
+        window.open('/', '_self')
       })
     },
     login: function () {

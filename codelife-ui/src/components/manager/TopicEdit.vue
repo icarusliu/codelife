@@ -9,35 +9,35 @@
         <div class="w-100"></div>
 
         <label class="col-sm-1 text-right">标题：</label>
-        <input type="text" class="col-sm-6 form-control" id="title"
-               v-model="title"/>
+        <input type="text" class="col-sm-6 form-control"
+               v-model="topic.title"/>
 
         <div class="w-100 mb-2"></div>
         <label class="col-sm-1 text-right">介绍：</label>
-        <textarea class="col-sm-6 form-control" id="introduction"
-                  v-model="introduction"/>
+        <textarea class="col-sm-6 form-control"
+                  v-model="topic.introduction"/>
 
         <div class="w-100 mb-2"></div>
         <label class="col-sm-1 text-right">类型：</label>
-        <select class="col-sm-6 form-control" id="type" v-model="topicType">
+        <select class="col-sm-6 form-control" v-model="selTopicType">
             <option v-for="(type, index) in topicTypes" :key="index" :value="index">{{type}}</option>
         </select>
 
         <div class="w-100 mb-2"></div>
         <label class="col-sm-1 text-right">管理员：</label>
-        <input class="col-sm-2 form-control" id="admin"
-                :value="topicAdminName"
+        <input class="col-sm-2 form-control"
+                :value="topic.topicAdminName"
                 type="text" readonly/>
         <button class="btn btn-secondary ml-2"
-                type="button" @click="showSetAdminDialog = true">变更</button>
+                type="button" @click="showSetAdminDialog">变更</button>
 
         <div class="w-100 mb-2"></div>
         <label class="col-sm-1 text-right">封面：</label>
-        <img class="col-sm-2" height="100px"
-                :src="null != topic ? topic.img : ''" id="img"/>
+        <img class="col-sm-2" height="100px" v-if="null != topic && null != topic.img"
+                :src="baseUrl + 'topic/getImg?fileName=' + topic.img" id="img"/>
         <input type="file" id="imgInput"
                accept="image/jpg,image/png"
-               onchange="checkFileSize(this); "
+               ref="imgFile"
                class="form-control col-sm-2"/>
 
         <div class="w-100 mb-2"></div>
@@ -49,27 +49,71 @@
         </div>
     </form>
 
-    <my-dialog v-if="showSetAdminDialog"
-        @close="showSetAdminDialog=false"
+    <my-dialog v-if="adminDialogShow"
+        @close="adminDialogShow=false"
         :submit="setAdmin"
-        title="test" class="container-fluid"
-        id="setAdminDialog">
-        <div class="row">
-            <input class="col-sm form-control mr-2" type="text" id="adminKeyWord"
+        title="选择管理员">
+        <div class="col-sm">
+            <div class="row">
+              <input class="col-sm form-control mr-2" type="text" v-model="adminKeyWord"
                     placeholder="关键字"
-                    maxlength="100" autofocus
+                    autofocus
                     required/>
-            <input type="button" class="btn col-sm-3" value="搜索" @click="searchAdmin"/>
+              <input type="button" class="btn btn-secondary btn-sm col-sm-3" value="搜索" @click="searchAdmin"/>
+            </div>
         </div>
 
-        <select class="row form-control mt-2"
-                id="adminSelect"
-                aria-multiselectable="false"
-                multiple="false">
+        <div class="w-100"></div>
 
+        <select class="col-sm form-control mt-2"
+                aria-multiselectable="false"
+                v-model="selectTopicAdmin"
+                multiple="false">
+          <option v-for="user in userList" :key="user.id" :value="user">
+            {{user.realName}}
+          </option>
         </select>
 
         <span class="row error-message" id="adminDialogErrorMessage"></span>
+    </my-dialog>
+
+    <!-- 文章清单 -->
+    <h5 class="ml-2 text-primary">文章清单</h5>
+    <hr/>
+    <data-table 
+      class="col"
+      ref="articleTable"
+      :columns="articleTable.columns"
+      :dataUrl="articleTable.dataUrl"
+      :buttons="articleTable.buttons"
+      :paged="false">
+    </data-table>
+
+    <my-dialog
+        v-if="articleTable.dialog.show"
+        @close="articleTable.dialog.show=false"
+        :submit="addArticles"
+        title="添加文章">
+        <div class="col-sm">
+            <div class="row">
+              <input class="col-sm form-control mr-2" type="text" v-model="articleTable.dialog.key"
+                    placeholder="关键字"
+                    autofocus
+                    required/>
+              <input type="button" class="btn btn-secondary btn-sm col-sm-3" value="搜索" @click="searchArticle"/>
+            </div>
+        </div>
+
+        <div class="w-100"></div>
+
+        <select class="col-sm form-control mt-2"
+                aria-multiselectable="false"
+                v-model="articleTable.dialog.selArticleList"
+                multiple="true">
+          <option v-for="article in articleTable.dialog.articleList" :key="article.id" :value="article.id">
+            {{article.title}}
+          </option>
+        </select>
     </my-dialog>
 </div>
 </template>
@@ -77,21 +121,48 @@
 <script>
 import ajax from '@/components/Ajax.js'
 import MyDialog from '@/components/common/Dialog'
-import $ from 'jquery'
+import axios from 'axios'
+import DataTable from '@/components/common/DataTable'
 
 export default {
   data () {
     return {
       topicId: this.$route.params.topicId,
-      topic: null,
+      topic: {},
       articles: [],
       topicTypes: [],
-      title: '',
-      introduction: '',
-      topicType: null,
-      topicAdminId: null,
-      topicAdminName: '',
-      showSetAdminDialog: false
+      adminDialogShow: false,
+      selectTopicAdmin: null,
+      userList: [],
+      adminKeyWord: '',
+      selTopicType: -1,
+      baseUrl: axios.defaults.baseURL,
+      articleTable: {
+        columns: [{
+          title: '标题',
+          field: 'title'
+        }, {
+          title: '作者',
+          field: 'authorName'
+        }, {
+          title: '创建时间',
+          field: 'createDate'
+        }, {
+          title: '操作',
+          buttons: [
+            {value: '删除', event: this.removeFromTopic}
+          ]
+        }],
+        dataUrl: '/topic/getTopicArticles?topicId=' + this.$route.params.topicId,
+        buttons: [{value: '新增', event: this.showArticleAddDialog}],
+        dialog: {
+          show: false,
+          key: '',
+          articleList: [],
+          selArticleList: []
+        },
+        refreshTable: null
+      }
     }
   },
   created () {
@@ -101,66 +172,126 @@ export default {
     loadData: function () {
       // 从服务器加载数据
       let _this = this
-      ajax.post('/system/topicManager/getEditInfo', {topicId: this.topicId}, function (data) {
+      ajax.post('/topic/manager/getEditInfo', {topicId: this.topicId}, function (data) {
         _this.topic = data.topic
         _this.articles = data.articles
         _this.topicTypes = data.types
 
-        _this.title = data.topic.title
-        _this.introduction = data.topic.introduction
-        _this.topicAdminName = data.topic.admin.realName
-        _this.topicAdminId = data.topic.admin.id
-
-        for (let i = 0, length = _this.topicTypes.length; i < length; i++) {
-          let topicType = _this.topicTypes[i]
-          if (topicType === data.topic.type) {
-            _this.topicType = i + 1
+        for (var i = 0; i < _this.topicTypes.length; i++) {
+          if (_this.topicTypes[i] === _this.topic.type) {
+            _this.selTopicType = i
             break
           }
         }
       })
     },
-    saveTopic: function () {
+    showSetAdminDialog: function () {
+      this.adminDialogShow = true
+      this.searchAdmin()
     },
-    searchAdmin: function () {
-      let keyword = $('#adminKeyWord').val().trim()
-      if (keyword === '') {
-        $('#adminDialogErrorMessage').html('关键字不能为空！')
-        $('#adminDialogErrorMessage').show()
-        return
+    saveTopic: function () {
+      var params = new FormData()
+      params.append('id', this.topicId)
+      params.append('title', this.topic.title)
+      params.append('introduction', this.topic.introduction)
+      params.append('type', this.selTopicType)
+
+      if (this.selectTopicAdmin) {
+        params.append('admin', this.selectTopicAdmin.id)
       }
 
-      $('#adminDialogErrorMessage').hide()
+      let files = this.$refs.imgFile.files
+      if (files) {
+        params.append('img', files[0])
+      }
+      var config = {
+        headers: {'Content-Type': 'multipart/form-data'}
+      }
 
-      $('#adminSelect').html('')
+      let _this = this
+      axios.post('/topic/manager/update', params, config).then(function (resp) {
+        alert('保存成功')
+        _this.loadData()
+      })
+    },
+    searchAdmin: function () {
+      let keyword = this.adminKeyWord.trim()
+
+      let _this = this
       ajax.post('/user/search', {key: keyword}, function (data) {
         if (!data || data.length === 0) {
           return
         }
 
-        for (var i in data) {
-          var user = data[i]
-
-          $('<option value="' + user.id + '">' + user.realName + '</option>')
-            .appendTo($('#adminSelect'))
-        }
-
-        // 选中第一个
-        $('#adminSelect').val(data[0].id)
+        _this.userList = data
       })
     },
     setAdmin: function () {
-      this.topicAdminId = $('#adminSelect').val()
-      this.topicAdminName = $('#adminSelect').text()
       this.showSetAdminDialog = false
+    }, 
+
+    /**
+     * 显示文章添加界面
+     */
+    showArticleAddDialog: function (refreshTable) {
+      this.articleTable.dialog.show = true
+      this.articleTable.refreshTable = refreshTable
+    },
+
+    /**
+     * 搜索文章
+     */
+    searchArticle: function () {
+      let key = this.articleTable.dialog.key
+      var _this = this
+      axios.get('/topic/manager/searchArticleNoInTopic', {params: {key: key, topicId: this.topicId, limit: 10}})
+        .then(resp => {
+          _this.articleTable.dialog.articleList = resp.data
+        })
+    },
+
+    /**
+     * 添加文章到专题
+     */
+    addArticles: function () {
+      let selArticles = this.articleTable.dialog.selArticleList
+      let _this = this
+      if (selArticles) {
+        axios.post('/topic/manager/addArticles', {id: this.topicId, articles: selArticles})
+          .then(resp => {
+            _this.articleTable.dialog.show = false
+            _this.articleTable.refreshTable && _this.articleTable.refreshTable()
+          })
+      }
+    },
+
+    /**
+     * 从专题中删除文章
+     */
+    removeFromTopic: function (item, refreshTable) {
+      if (confirm('确定从专题中删除文章？')) {
+        axios.post('/topic/manager/deleteArticle', {id: this.topicId, articleId: item.id})
+        .then(resp => {
+          refreshTable && refreshTable()
+        })
+      }
     }
   },
   components: {
-    MyDialog
+    MyDialog,
+    DataTable
   }
 }
 </script>
 
 <style>
+  select {
+    padding: 0px;
+  }
 
+  select>option {
+    line-height: 30px;
+    height: 30px;
+    padding-top: 4px;
+  }
 </style>

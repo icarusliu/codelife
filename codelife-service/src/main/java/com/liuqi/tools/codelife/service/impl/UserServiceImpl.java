@@ -242,10 +242,6 @@ public class UserServiceImpl implements UserService{
     @Override
     public Collection<User> search(String key) {
         key = key.trim();
-        if ("".equals(key)) {
-            return Collections.EMPTY_LIST;
-        }
-        
         return userDao.search(key);
     }
     

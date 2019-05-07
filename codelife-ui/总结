@@ -111,3 +111,7 @@ watch: {
 引入bootstrap:  
 npm install bootstrap --save-dev
 npm install --save popper.js
+
+引入highlight
+npm install highlight.js
+npm install showdown

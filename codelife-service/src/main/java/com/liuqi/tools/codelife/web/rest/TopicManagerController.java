@@ -1,6 +1,7 @@
 package com.liuqi.tools.codelife.web.rest;
 
 import com.liuqi.tools.codelife.db.entity.*;
+import com.liuqi.tools.codelife.service.ArticleService;
 import com.liuqi.tools.codelife.util.exceptions.ErrorCodes;
 import com.liuqi.tools.codelife.util.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
@@ -16,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -40,6 +42,9 @@ public class TopicManagerController {
     
     @Autowired
     private AuthenticationService authenticationService;
+
+    @Resource
+    private ArticleService articleService;
     
     /**
      * 获取专题清单
@@ -162,6 +167,20 @@ public class TopicManagerController {
     }
 
     /**
+     * 获取不在专题中的文章清单
+     * @param topicId   专题编号
+     * @param key       关键字
+     * @param limit     文章记录数
+     * @return          文章清单
+     */
+    @GetMapping("/searchArticleNoInTopic")
+    public List<Article> searchArticleNoInTopic(@RequestParam("topicId") Integer topicId,
+                                                @RequestParam("key") String key,
+                                                @RequestParam("limit") Integer limit) {
+        return articleService.findNotInTopic(topicId, key, 1, limit).getList();
+    }
+
+    /**
      * 获取编辑专题时需要的数据
      *
      * @param topicId
@@ -176,7 +195,7 @@ public class TopicManagerController {
                 .put("types", TopicType.values())
                 .build();
     }
-    
+
     /**
      * 删除专题
      * 只有系统管理员可以删除专题

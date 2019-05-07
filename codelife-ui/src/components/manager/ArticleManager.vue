@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import DataTable from '@/components/DataTable'
-import ajax from '@/components/Ajax.js'
+import DataTable from '@/components/common/DataTable'
+import axios from 'axios'
 import { mapState } from 'vuex'
 
 export default {
@@ -25,7 +25,7 @@ export default {
           id: 1,
           title: '标题',
           field: 'title',
-          width: 500
+          width: 400
         },
         {
           id: 2,
@@ -66,7 +66,7 @@ export default {
             {value: '删除', event: this.deleteRow},
             {value: '编辑', event: this.editRow}
           ],
-          width: 200
+          width: 240
         }
       ],
       buttons: [
@@ -89,24 +89,26 @@ export default {
 
       return '置顶'
     },
-    fixTop: function (item) {
-      var url = '/system/articleManager/fixTop'
+    fixTop: function (item, callback) {
+      var url = '/article/manager/fixTop'
 
       // 进行置顶或者取消置顶
       if ((this.loginUser.systemAdmin && item.recommended) ||
           (!this.loginUser.systemAdmin && item.fixTop)) {
         // 已经置顶则取消置顶
-        url = '/system/articleManager/unFixTop'
+        url = '/article/manager/unFixTop'
       }
 
       // 调用后台服务进行置顶或者取消置顶处理
       let _this = this
-      ajax.post(url, {id: item.id}, function (data) {
+      axios.post(url, {id: item.id}).then(function (data) {
         if (_this.loginUser.systemAdmin) {
           item.recommended = !item.recommended
         } else {
           item.fixTop = !item.fixTop
         }
+
+        callback()
       })
     },
     add: function () {
@@ -118,22 +120,16 @@ export default {
     convertFixTop: function (fixTop) {
       return fixTop ? '是' : '否'
     },
-    deleteRow: function (item, dataList) {
+    deleteRow: function (item, success) {
       // 删除记录
       if (!confirm('将删除该行，是否确认？')) {
         return
       }
 
       // 向服务器提交删除申请
-      ajax.post('/system/articleManager/deleteArticle', {id: item.id}, function (data) {
-        // 从表格中删除数据
-        if (dataList) {
-          for (var i = 0, length = dataList.length; i < length; i++) {
-            if (item === dataList[i]) {
-              dataList.splice(i, 1)
-              break
-            }
-          }
+      axios.post('/article/manager/delete', {id: item.id}).then(function (data) {
+        if (success) {
+          success()
         }
       })
     },

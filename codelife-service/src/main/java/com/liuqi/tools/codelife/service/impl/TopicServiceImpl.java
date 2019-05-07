@@ -73,12 +73,14 @@ public class TopicServiceImpl implements TopicService {
      * 获取指定用户未订阅的所有开放的专题清单
      *
      * @param user
+     * @param key
      * @return 如果无专题将返回空的List
      */
     @Override
-    public PageInfo<Topic> findUserNotSubscribed(User user, int nowPage, int pageSize) {
+    public PageInfo<Topic> findUserNotSubscribed(User user, String key, int nowPage, int pageSize) {
         PageHelper.startPage(nowPage, pageSize);
-        return PageInfo.of(Optional.ofNullable(topicDao.findUserNotSubscribed(user)).orElse(Collections.EMPTY_LIST));
+        return PageInfo.of(Optional.ofNullable(topicDao.findUserNotSubscribed(null == user ? null : user.getId(), key))
+                .orElse(Collections.EMPTY_LIST));
     }
     
     /**

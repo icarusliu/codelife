@@ -4,8 +4,6 @@
      <div class="col-sm-3 col-md-2 hidden-xs-down sidebar pl-0 pr-2">
         <div class="side-block container" id="navUl" >
             <span class="side-block-title row">文章版块</span>
-            <router-link :to="{name: 'articles', params: {forumId: -1, title: '所有文章'}}"
-              class="side-block-item row active">{{ '所有文章(' + articleCount + ')' }}</router-link>
             <router-link :to="{name: 'articles', params: {forumId: forum.id, title: forum.name}}"
               class="side-block-item row"
               v-for="forum in forums" :key="forum.id">
@@ -15,7 +13,16 @@
     </div>
 
     <!-- 右侧文章列表 -->
-    <article-list class="col-sm right-content" :forumId="forumId"></article-list>
+    <div class="right-content col-sm mr-0">
+            <div class="right-content-toolbar row text-right m-0">
+                <router-link :to="{name: 'articles', params: {forumId: -1, title: '所有文章'}}">所有文章</router-link>
+                <label v-if="-1 != forumId">&nbsp;&nbsp;>&nbsp;&nbsp;</label>
+                <label v-if="-1 != forumId" class="right-content-title">{{title}}</label>
+            </div>
+
+            <article-list :forumId="forumId">
+            </article-list>
+        </div>
   </div>
 </template>
 

@@ -1,17 +1,12 @@
 <!-- 我的专题页面 -->
 <template>
-<div class="container-fluid">
-    <div v-if="myTopics == null || 0 == myTopics.length"
-        class="row ml-4">
-        您尚未订阅任何专题，请访问<a th:href="@{/topic/explorer}">专题浏览</a>进行订阅。
-    </div>
+<div>
 
-    <div v-if="myTopics != null && 0 != myTopics.length"
-          class="p-2 row">
+    <div class="p-0 pr-1 col-sm-3 d-none d-sm-block">
         <!--我的专题列表-->
-        <div class="col-sm-2">
-            <h5 class="text-primary left-nav-title">
-                我订阅的专题
+        <div class="block mb-1" v-if="loginUser !== null">
+            <h5 class="block-title">
+                我的订阅
             </h5>
             <div class="list-group" id="topicList">
                 <router-link class="row list-group-item ml-2 mr-2"
@@ -24,42 +19,55 @@
             </div>
         </div>
 
-        <div class="col-sm topic-detail-panel mr-4"
-          v-if="topic != null">
+        <div class="block">
+            <h5 class="block-title">
+                热门专题
+            </h5>
+            <router-link class="block-item row"
+                v-for="topic in hotTopics" :key="topic.id"
+                :to="{name: 'myTopics', params: {topicId: topic.id}}">
+                <span>{{ topic.title }}</span>
+                <sup v-if="loginUser != null && topic.admin.id == loginUser.id"
+                      style="color: red;">管理员</sup>
+            </router-link>
+        </div>
+    </div>
+
+    <div class="col-sm topic-detail-panel mr-1"
+      v-if="topic != null">
         <!--上面专题信息-->
-            <section class="row topic-detail-panel-info">
-                <h1 class="col-sm">
-                    <span>{{topic.title}}</span>
-                    <sub>
-                      <router-link v-if="null != loginUser
-                                && topic.admin.id == loginUser.id"
-                            :to="{name: 'topicEdit', params: {topicId: topic.id}}">(编辑)</router-link>
-                    </sub>
-                </h1>
+        <section class="row topic-detail-panel-info">
+            <h1 class="col-sm">
+                <span>{{topic.title}}</span>
+                <sub>
+                  <router-link v-if="null != loginUser
+                            && topic.admin.id == loginUser.id"
+                        :to="{name: 'topicEdit', params: {topicId: topic.id}}">(编辑)</router-link>
+                </sub>
+            </h1>
 
-                <div class="w-100 mb-2"></div>
-                <p class="col-sm-8">{{topic.introduction}}</p>
-                <img class="col-sm-3" height="200px"
-                     :src="'/topic/getImg?fileName=' + topic.img" id="img"/>
-            </section>
+            <div class="w-100 mb-2"></div>
+            <p class="col-sm-8">{{topic.introduction}}</p>
+            <img class="col-sm-3" height="200px"
+                  :src="baseUrl + 'topic/getImg?fileName=' + topic.img" id="img"/>
+        </section>
 
-            <!--下面文章清单-->
-            <div class="row">
-                <article-list class="col-sm" :title="文章清单">
-                </article-list>
+        <!--下面文章清单-->
+        <div class="row">
+            <article-list class="col-sm" :no-page="true" :forum-id="-1" :topic-id="topic.id">
+            </article-list>
 
-                <!--订阅用户清单-->
-                <div class="user-group col-sm-2"
-                     th:if="null != userList && 0 != userList.size()">
-                    <h6 class="group-title user-group-title row">订阅用户清单</h6>
-                    <router-link
-                        class="user-group-item row" v-for="user in userList" :key="user.id"
-                        :to="{name: 'userIndex',
-                        params: {url: 'userIndex', userId: user.id, typeId: -1, nowPage: 1, pageSize: 20}}">
-                        {{user.realName}}
-                    </router-link>
-                </div>
-            </div>
+            <!--订阅用户清单-->
+            <!-- <div class="user-group col-sm-2"
+                  th:if="null != userList && 0 != userList.size()">
+                <h6 class="group-title user-group-title row">订阅用户清单</h6>
+                <router-link
+                    class="user-group-item row" v-for="user in userList" :key="user.id"
+                    :to="{name: 'userIndex',
+                    params: {url: 'userIndex', userId: user.id, typeId: -1, nowPage: 1, pageSize: 20}}">
+                    {{user.realName}}
+                </router-link>
+            </div> -->
         </div>
     </div>
 </div>
@@ -75,10 +83,12 @@ export default {
   data () {
     return {
       myTopics: [], // 订阅的专题清单
+      hotTopics: [], // 热门专题
       topic: null, // 显示的专题
       articles: [], // 显示的专题的文章清单
       userList: [], // 显示的专题的订阅用户清单
-      topicId: null // 显示的专题
+      topicId: null, // 显示的专题
+      baseUrl: axios.defaults.baseURL
     }
   },
   components: {
@@ -120,6 +130,7 @@ export default {
         that.topic = resp.data.topic
         that.articles = resp.data.articles
         that.userList = resp.data.userList
+        that.hotTopics = resp.data.hotTopics
       })
     }
   }
@@ -129,6 +140,7 @@ export default {
 <style>
   .topic-detail-panel {
     border: 1px solid #AFEEEE;
+    background: #fff;
   }
 
   .topic-detail-panel-info {

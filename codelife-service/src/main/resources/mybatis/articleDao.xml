@@ -97,6 +97,15 @@
         order by create_date desc
     </select>
 
+    <select id="findNotInTopic" resultMap="articleResult">
+        <include refid="selectArticle"/>
+        left join topic_article t4
+        on t4.article_id = t1.id
+        where (t4.topic_id is null or t4.topic_id != #{topicId})
+          and t1.title like concat('%', #{key}, '%')
+        order by create_date desc
+    </select>
+
     <!-- 通过文章ID查找文章-->
     <select id="findById" resultMap="articleResult">
         <include refid="selectArticle"/>
