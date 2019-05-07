@@ -13,18 +13,42 @@ Vue.config.productionTip = false
 
 Vue.use(Vuex)
 
+Axios.interceptors.request.use(config => {
+  let token = window.localStorage.getItem('accessToken')
+  // if (token && config.url.indexOf('/oauth/token') === -1) {
+  //   config.withCredentials = true
+  //   config.headers.Authorization = 'Bearer' + token
+
+  //   console.log(config.headers.Authorization)
+  // }
+
+  return config
+})
+
 // 返回数据统一处理
 Axios.interceptors.response.use(
   response => {
+    console.log('response: ' + response)
+
     if (response.status === 200 && response.data && response.data.statusCode === '200') {
       return Promise.resolve(response.data)
+    } else if (response.status === 401) {
+      window.open('/', '_self')
     } else {
       if (response.status !== 200) {
         alert('系统内部错误')
       } else {
-        return Promise.reject(response.data)
+        if (response.data) {
+          return Promise.resolve(response.data)
+        } else {
+          return Promise.resolve(response)
+        }
       }
     }
+  },
+  error => {
+    console.log(error.status)
+    return Promise.reject(error)
   }
 )
 

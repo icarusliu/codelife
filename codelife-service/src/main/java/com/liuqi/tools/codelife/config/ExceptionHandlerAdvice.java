@@ -1,7 +1,7 @@
 package com.liuqi.tools.codelife.config;
 
-import com.liuqi.tools.codelife.util.exceptions.RestException;
 import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
+import com.liuqi.tools.codelife.util.exceptions.RestException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
