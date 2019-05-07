@@ -1,7 +1,6 @@
 package com.liuqi.tools.codelife.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -27,15 +26,6 @@ public class WebConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(logInterceptor);
     }
     
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedHeaders("*")
-                .allowedMethods("*")
-                .allowedOrigins("http://localhost:8080")
-                .allowCredentials(true);
-    }
-
     /**
      * Add handlers to serve static resources such as images, js, and, css
      * files from specific locations under web application root, the classpath,

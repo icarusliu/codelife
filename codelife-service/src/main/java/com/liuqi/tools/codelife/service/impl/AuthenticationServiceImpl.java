@@ -5,6 +5,7 @@ import com.liuqi.tools.codelife.db.entity.User;
 import com.liuqi.tools.codelife.service.AuthenticationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (obj instanceof RealUserDetails) {
             RealUserDetails userDetails = (RealUserDetails) obj;
             return userDetails.getRemoteIp();
+        }
+
+        if (obj instanceof OAuth2AuthenticationDetails) {
+            return ((OAuth2AuthenticationDetails)obj).getRemoteAddress();
         }
         
         WebAuthenticationDetails details = (WebAuthenticationDetails) authentication.getDetails();

@@ -91,8 +91,10 @@ public class RealAuthenticationProvider implements AuthenticationProvider {
         token.setDetails(userDetails);
         
         //获取用户登录IP
-        WebAuthenticationDetails details = (WebAuthenticationDetails) authentication.getDetails();
-        userDetails.setRemoteIp(details.getRemoteAddress());
+        if (authentication.getDetails() instanceof WebAuthenticationDetails) {
+            WebAuthenticationDetails details = (WebAuthenticationDetails) authentication.getDetails();
+            userDetails.setRemoteIp(details.getRemoteAddress());
+        }
         
         return token;
     }
