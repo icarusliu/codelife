@@ -67,6 +67,12 @@
             and t1.destination=#{destination}
     </select>
 
+    <select id="findNewerComments" resultMap="commentResult">
+        <include refid="select"/>
+        order by t1.comment_time desc
+        limit ${count}
+    </select>
+
     <select id="getCommentCountByAuthor" resultType="Integer">
         select
             count(t2.id) as commentCount

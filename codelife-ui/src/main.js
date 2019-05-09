@@ -15,12 +15,12 @@ Vue.use(Vuex)
 
 Axios.interceptors.request.use(config => {
   let token = window.localStorage.getItem('accessToken')
-  // if (token && config.url.indexOf('/oauth/token') === -1) {
-  //   config.withCredentials = true
-  //   config.headers.Authorization = 'Bearer' + token
+  if (token && config.url.indexOf('/oauth/token') === -1) {
+    config.withCredentials = true
+    config.headers.Authorization = 'Bearer' + token
 
-  //   console.log(config.headers.Authorization)
-  // }
+    console.log(config.headers.Authorization)
+  }
 
   return config
 })
@@ -47,7 +47,15 @@ Axios.interceptors.response.use(
     }
   },
   error => {
-    console.log(error.status)
+    console.error(error)
+    let statusCode = error.response.status
+    if (statusCode === 401 && error.response.data.error === 'invalid_token') {
+      // Token失效
+      console.log('invalid_token')
+      window.localStorage.removeItem('accessToken')
+      store.dispatch('updateLoginUser')
+      router.push('/login')
+    }
     return Promise.reject(error)
   }
 )

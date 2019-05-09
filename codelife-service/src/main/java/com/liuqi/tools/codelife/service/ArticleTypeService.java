@@ -62,4 +62,9 @@ public interface ArticleTypeService {
      * @param id
      */
     void deduceArticleCount(Integer id);
+
+    /**
+     * 更新分类文章数量
+     */
+    void updateArticleCounts();
 }

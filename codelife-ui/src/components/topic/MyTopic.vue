@@ -53,8 +53,8 @@
         </section>
 
         <!--下面文章清单-->
-        <div class="row">
-            <article-list class="col-sm" :no-page="true" :forum-id="-1" :topic-id="topic.id">
+        <div class="row m-0 p-0">
+            <article-list :no-page="true" :forum-id="-1" :topic-id="topic.id">
             </article-list>
 
             <!--订阅用户清单-->

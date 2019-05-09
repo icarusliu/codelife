@@ -1,33 +1,33 @@
 <!-- 个人主页 -->
 <template>
     <div>
-        <div class="col-sm-3 col-md-3 mr-2 ml-0 pr-0 pl-0 hidden-xs-down sidebar">
-            <div class="container side-block container mb-2 pr-4 pl-4">
+        <div class="col-sm-2 col-md-2 mr-2 ml-0 pr-0 pl-0 hidden-xs-down sidebar">
+            <div class="container side-block container mb-2 pr-3 pl-3">
                 <div class="row p-1">
                     <span class="stat-info-title col-sm">{{ null != user ? user.realName : ''}}</span>
 
                     <hr class="w-100 m-2"/>
 
                     <div class="stat-info-item col-sm-3">
-                        <div class="row text-center"><span class="col">文章</span></div>
-                        <div class="row text-center"><span class="col">{{ null == statInfo ? 0 : statInfo.articleCount }}</span></div>
+                        <div class="row text-center"><span class="col p-0">文章</span></div>
+                        <div class="row text-center"><span class="col p-0">{{ null == statInfo ? 0 : statInfo.articleCount }}</span></div>
                     </div>
 
                     <div class="stat-info-item col-sm-3">
-                        <div class="row text-center"><span class="col">点赞</span></div>
+                        <div class="row text-center"><span class="col p-0">点赞</span></div>
                         <div class="row text-center">
-                            <span class="col">{{ null == statInfo ? 0 : statInfo.praiseCount }}</span></div>
+                            <span class="col p-0">{{ null == statInfo ? 0 : statInfo.praiseCount }}</span></div>
                     </div>
 
                     <div class="stat-info-item col-sm-3">
-                        <div class="row text-center"><span class="col">阅读</span></div>
+                        <div class="row text-center"><span class="col p-0">阅读</span></div>
                         <div class="row text-center">
-                            <span class="col">{{null == statInfo ? 0 : statInfo.readCount}}</span></div>
+                            <span class="col p-0">{{null == statInfo ? 0 : statInfo.readCount}}</span></div>
                     </div>
 
                     <div class="stat-info-item col-sm-3">
-                        <div class="row text-center"><span class="col">评论</span></div>
-                        <div class="row text-center"><span class="col">{{ null == statInfo ? 0 : statInfo.commentCount }}</span></div>
+                        <div class="row text-center"><span class="col p-0">评论</span></div>
+                        <div class="row text-center"><span class="col p-0">{{ null == statInfo ? 0 : statInfo.commentCount }}</span></div>
                     </div>
                 </div>
             </div>

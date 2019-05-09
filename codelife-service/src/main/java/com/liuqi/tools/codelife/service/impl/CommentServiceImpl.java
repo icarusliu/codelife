@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 评论服务实现类
@@ -81,6 +82,17 @@ public class CommentServiceImpl implements CommentService {
     public int getCommentCountByAuthor(Integer authorId) {
         return commentDao.getCommentCountByAuthor(authorId);
     }
-    
+
+    /**
+     * 获取新增加的评论列表
+     *
+     * @param count 需要查询的评论数目
+     * @return 新增加的评论列表
+     */
+    @Override
+    public List<Comment> findNewerComments(int count) {
+        return commentDao.findNewerComments(count);
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
 }

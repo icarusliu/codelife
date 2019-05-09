@@ -6,8 +6,11 @@ import com.liuqi.tools.codelife.service.AuthenticationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * @Author: LiuQI
@@ -51,5 +54,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         
         WebAuthenticationDetails details = (WebAuthenticationDetails) authentication.getDetails();
         return details.getRemoteAddress();
+    }
+
+    /**
+     * 退出登录
+     */
+    @Override
+    public void logout() {
+        SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+        SecurityContextHolder.clearContext();
     }
 }

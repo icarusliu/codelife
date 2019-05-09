@@ -53,4 +53,20 @@
         update article_type set article_count =
             case when article_count > 1 then article_count - 1 else 0 end where id=#{id}
     </update>
+
+    <select id="countArticleByType" resultType="map">
+        select type, count(1) as c from article group by type
+        union
+        select forum as type, count(1) as c from article group by forum
+    </select>
+
+    <update id="updateArticleCounts">
+        update article_type set article_count =
+        case
+            <foreach collection="dataList" item="item">
+                when id = #{item.TYPE} then #{item.C}
+            </foreach>
+            else 0
+        end
+    </update>
 </mapper>

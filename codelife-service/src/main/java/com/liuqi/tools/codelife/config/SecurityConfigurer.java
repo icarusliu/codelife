@@ -6,19 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.access.expression.method.ExpressionBasedPreInvocationAdvice;
-import org.springframework.security.access.prepost.PreInvocationAuthorizationAdvice;
-import org.springframework.security.access.prepost.PreInvocationAuthorizationAdviceVoter;
 import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter;
 
 import javax.annotation.Resource;
 
@@ -29,12 +25,15 @@ import javax.annotation.Resource;
  **/
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfigurer extends WebSecurityConfigurerAdapter implements ResourceServerConfigurer {
+public class SecurityConfigurer extends ResourceServerConfigurerAdapter {
     @Autowired
     private RealAuthenticationProvider authenticationProvider;
 
     @Resource
     private AppVoter appVoter;
+
+    @Resource
+    private MyCorsFilter myCorsFilter;
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
@@ -62,10 +61,12 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter implements 
         http.authorizeRequests().withObjectPostProcessor(new ObjectPostProcessor<AffirmativeBased>() {
             @Override
             public <O extends AffirmativeBased> O postProcess(O object) {
-//                object.getDecisionVoters().add(appVoter);
+                object.getDecisionVoters().add(appVoter);
                 return object;
             }
         });
+
+        http.addFilterBefore(myCorsFilter, WebAsyncManagerIntegrationFilter.class);
     }
 
     @Bean
