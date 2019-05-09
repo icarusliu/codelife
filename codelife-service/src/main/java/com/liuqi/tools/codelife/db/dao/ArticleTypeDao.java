@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 文章分类Mapper
@@ -63,4 +64,15 @@ public interface ArticleTypeDao {
      * @param id
      */
     void deduceArticleCount(@Param("id") Integer id);
+
+    /**
+     * 更新分类文章数量
+     */
+    void updateArticleCounts(@Param("dataList") List<Map<String, Object>> dataList);
+
+    /**
+     * 根据文章分类统计文章数目
+     * @return  文章分类及对应的文章数目
+     */
+    List<Map<String,Object>> countArticleByType();
 }

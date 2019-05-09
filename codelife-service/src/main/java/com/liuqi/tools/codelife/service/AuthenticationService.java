@@ -24,4 +24,9 @@ public interface AuthenticationService {
      * @return
      */
     String getLoginUserIp();
+
+    /**
+     * 退出登录
+     */
+    void logout();
 }

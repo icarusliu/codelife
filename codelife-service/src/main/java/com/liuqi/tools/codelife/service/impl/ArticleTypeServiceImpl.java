@@ -12,8 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: LiuQI
@@ -88,7 +90,21 @@ public class ArticleTypeServiceImpl implements ArticleTypeService {
         
         articleTypeDao.deduceArticleCount(id);
     }
-    
-    
+
+    /**
+     * 更新分类文章数量
+     */
+    @Override
+    public void updateArticleCounts() {
+        List<Map<String, Object>> dataList = articleTypeDao.countArticleByType();
+        if (logger.isDebugEnabled()) {
+            logger.debug("分类文章数量：{}", dataList);
+        }
+
+        if (!CollectionUtils.isEmpty(dataList)) {
+            articleTypeDao.updateArticleCounts(dataList);
+        }
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(ArticleTypeServiceImpl.class);
 }

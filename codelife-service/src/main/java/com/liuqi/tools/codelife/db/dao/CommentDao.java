@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 评论Mapper对象
@@ -52,4 +53,12 @@ public interface CommentDao {
      * @return
      */
     int getCommentCountByAuthor(@Param("authorId") Integer authorId);
+
+    /**
+     * 获取新增加的评论列表
+     *
+     * @param count 需要查询的评论数目
+     * @return 新增加的评论列表
+     */
+    List<Comment> findNewerComments(@Param("count") int count);
 }

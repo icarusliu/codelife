@@ -157,7 +157,8 @@ public class ArticleServiceImpl implements ArticleService {
         Integer articleId = articleDao.save(article);
         
         //文章分类对象中文章数目加1
-        articleTypeService.addArticleCount(topicId);
+        articleTypeService.addArticleCount(forumId);
+        articleTypeService.addArticleCount(type);
         
         //将文章添加到专题
         if (null != topicId && 0 != topicId) {

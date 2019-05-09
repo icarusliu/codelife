@@ -86,6 +86,7 @@ export default {
     logout: function () {
       // 退出登录
       axios.post('/customLogout').then((resp) => {
+        window.localStorage.removeItem('accessToken')
         this.$store.dispatch('updateLoginUser')
         window.open('/', '_self')
       })

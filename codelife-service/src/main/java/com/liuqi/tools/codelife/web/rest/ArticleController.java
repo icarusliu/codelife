@@ -78,6 +78,7 @@ public class ArticleController {
         
         return MapBuilder.of()
                 .put("article", article)
+                .put("relatedArticles", articleService.findHotArticles(0, 5).getList())
                 .put("comments", commentService.findByDestination(CommentType.ARTICLE, articleId))
                 .put("files", fileInfoService.findByItem(MODULE_ARTICLE, articleId))
                 .build();

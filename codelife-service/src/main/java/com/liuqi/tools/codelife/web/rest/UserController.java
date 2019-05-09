@@ -116,10 +116,8 @@ public class UserController {
      */
     @PostMapping("/customLogout")
     public String customLogout() {
-        SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
-        SecurityContextHolder.clearContext();
-        
-        
+        authenticationService.logout();
+
         return "succeed";
     }
     

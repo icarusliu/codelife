@@ -90,6 +90,8 @@ body {
     padding-left: 2.2em;
     margin-left: 0em;
     color: #000;
+    text-overflow: ellipsis; 
+    overflow: hidden;
 }
 
 /*右侧内容区域样式调整*/
@@ -139,10 +141,17 @@ body {
     margin-bottom: 0px!important;
 }
 
+.block-item {
+    font-size: 0.8em;
+}
+
+.block-item>sub {
+    color: gray;
+}
+
 .block-item-a,.block-item {
     margin-left: 10px;
     line-height: 30px;
-    font-size: 0.8em;
 }
 
 .block-item-a>a{

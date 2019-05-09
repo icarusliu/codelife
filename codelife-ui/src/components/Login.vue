@@ -42,11 +42,22 @@ export default {
   methods: {
     submit: function () {
       var formData = this.user
+      formData.id = 'test'
+      formData.client_id = 'codelife'
+      formData.client_secret = 'secret'
+      formData.scope = 'read'
+      formData.grant_type = 'password'
+
       var that = this
-      axios.post('/customLogin', formData).then(function (resp) {
+      axios.post('/oauth/token', formData).then(function (resp) {
+        console.log('oauth token response: ' + resp)
+
+        window.localStorage.setItem('accessToken', resp.access_token)
         that.$store.dispatch('updateLoginUser')
         that.$router.push('/')
       }).catch(function (error) {
+        console.log('Oauth token response error: ' + error)
+
         if (error.statusCode && error.statusCode === 200) {
           that.errorMessage = error.errorMessage
         } else {

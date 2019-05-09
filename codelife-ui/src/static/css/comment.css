@@ -8,16 +8,12 @@
 }
 
 .comment-list-item-info {
-    font-size: 0.6em;
+    font-size: 0.8em;
     color: #bbb;
 }
 
-.comment-list-item-content {
-
-}
-
 .comment-list-item-buttons input {
-    font-size: 0.6em;
+    font-size: 0.8em;
     cursor: pointer;
 }
 

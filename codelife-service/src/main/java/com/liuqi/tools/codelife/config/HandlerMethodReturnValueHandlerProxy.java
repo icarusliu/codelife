@@ -1,6 +1,7 @@
 package com.liuqi.tools.codelife.config;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
@@ -31,6 +32,10 @@ public class HandlerMethodReturnValueHandlerProxy implements HandlerMethodReturn
     @Override
     public void handleReturnValue(Object returnValue, MethodParameter returnType, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest) throws Exception {
+        if (returnValue instanceof WebAuthenticationDetails) {
+            return;
+        }
+
         Map<String, Object> resultMap = new HashMap<>(3);
 
         resultMap.put("statusCode", STATUS_CODE_SUCCEEDED);

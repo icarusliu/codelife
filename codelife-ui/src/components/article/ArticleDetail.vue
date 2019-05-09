@@ -2,13 +2,13 @@
 <template>
   <div v-if="null != article">
     <!--文章目录-->
-    <div class="hidden-xs-down col-sm-2 p-2 article-catalog fixed-top " style="z-index: 1000; margin-top: 60px; ">
+    <div class="d-none d-sm-block col-sm-2 p-2 article-catalog fixed-top" style="z-index: 1000; margin-top: 60px; ">
         <div class="article-catalog-content ml-2" v-html="catalog">
         </div>
     </div>
 
     <!--文章内容-->
-    <div class="article-block col-sm offset-sm-2 mr-1">
+    <div class="article-block col-sm-8 offset-sm-2 mr-0">
         <!--文章标题 -->
         <div class="row">
             <div class="col text-center">
@@ -36,15 +36,15 @@
             <div class="col text-center ml-2">
                 <button type="button" class="btn btn-link"
                         id="praiseButton"
-                        onclick="javascript: doPraise(); ">
-                    <img src="/static/icons/thumb-up-2x.png" id="praiseImg"/>
+                        @click="doPraise()">
+                    <img :src="praiseImg" id="praiseImg"/>
                 </button>
             </div>
         </div>
 
         <!--评论对话框-->
         <form class="row m-2" method="post" id="commentForm">
-            <textarea class="col-sm mr-3 form-control" placeholder="评论内容" required
+            <textarea class="col-sm mr-3 form-control" placeholder="评论内容"
                       id="commentContent" v-model="comment.content"></textarea>
             <div>
                 <div class="row ml-1 text-center">
@@ -71,7 +71,7 @@
 
                 <div class="comment-list-item-buttons row">
                     <input class="btn btn-link" type="button" value="答复"
-                            th:onclick="'replyComment(' + ${comment.id} + ')'"/>
+                            @click="replyComment(comment.id)"/>
                 </div>
 
                 <!--子评论-->
@@ -91,6 +91,18 @@
             </div>
         </div>
     </div>
+
+    <!-- 相关文章-->
+    <div class="d-none d-sm-block col-sm-2 ml-0">
+      <div class="row side-block">
+        <label class="w-100 side-block-title">相关文章</label>
+        <router-link :to="{name: 'articleDetail', params: {id: article.id}}"
+          class="side-block-item w-100"
+          v-for="article in relatedArticles" :key="article.id">
+          {{ article.title }}
+        </router-link>
+      </div>
+    </div>
 </div>
 </template>
 
@@ -103,6 +115,8 @@ import hljs from 'highlight.js'
 import 'highlight.js/styles/googlecode.css'
 import showdown from 'showdown'
 import {processHtml} from '@/static/js/markdown.js'
+import axios from 'axios'
+import $ from 'jquery'
 
 Vue.directive('highlight', function (el) {
   let blocks = el.querySelectorAll('pre code')
@@ -117,14 +131,18 @@ export default {
       articleId: this.$route.params.id, // 文章编号，从请求参数中获取
       article: null, // 文章
       comments: [], // 文章对应的评论清单
+      relatedArticles: [],
       comment: {
         anonymos: false,
         content: '',
-        type: 'article',
-        id: this.articleId ? this.articleId : -1
+        type: 'article'
       },
       catalog: '',
-      htmlContent: ''
+      htmlContent: '',
+
+      praiseImg: '/static/icons/thumb-up-2x.png',
+      praised: false,
+      parentCommentId: -1
     }
   },
   watch: {
@@ -149,6 +167,7 @@ export default {
       ajax.post('/article/getDetail', {id: this.articleId}, function (data) {
         _this.article = data.article
         _this.comments = data.comments
+        _this.relatedArticles = data.relatedArticles
 
         var html = data.article.content
         html = _this.getConverter().makeHtml(html)
@@ -158,24 +177,60 @@ export default {
         _this.catalog = '<h5 class="article-catalog-title">目录</h5>' + catalogHtml
         _this.htmlContent = result.html
       })
-
-      // 获取评论清单
-      ajax.get('/comment/findByDestination', {id: this.articleId, type: 'article'}, data => {
-        console.log(data)
-      })
     },
 
     /**
      * 新增评论
      */
     addComment: function () {
+      if (this.parentCommentId !== -1) {
+        this.comment.id = this.parentCommentId
+        this.comment.type = 'comment'
+      } else {
+        this.comment.id = this.articleId
+        this.comment.type = 'article'
+      }
+
       if (!this.comment.content) {
         alert('请输入评论内容')
         return
       }
 
-      ajax.post('/comment/add', this.comment, data => {
-        console.log(data)
+      let _this = this
+      axios.post('/comment/add', this.comment).then(function (data) {
+        console.log('Add comment result: ' + data)
+        axios.get('/comment/findByDestination', {params: {id: _this.articleId, type: 'article'}}).then(function (resp) {
+          console.log(resp)
+          _this.comments = resp.data
+          _this.parentCommentId = -1
+          _this.comment.content = ''
+        })
+      })
+    },
+
+    replyComment: function (parentId) {
+      this.parentCommentId = parentId
+      $('#commentContent').focus()
+    },
+
+    /**
+     * 点赞
+     */
+    doPraise: function () {
+      let _this = this
+      let url = '/article/praise'
+      if (this.praised) {
+        url = '/article/unpraise'
+      }
+
+      axios.post(url, {id: this.articleId}).then(resp => {
+        _this.praised = !_this.praised
+
+        if (_this.praised) {
+          _this.praiseImg = '/static/icons/thumb-up-2x-1.png'
+        } else {
+          _this.praiseImg = '/static/icons/thumb-up-2x.png'
+        }
       })
     },
 
@@ -229,6 +284,8 @@ export default {
 
   #title {
     line-height: 80px;
+    overflow: hidden;  
+    text-overflow: ellipsis;
   }
 
   .article-block {

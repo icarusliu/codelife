@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 评论控制器
@@ -61,5 +62,10 @@ public class CommentController {
     public Collection<Comment> findByDestination(@RequestParam("type") String type,
                                                  @RequestParam("id") Integer id) {
         return commentService.findByDestination(ofType(type), id);
+    }
+
+    @GetMapping("/newComments")
+    public List<Comment> newComments() {
+        return commentService.findNewerComments(5);
     }
 }

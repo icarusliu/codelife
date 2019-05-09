@@ -6,6 +6,7 @@ import com.liuqi.tools.codelife.db.entity.User;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 评论服务接口
@@ -40,4 +41,11 @@ public interface CommentService {
      * @return
      */
     int getCommentCountByAuthor(Integer authorId);
+
+    /**
+     * 获取新增加的评论列表
+     * @param count 需要查询的评论数目
+     * @return  新增加的评论列表
+     */
+    List<Comment> findNewerComments(int count);
 }
