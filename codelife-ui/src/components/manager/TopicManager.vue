@@ -99,8 +99,7 @@ export default {
     },
     edit: function (item) {
       // 打开编辑界面
-      let route = this.$router.resolve({name: '/'})
-      window.open(route.href + 'topic/topicEdit/' + item.id, '_self')
+      window.open('/topic/topicEdit/' + item.id, '_self')
     }
   }
 }
