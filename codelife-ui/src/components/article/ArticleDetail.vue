@@ -60,8 +60,10 @@
                 <h6 class="comment-list-item-info">
                     <span class="mr-2">{{ (index + 1) + '楼'}}</span>
                     <span class="mr-2">
-                        {{comment.commentUser != null && comment.commentUser.id == article.authorID
-                        ? '作者' : (comment.commentUser != null ? comment.commentUser.realName : comment.showName)}}
+                        {{comment.showName != null ? comment.showName : (
+                          comment.commentUser != null && comment.commentUser.id == article.authorID
+                        ? '作者' : (comment.commentUser != null ? comment.commentUser.realName : '匿名用户')
+                        )}}
                     </span>
                     评论于<cite>{{comment.commentTime}}</cite>
                 </h6>
@@ -77,10 +79,12 @@
                     && comment.children.length != 0">
                     <div class="comment-list-item col-sm-12" v-for="subComment in comment.children" :key="subComment.id">
                         <h6 class="comment-list-item-info">
-                              <span class="mr-2">{{subComment.commentUser != null
-                                        && subComment.commentUser.id == article.authorID
-                                  ? '作者' : (subComment.commentUser != null
-                                                ? subComment.commentUser.realName : comment.showName)}}</span>
+                              <span class="mr-2">
+                                {{subComment.showName != null ? subComment.showName : (
+                                  subComment.commentUser != null && subComment.commentUser.id == article.authorID
+                                ? '作者' : (subComment.commentUser != null ? subComment.commentUser.realName : '匿名用户')
+                                )}}
+                              </span>
                             评论于<cite>{{subComment.commentTime}}</cite>
                         </h6>
                         <p class="comment-list-item-content">{{subComment.content}}</p>
@@ -155,6 +159,11 @@ export default {
   },
   created () {
     this.refreshData()
+
+    let cachedShowName = localStorage.getItem('commentShowName')
+    if (cachedShowName) {
+      this.comment.showName = cachedShowName
+    }
   },
   methods: {
     /**
@@ -191,6 +200,8 @@ export default {
         return
       }
 
+      localStorage.setItem('commentShowName', this.comment.showName)
+
       if (!this.comment.content) {
         alert('请输入评论内容')
         return
@@ -210,7 +221,9 @@ export default {
 
     replyComment: function (parent) {
       this.parentCommentId = parent.id
-      this.comment.content = '【回复: ' + (parent.showName === null ? '匿名用户' : parent.showName) + '】'
+      let parentUser = (parent.commentUser !== null && parent.commentUser.id === this.article.authorID) ? '作者' : (parent.showName === null ? '匿名用户' : parent.showName)
+
+      this.comment.content = '【回复: ' + parentUser + '】'
       $('#commentContent').focus()
     },
 
