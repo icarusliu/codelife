@@ -35,16 +35,15 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
     
     /**
      * 添加评论
-     *
      * @param content
      * @param anonymos
-     * @param id
      * @param loginUser
      * @param host
+     * @param showName
      */
     @Override
     public void add(String content, Boolean anonymos, Integer articleId, Integer parentCommentId,
-                    User loginUser, String host) throws RestException {
+                    User loginUser, String host, String showName) throws RestException {
         if (null == content || "".equals(content.trim())) {
             logger.error("Content cannot be null or empty!");
             throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "评论内容");
@@ -65,6 +64,7 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
         articleComment.setAnonymos(anonymos);
         articleComment.setContent(content.trim());
         articleComment.setIp(host.trim());
+        articleComment.setShowName(showName);
         if (null != parentCommentId) {
             articleComment.setParent(articleCommentDao.findById(parentCommentId));
         }

@@ -1,7 +1,6 @@
 package com.liuqi.tools.codelife.service;
 
 import com.liuqi.tools.codelife.db.entity.ArticleComment;
-import com.liuqi.tools.codelife.db.entity.CommentType;
 import com.liuqi.tools.codelife.db.entity.User;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
 
@@ -19,11 +18,12 @@ public interface ArticleCommentService {
      * @param anonymos
      * @param loginUser
      * @param host
+     * @param showName
      * @throws RestException
      */
     void add(String content, Boolean anonymos,
              Integer parentCommentId, Integer articleId,
-             User loginUser, String host) throws RestException;
+             User loginUser, String host, String showName) throws RestException;
     
     /**
      * 根据文章及父级评论查询评论

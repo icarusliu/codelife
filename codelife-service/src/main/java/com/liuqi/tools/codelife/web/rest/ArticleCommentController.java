@@ -34,11 +34,12 @@ public class ArticleCommentController {
                     @RequestParam("anonymos") Boolean anonymos,
                     @RequestParam("articleId") Integer articleId,
                     @RequestParam(value = "parent", required = false) Integer parent,
+                    @RequestParam("showName") String showName,
                     HttpServletRequest request) throws RestException {
         String host = request.getHeader("Host");
         User loginUser = authenticationService.getLoginUser();
         
-        commentService.add(content, anonymos, articleId, parent, loginUser, host);
+        commentService.add(content, anonymos, articleId, parent, loginUser, host, showName);
     }
     
     /**

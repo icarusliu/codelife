@@ -17,3 +17,5 @@ insert into article_comment
 select t1.id, t1.user_id, t1.ip, t1.content, t1.comment_time, t1.anonymos, t2.destination, t2.id from comment t1
 left join comment t2 on t1.destination = t2.id
 where t1.type = 2;
+
+alter table article_comment add column show_name varchar(100) comment '显示名称';

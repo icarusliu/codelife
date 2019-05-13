@@ -5,10 +5,10 @@
 <mapper namespace="com.liuqi.tools.codelife.db.dao.ArticleCommentDao">
 
     <insert id="add" parameterType="ArticleComment">
-        insert into article_comment(user_id, ip, content, comment_time, anonymos, article, parent)
+        insert into article_comment(user_id, ip, content, comment_time, anonymos, article, parent, show_name)
         values(#{commentUser.id}, #{ip}, #{content}, #{commentTime}, #{anonymos},
         #{article.id},
-        #{parent.id});
+        #{parent.id}, #{showName});
     </insert>
 
     <resultMap id="commentResult" type="ArticleComment">
@@ -17,6 +17,7 @@
         <result property="content" column="content"/>
         <result property="commentTime" column="comment_time"/>
         <result property="anonymos" column="anonymos"/>
+        <result property="showName" column="show_name"/>
         <association property="article" column="article" javaType="Article"
                      select="com.liuqi.tools.codelife.db.dao.ArticleDao.findById"/>
         <!--<association property="parent" column="parent" javaType="ArticleComment"-->
@@ -37,7 +38,8 @@
             t1.comment_time,
             t1.anonymos,
             t1.article,
-            t1.parent
+            t1.parent,
+            t1.show_name
         from
             article_comment t1
     </sql>

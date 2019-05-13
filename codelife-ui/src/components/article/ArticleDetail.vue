@@ -44,16 +44,14 @@
 
         <!--评论对话框-->
         <form class="row m-2" method="post" id="commentForm">
+            <div class="w-100 mb-1">
+              <input class="col-sm-4 clear"
+                type="text" v-model="comment.showName" placeholder="显示名称"/>
+            </div>
             <textarea class="col-sm mr-3 form-control" placeholder="评论内容"
                       id="commentContent" v-model="comment.content"></textarea>
-            <div>
-                <div class="row ml-1 text-center">
-                    <input class="mr-1" type="checkbox" v-model="comment.anonymos" style="margin-top: 2px; "/>
-                    <label for="anonymos" style="line-height: 16px; ">匿名</label>
-                </div>
-                <div class="w-100"></div>
-                <input class="btn btn-primary" type="button" value="提交" @click="addComment"/>
-            </div>
+            <div class="w-100 mb-1"></div>
+            <input class="btn btn-primary btn-small" type="button" value="提交" @click="addComment"/>
         </form>
 
         <!--评论内容-->
@@ -63,7 +61,7 @@
                     <span class="mr-2">{{ (index + 1) + '楼'}}</span>
                     <span class="mr-2">
                         {{comment.commentUser != null && comment.commentUser.id == article.authorID
-                        ? '题主' : (comment.commentUser != null ? comment.commentUser.realName : '匿名用户')}}
+                        ? '作者' : (comment.commentUser != null ? comment.commentUser.realName : comment.showName)}}
                     </span>
                     评论于<cite>{{comment.commentTime}}</cite>
                 </h6>
@@ -71,7 +69,7 @@
 
                 <div class="comment-list-item-buttons row">
                     <input class="btn btn-link" type="button" value="答复"
-                            @click="replyComment(comment.id)"/>
+                            @click="replyComment(comment)"/>
                 </div>
 
                 <!--子评论-->
@@ -81,8 +79,8 @@
                         <h6 class="comment-list-item-info">
                               <span class="mr-2">{{subComment.commentUser != null
                                         && subComment.commentUser.id == article.authorID
-                                  ? '题主' : (subComment.commentUser != null
-                                                ? subComment.commentUser.realName : '匿名用户')}}</span>
+                                  ? '作者' : (subComment.commentUser != null
+                                                ? subComment.commentUser.realName : comment.showName)}}</span>
                             评论于<cite>{{subComment.commentTime}}</cite>
                         </h6>
                         <p class="comment-list-item-content">{{subComment.content}}</p>
@@ -188,6 +186,11 @@ export default {
         this.comment.parent = this.parentCommentId
       }
 
+      if (!this.comment.showName) {
+        alert('请输入显示名称')
+        return
+      }
+
       if (!this.comment.content) {
         alert('请输入评论内容')
         return
@@ -205,8 +208,9 @@ export default {
       })
     },
 
-    replyComment: function (parentId) {
-      this.parentCommentId = parentId
+    replyComment: function (parent) {
+      this.parentCommentId = parent.id
+      this.comment.content = '【回复: ' + (parent.showName === null ? '匿名用户' : parent.showName) + '】'
       $('#commentContent').focus()
     },
 

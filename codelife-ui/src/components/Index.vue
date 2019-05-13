@@ -23,13 +23,13 @@
           <div class="block mt-1">
             <h5 class="block-title">最新评论</h5>
             <div class="w-100"></div>
-            <div class="block-item" v-for="comment in comments" :key="comment.id">
-              <a class="comment-article" 
+            <div class="block-item ml-4" v-for="comment in comments" :key="comment.id">
+              <a class="comment-article row" 
                 v-bind:href="'/articleDetail/' + comment.article.id">{{comment.article.title}}</a>
-              <sub>{{comment.commentTime}}</sub>
-              <a class="block-item-a">
-                {{ comment.content }}
-              </a>
+              <div class="row">
+                <small>{{ null != comment.showName ? comment.showName : '匿名用户'}}：</small>
+                <label>{{ comment.content }}</label>
+              </div>
             </div>
           </div>
       </div>

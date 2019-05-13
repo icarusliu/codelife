@@ -17,6 +17,7 @@ public class ArticleComment implements Serializable{
     private ArticleComment parent;
     private String commentTime;
     private User commentUser;
+    private String showName;
     private String ip;
     private Boolean anonymos;
 
@@ -94,5 +95,14 @@ public class ArticleComment implements Serializable{
     
     public void setChildren(Collection<ArticleComment> children) {
         this.children = children;
+    }
+
+    public String getShowName() {
+        return showName;
+    }
+
+    public ArticleComment setShowName(String showName) {
+        this.showName = showName;
+        return this;
     }
 }
