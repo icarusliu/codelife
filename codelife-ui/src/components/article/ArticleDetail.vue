@@ -183,12 +183,9 @@ export default {
      * 新增评论
      */
     addComment: function () {
+      this.comment.articleId = this.articleId
       if (this.parentCommentId !== -1) {
-        this.comment.id = this.parentCommentId
-        this.comment.type = 'comment'
-      } else {
-        this.comment.id = this.articleId
-        this.comment.type = 'article'
+        this.comment.parent = this.parentCommentId
       }
 
       if (!this.comment.content) {
@@ -197,9 +194,9 @@ export default {
       }
 
       let _this = this
-      axios.post('/comment/add', this.comment).then(function (data) {
+      axios.post('/article/comment/add', this.comment).then(function (data) {
         console.log('Add comment result: ' + data)
-        axios.get('/comment/findByDestination', {params: {id: _this.articleId, type: 'article'}}).then(function (resp) {
+        axios.get('/article/comment/findByArticle', {params: {articleId: _this.articleId}}).then(function (resp) {
           console.log(resp)
           _this.comments = resp.data
           _this.parentCommentId = -1

@@ -29,7 +29,7 @@
         <mapper resource="mybatis/userLogDao.xml"/>
         <mapper resource="mybatis/roleDao.xml"/>
         <mapper resource="mybatis/topicDao.xml"/>
-        <mapper resource="mybatis/commentDao.xml"/>
+        <mapper resource="mybatis/articleCommentDao.xml"/>
         <mapper resource="mybatis/articleTypeDao.xml"/>
         <mapper resource="mybatis/systemDao.xml"/>
     </mappers>

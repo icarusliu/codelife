@@ -1,11 +1,11 @@
 package com.liuqi.tools.codelife.web.rest;
 
-import com.liuqi.tools.codelife.db.entity.Comment;
+import com.liuqi.tools.codelife.db.entity.ArticleComment;
 import com.liuqi.tools.codelife.db.entity.CommentType;
 import com.liuqi.tools.codelife.db.entity.User;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
 import com.liuqi.tools.codelife.service.AuthenticationService;
-import com.liuqi.tools.codelife.service.CommentService;
+import com.liuqi.tools.codelife.service.ArticleCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +21,10 @@ import java.util.List;
  * @Version: V1.0
  **/
 @RestController
-@RequestMapping("/comment")
-public class CommentController {
+@RequestMapping("/article/comment")
+public class ArticleCommentController {
     @Autowired
-    private CommentService commentService;
+    private ArticleCommentService commentService;
     
     @Autowired
     private AuthenticationService authenticationService;
@@ -32,13 +32,13 @@ public class CommentController {
     @PostMapping("/add")
     public void add(@RequestParam("content") String content,
                     @RequestParam("anonymos") Boolean anonymos,
-                    @RequestParam("type") String type,
-                    @RequestParam("id") Integer id,
+                    @RequestParam("articleId") Integer articleId,
+                    @RequestParam(value = "parent", required = false) Integer parent,
                     HttpServletRequest request) throws RestException {
         String host = request.getHeader("Host");
         User loginUser = authenticationService.getLoginUser();
         
-        commentService.add(content, anonymos, ofType(type), id, loginUser, host);
+        commentService.add(content, anonymos, articleId, parent, loginUser, host);
     }
     
     /**
@@ -58,14 +58,13 @@ public class CommentController {
         return commentType;
     }
     
-    @GetMapping("/findByDestination")
-    public Collection<Comment> findByDestination(@RequestParam("type") String type,
-                                                 @RequestParam("id") Integer id) {
-        return commentService.findByDestination(ofType(type), id);
+    @GetMapping("/findByArticle")
+    public Collection<ArticleComment> findByArticle(@RequestParam("articleId") Integer articleId) {
+        return commentService.findByArticle(articleId);
     }
 
-    @GetMapping("/newComments")
-    public List<Comment> newComments() {
-        return commentService.findNewerComments(5);
+    @GetMapping("/latestComments")
+    public List<ArticleComment> latestComments() {
+        return commentService.findLatestComments(5);
     }
 }

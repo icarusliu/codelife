@@ -32,7 +32,7 @@ public class ArticleThymeleafController {
     private AuthenticationService authenticationService;
     
     @Autowired
-    private CommentService commentService;
+    private ArticleCommentService commentService;
     
     @Autowired
     private ArticleTypeService typeService;
@@ -95,7 +95,7 @@ public class ArticleThymeleafController {
 
         return ModelAndViewBuilder.of("articleDetail")
                 .setData("article", article)
-                .setData("comments", commentService.findByDestination(CommentType.ARTICLE, id))
+                .setData("comments", commentService.findByArticle(article.getId()))
                 .setData("topics", topicService.findByArticle(id))
                 .setData("hotArticles", articleService.findHotArticles(0, 5).getList())
                 .build();

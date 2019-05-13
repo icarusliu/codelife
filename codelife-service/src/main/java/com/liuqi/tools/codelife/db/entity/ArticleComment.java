@@ -10,17 +10,17 @@ import java.util.Collection;
  * @Created: 2018/4/13 15:57
  * @Version: V1.0
  **/
-public class Comment implements Serializable{
+public class ArticleComment implements Serializable{
     private Integer id;
     private String content;
-    private CommentType type;
-    private Integer destination;
+    private Article article;
+    private ArticleComment parent;
     private String commentTime;
     private User commentUser;
     private String ip;
     private Boolean anonymos;
-    
-    private Collection<Comment> children;
+
+    private Collection<ArticleComment> children;
     
     public Integer getId() {
         return id;
@@ -37,23 +37,25 @@ public class Comment implements Serializable{
     public void setContent(String content) {
         this.content = content;
     }
-    
-    public CommentType getType() {
-        return type;
+
+    public Article getArticle() {
+        return article;
     }
-    
-    public void setType(CommentType type) {
-        this.type = type;
+
+    public ArticleComment setArticle(Article article) {
+        this.article = article;
+        return this;
     }
-    
-    public Integer getDestination() {
-        return destination;
+
+    public ArticleComment getParent() {
+        return parent;
     }
-    
-    public void setDestination(Integer destination) {
-        this.destination = destination;
+
+    public ArticleComment setParent(ArticleComment parent) {
+        this.parent = parent;
+        return this;
     }
-    
+
     public String getCommentTime() {
         return commentTime;
     }
@@ -86,11 +88,11 @@ public class Comment implements Serializable{
         this.anonymos = anonymos;
     }
     
-    public Collection<Comment> getChildren() {
+    public Collection<ArticleComment> getChildren() {
         return children;
     }
     
-    public void setChildren(Collection<Comment> children) {
+    public void setChildren(Collection<ArticleComment> children) {
         this.children = children;
     }
 }

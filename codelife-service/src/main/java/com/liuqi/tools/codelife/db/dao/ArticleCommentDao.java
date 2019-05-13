@@ -1,6 +1,6 @@
 package com.liuqi.tools.codelife.db.dao;
 
-import com.liuqi.tools.codelife.db.entity.Comment;
+import com.liuqi.tools.codelife.db.entity.ArticleComment;
 import com.liuqi.tools.codelife.db.entity.CommentType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,27 +16,27 @@ import java.util.List;
  * @Version: V1.0
  **/
 @Mapper
-public interface CommentDao {
+public interface ArticleCommentDao {
     /**
      * 通过评论类型及评论主体获取所有评论
-     * @param type
-     * @param destination
+     * @param articleId
      * @return
      */
-    Collection<Comment> getByDestination(@Param("type") CommentType type,
-                                         @Param("destination") Integer destination);
+    Collection<ArticleComment> findByArticle(@Param("article") Integer articleId);
+
+    ArticleComment findById(@Param("id") Integer id);
     
     /**
      * 添加评论
-     * @param comment
+     * @param articleComment
      */
-    void add(Comment comment);
+    void add(ArticleComment articleComment);
     
     /**
      * 删除评论
-     * @param comment
+     * @param articleComment
      */
-    void delete(Comment comment);
+    void delete(ArticleComment articleComment);
     
     /**
      * 更新评论内容
@@ -60,5 +60,5 @@ public interface CommentDao {
      * @param count 需要查询的评论数目
      * @return 新增加的评论列表
      */
-    List<Comment> findNewerComments(@Param("count") int count);
+    List<ArticleComment> findNewerComments(@Param("count") int count);
 }

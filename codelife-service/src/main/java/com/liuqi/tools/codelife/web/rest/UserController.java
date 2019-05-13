@@ -51,7 +51,7 @@ public class UserController {
     private ArticleTypeService typeService;
     
     @Autowired
-    private CommentService commentService;
+    private ArticleCommentService commentService;
     
     @Autowired
     private AuthenticationProvider authenticationProvider;
