@@ -92,6 +92,7 @@ body {
     color: #000;
     text-overflow: ellipsis; 
     overflow: hidden;
+    white-space: nowrap;
 }
 
 /*右侧内容区域样式调整*/

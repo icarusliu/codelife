@@ -27,7 +27,7 @@
 
         <!-- 文章内容  -->
         <div class="row">
-            <div class="col ml-1 mr-1" id="content" v-html="htmlContent">
+            <div class="col" id="content" v-html="htmlContent">
             </div>
         </div>
 
@@ -290,10 +290,18 @@ export default {
     color: #00008B;
   }
 
+  .article-catalog-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .article-catalog-content a{
     font-size: 0.8em;
     line-height: 2em;
     color: #4169E1;
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   #title {
