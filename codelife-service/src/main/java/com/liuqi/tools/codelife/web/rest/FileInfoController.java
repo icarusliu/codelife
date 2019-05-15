@@ -14,6 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 文件管理控制器
@@ -32,12 +35,21 @@ public class FileInfoController extends BaseEntityController<FileInfoVO, FileInf
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/upload", consumes = "multipart/form-data")
-    public FileInfoVO upload(@RequestParam(value = "file", required = false)MultipartFile file,
+    public FileInfoVO upload(@RequestParam(value = "file")MultipartFile file,
                              @RequestParam("uploadUser") Integer uploadUser,
                              @RequestParam("module") String module) throws RestException {
         return this.entityService.upload(new FileInfoVO()
                 .setModule(module)
                 .setUploadUser(uploadUser), file);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "batchUpload", consumes = "multipart/form-data")
+    public List<FileInfoVO> batchUpload(@RequestParam(value = "files") MultipartFile[] files,
+                                        @RequestParam("uploadUser") Integer uploadUser,
+                                        @RequestParam("module") String module) {
+        return Arrays.stream(files).map(file -> this.entityService.upload(new FileInfoVO().setModule(module).setUploadUser(uploadUser), file))
+                .collect(Collectors.toList());
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -62,6 +74,9 @@ public class FileInfoController extends BaseEntityController<FileInfoVO, FileInf
             response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
             try (OutputStream outputStream = response.getOutputStream()) {
                 FileUtils.outputFileContent(entityService.getUploadPath(), fileInfo.getPath(), outputStream);
+                Integer downloadCount = fileInfo.getDownloadCount();
+                fileInfo.setDownloadCount(null == downloadCount ? 1 : downloadCount + 1);
+                this.entityService.save(fileInfo);
             } catch (IOException e) {
                 logger.error("写文件流失败", e);
             }

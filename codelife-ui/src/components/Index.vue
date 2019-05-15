@@ -3,7 +3,7 @@
         <!-- <login class="col-sm-2"></login> -->
         <div class="col-sm">
           <div class="row">
-            <div class="col-sm block">
+            <div class="col-sm block p-0">
               <h5 class="row block-title mb-0 mr-0 ml-0">热门文章</h5>
               <article-list class="mr-0 ml-0"  :forumId="-1" :title="title"></article-list>
             </div>
@@ -23,11 +23,13 @@
           <div class="block mt-1">
             <h5 class="block-title">最新评论</h5>
             <div class="w-100"></div>
-            <div class="block-item" v-for="comment in comments" :key="comment.id">
-              <sub>{{comment.commentTime}}</sub>
-              <a class="block-item-a">
-                {{ comment.content }}
-              </a>
+            <div class="block-item ml-4" v-for="comment in comments" :key="comment.id">
+              <a class="comment-article row" 
+                v-bind:href="'/articleDetail/' + comment.article.id">{{comment.article.title}}</a>
+              <div class="row">
+                <small>{{ null != comment.showName ? comment.showName : '匿名用户'}}：</small>
+                <label>{{ comment.content }}</label>
+              </div>
             </div>
           </div>
       </div>
@@ -61,7 +63,7 @@ export default {
       that.topics = data.topics
     })
 
-    axios.get('/comment/newComments').then(resp => {
+    axios.get('/article/comment/latestComments').then(resp => {
       that.comments = resp.data
     })
   },
@@ -79,3 +81,11 @@ export default {
   }
 }
 </script>
+
+<style>
+.comment-article {
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  color: gray;
+}
+</style>

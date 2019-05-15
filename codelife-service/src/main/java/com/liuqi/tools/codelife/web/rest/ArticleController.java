@@ -6,7 +6,7 @@ import com.liuqi.tools.codelife.service.FileInfoService;
 import com.liuqi.tools.codelife.service.TopicService;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
 import com.liuqi.tools.codelife.service.ArticleService;
-import com.liuqi.tools.codelife.service.CommentService;
+import com.liuqi.tools.codelife.service.ArticleCommentService;
 import com.liuqi.tools.codelife.util.MapBuilder;
 import com.liuqi.tools.codelife.util.SessionProxy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class ArticleController {
     private TopicService topicService;
     
     @Autowired
-    private CommentService commentService;
+    private ArticleCommentService commentService;
 
     @Autowired
     private FileInfoService fileInfoService;
@@ -79,7 +79,7 @@ public class ArticleController {
         return MapBuilder.of()
                 .put("article", article)
                 .put("relatedArticles", articleService.findHotArticles(0, 5).getList())
-                .put("comments", commentService.findByDestination(CommentType.ARTICLE, articleId))
+                .put("comments", commentService.findByArticle(articleId))
                 .put("files", fileInfoService.findByItem(MODULE_ARTICLE, articleId))
                 .build();
     }

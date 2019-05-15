@@ -119,7 +119,7 @@
 </template>
 
 <script>
-import ajax from '@/components/Ajax.js'
+import ajax from '@/components/common/Ajax.js'
 import MyDialog from '@/components/common/Dialog'
 import axios from 'axios'
 import DataTable from '@/components/common/DataTable'

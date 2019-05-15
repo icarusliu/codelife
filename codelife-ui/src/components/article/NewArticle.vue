@@ -26,16 +26,27 @@
       <mavon-editor class="row content"
         v-model="content"></mavon-editor>
     </div>
+
+    <dialog
+      @close="fileManager.showDialog=false"
+      v-if="fileManager.showDialog"
+      :submit="fileManager.showDIalog=false"
+      :title="fileManager.dialogTitle">
+      <div>
+        
+      </div>
+    </dialog>
   </div>
 </template>
 
 <script>
-import ajax from '@/components/Ajax.js'
+import ajax from '@/components/common/Ajax.js'
 import Vue from 'vue'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import '@/static/css/article-detail.css'
 import '@/static/css/comment.css'
+import Dialog from '@/components/common/Dialog'
 
 Vue.use(mavonEditor)
 
@@ -52,8 +63,16 @@ export default {
       typeId: null,
       forumId: null,
       topicId: null,
-      errorMessage: null
+      errorMessage: null,
+      
+      fileManager: {
+        showDialog: false,
+        dialogTitle: '文件管理'
+      }
     }
+  },
+  components: {
+    Dialog
   },
   created () {
     this.reload()

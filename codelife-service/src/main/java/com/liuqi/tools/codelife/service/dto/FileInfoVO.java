@@ -25,6 +25,8 @@ public class FileInfoVO {
 
     private String uploadDir;
 
+    private Integer downloadCount;
+
     public Integer getId() {
         return Id;
     }
@@ -94,6 +96,15 @@ public class FileInfoVO {
 
     public FileInfoVO setUploadDir(String uploadDir) {
         this.uploadDir = uploadDir;
+        return this;
+    }
+
+    public Integer getDownloadCount() {
+        return downloadCount;
+    }
+
+    public FileInfoVO setDownloadCount(Integer downloadCount) {
+        this.downloadCount = downloadCount;
         return this;
     }
 
