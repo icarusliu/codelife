@@ -71,7 +71,7 @@ public class IndexThymeleafController {
      *
      * @return
      */
-    @RequestMapping({"/index", "/"})
+//    @RequestMapping({"/index", "/"})
     public ModelAndView index() {
         List articles;
         try {

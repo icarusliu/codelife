@@ -109,7 +109,7 @@ export default {
     editArticle: function (id) {
       // 打开编辑界面
       let route = this.$router.resolve({name: '/'})
-      window.open(route.href + 'newArticle/' + id, '_blank')
+      window.open(route.href + 'newArticle/' + id)
     }
   },
   created () {

@@ -51,7 +51,7 @@
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
-                <router-link tag="a" target="_blank" v-if="null != loginUser" class="btn btn-sm btn-link mr-4" 
+                <router-link tag="a" v-if="null != loginUser" class="btn btn-sm btn-link mr-4" 
                     style="color: rgb(151, 229, 255); line-height: 24px; font-size: 0.8em;" :to="{name: 'newArticle', params: {articleId: -1}}">
                     <img src="/static/icons/write.png" width="15px" height="15px">写文章  
                 </router-link>

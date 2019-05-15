@@ -127,7 +127,7 @@ export default {
 
       ajax.post('/article/manager/save', params, function () {
         alert('保存成功！')
-        window.close()
+        window.history.back(-1)
       })
     }
   }

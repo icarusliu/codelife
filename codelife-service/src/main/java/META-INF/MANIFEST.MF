@@ -57,6 +57,8 @@ Class-Path: libs/mybatis-spring-1.3.1.jar libs/unbescape-1.1.5.RELEASE
  E.jar libs/spring-security-core-5.0.5.RELEASE.jar libs/tomcat-embed-e
  l-8.5.31.jar libs/spring-boot-starter-test-2.0.2.RELEASE.jar libs/ham
  crest-library-1.3.jar libs/lettuce-core-5.0.4.RELEASE.jar libs/spring
- -jdbc-5.0.6.RELEASE.jar libs/spring-aspects-5.0.6.RELEASE.jar
+ -jdbc-5.0.6.RELEASE.jar libs/spring-aspects-5.0.6.RELEASE.jar libs/sp
+ ring-security-oauth2-2.3.4.RELEASE.jar libs/commons-codec-1.11.jar li
+ bs/jackson-core-asl-1.9.13.jar libs/jackson-mapper-asl-1.9.13.jar
 Main-Class: com.liuqi.tools.codelife.Application
 
