@@ -92,7 +92,8 @@ export default {
       }
 
       var _this = this
-      ajax.post('/article/manager/getDataForNew', params, function (data) {
+      ajax.post('/article/manager/getDataForNew', params, function (d) {
+        let data = d.data
         _this.article = data.article
         _this.forums = data.forums
         _this.types = data.types

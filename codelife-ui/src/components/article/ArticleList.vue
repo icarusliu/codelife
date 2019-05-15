@@ -108,12 +108,7 @@ export default {
     },
     editArticle: function (id) {
       // 打开编辑界面
-<<<<<<< HEAD
-      let route = this.$router.resolve({name: '/'})
-      window.open(route.href + 'newArticle/' + id)
-=======
-      window.open('/newArticle/' + id)
->>>>>>> 7ad2de1b4921b0d15746e396a42a175c72520f80
+      this.$router.push({path: '/newArticle/' + id})
     }
   },
   created () {

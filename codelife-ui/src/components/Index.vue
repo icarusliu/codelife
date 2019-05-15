@@ -23,7 +23,7 @@
           <div class="block mt-1">
             <h5 class="block-title">最新评论</h5>
             <div class="w-100"></div>
-            <div class="block-item ml-4" v-for="comment in comments" :key="comment.id">
+            <div class="block-item ml-4 mr-4 p-0" v-for="comment in comments" :key="comment.id">
               <a class="comment-article row" 
                 v-bind:href="'/articleDetail/' + comment.article.id">{{comment.article.title}}</a>
               <div class="row">
@@ -87,5 +87,6 @@ export default {
   overflow: hidden; 
   text-overflow: ellipsis;
   color: gray;
+  border-bottom: 1px dotted gray; 
 }
 </style>

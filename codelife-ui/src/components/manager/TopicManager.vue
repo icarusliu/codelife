@@ -99,7 +99,7 @@ export default {
     },
     edit: function (item) {
       // 打开编辑界面
-      window.open('/topic/topicEdit/' + item.id, '_self')
+      this.$router.push({path: '/topic/topicEdit/' + item.id})
     }
   }
 }
