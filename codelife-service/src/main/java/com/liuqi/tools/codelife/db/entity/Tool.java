@@ -46,9 +46,6 @@ public class Tool {
     @JoinColumn(name = "item_id", referencedColumnName = "id")
     private List<FileInfo> images;
 
-    @Column(name = "download_count", columnDefinition = "integer not null default 0 comment '下载次数'")
-    private Integer downloadCount;
-
     public Integer getId() {
         return id;
     }
@@ -118,15 +115,6 @@ public class Tool {
 
     public Tool setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
-        return this;
-    }
-
-    public Integer getDownloadCount() {
-        return downloadCount;
-    }
-
-    public Tool setDownloadCount(Integer downloadCount) {
-        this.downloadCount = downloadCount;
         return this;
     }
 }

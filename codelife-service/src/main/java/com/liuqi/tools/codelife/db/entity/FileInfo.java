@@ -33,6 +33,9 @@ public class FileInfo {
     @Column(name = "upload_user", columnDefinition = "integer comment '上传用户'")
     private Integer uploadUser;
 
+    @Column(name = "download_count", columnDefinition = "integer default 0 comment '下载次数'")
+    private Integer downloadCount;
+
     public Integer getId() {
         return id;
     }
@@ -93,6 +96,15 @@ public class FileInfo {
 
     public FileInfo setUploadUser(Integer uploadUser) {
         this.uploadUser = uploadUser;
+        return this;
+    }
+
+    public Integer getDownloadCount() {
+        return downloadCount;
+    }
+
+    public FileInfo setDownloadCount(Integer downloadCount) {
+        this.downloadCount = downloadCount;
         return this;
     }
 }

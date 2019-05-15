@@ -12,7 +12,7 @@
             <div class="col d-block tool-info">
               <p class="row">{{tool.desc}}</p>
               <span class="row">上传时间：<label>{{tool.updateTime}}</label></span>
-              <span class="row">下载次数：<label>{{tool.downloadCount}}</label></span>
+              <span class="row">下载次数：<label>{{null != tool.fileInfo ? tool.fileInfo.downloadCount : 0}}</label></span>
               <span class="row">
                 <a class="my-btn my-btn-gray" 
                   v-if="null != tool.fileInfo"
@@ -84,7 +84,7 @@ export default {
 }
 
 .images {
-  margin: 0px 10px;
+  margin: 0px 40px 0px 10px;
   padding: 0px;
   box-shadow: 0px 0px 3px gray;
 }

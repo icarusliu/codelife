@@ -31,8 +31,6 @@ public class ToolVO {
 
     private LocalDateTime updateTime;
 
-    private Integer downloadCount;
-
     public Integer getId() {
         return id;
     }
@@ -87,15 +85,6 @@ public class ToolVO {
         return this;
     }
 
-    public Integer getDownloadCount() {
-        return downloadCount;
-    }
-
-    public ToolVO setDownloadCount(Integer downloadCount) {
-        this.downloadCount = downloadCount;
-        return this;
-    }
-
     @Override
     public String toString() {
         return "ToolVO{" +
@@ -105,7 +94,6 @@ public class ToolVO {
                 ", fileInfo=" + fileInfo +
                 ", images=" + images +
                 ", updateTime=" + updateTime +
-                ", downloadCount=" + downloadCount +
                 '}';
     }
 }

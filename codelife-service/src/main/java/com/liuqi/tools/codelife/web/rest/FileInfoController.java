@@ -74,6 +74,9 @@ public class FileInfoController extends BaseEntityController<FileInfoVO, FileInf
             response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
             try (OutputStream outputStream = response.getOutputStream()) {
                 FileUtils.outputFileContent(entityService.getUploadPath(), fileInfo.getPath(), outputStream);
+                Integer downloadCount = fileInfo.getDownloadCount();
+                fileInfo.setDownloadCount(null == downloadCount ? 1 : downloadCount + 1);
+                this.entityService.save(fileInfo);
             } catch (IOException e) {
                 logger.error("写文件流失败", e);
             }

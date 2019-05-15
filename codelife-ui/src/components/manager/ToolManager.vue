@@ -75,7 +75,8 @@ export default {
         },
         {
           title: '下载次数',
-          field: 'downloadCount'
+          field: 'fileInfo',
+          convert: (data) => data ? data.downloadCount : 0
         },
         {
           title: '操作',
@@ -95,8 +96,7 @@ export default {
         item: {
           id: -1,
           name: '',
-          desc: '',
-          downloadCount: 0
+          desc: ''
         }
       },
       images: [],
@@ -116,8 +116,7 @@ export default {
       this.dialog.item = {
         id: -1,
         name: '',
-        desc: '',
-        downloadCount: 0
+        desc: ''
       }
       this.dialog.title = '新增工具'
       this.dialog.show = true
@@ -170,7 +169,6 @@ export default {
       let params = {
           name: this.dialog.item.name,
           desc: this.dialog.item.desc,
-          downloadCount: this.dialog.item.downloadCount,
           fileInfo: files,
           images: imgFiles
       }
