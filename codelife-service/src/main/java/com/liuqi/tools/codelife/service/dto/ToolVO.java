@@ -2,6 +2,8 @@ package com.liuqi.tools.codelife.service.dto;
 
 import com.liuqi.tools.codelife.db.entity.FileInfo;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -26,6 +28,10 @@ public class ToolVO {
      * 图片信息
      */
     private List<FileInfo> images;
+
+    private LocalDateTime updateTime;
+
+    private Integer downloadCount;
 
     public Integer getId() {
         return id;
@@ -70,5 +76,36 @@ public class ToolVO {
     public ToolVO setImages(List<FileInfo> images) {
         this.images = images;
         return this;
+    }
+
+    public LocalDateTime getUpdateTime() {
+        return updateTime;
+    }
+
+    public ToolVO setUpdateTime(LocalDateTime updateTime) {
+        this.updateTime = updateTime;
+        return this;
+    }
+
+    public Integer getDownloadCount() {
+        return downloadCount;
+    }
+
+    public ToolVO setDownloadCount(Integer downloadCount) {
+        this.downloadCount = downloadCount;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "ToolVO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                ", fileInfo=" + fileInfo +
+                ", images=" + images +
+                ", updateTime=" + updateTime +
+                ", downloadCount=" + downloadCount +
+                '}';
     }
 }

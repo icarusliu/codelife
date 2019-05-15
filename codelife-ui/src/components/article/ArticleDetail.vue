@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import ajax from '@/components/Ajax.js'
+import ajax from '@/components/common/Ajax.js'
 import Vue from 'vue'
 import '@/static/css/article-detail.css'
 import '@/static/css/comment.css'

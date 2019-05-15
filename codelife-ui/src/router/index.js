@@ -19,6 +19,8 @@ import SystemIndexManager from '@/components/manager/IndexManager'
 import ArticleDetail from '@/components/article/ArticleDetail'
 import NewArticle from '@/components/article/NewArticle'
 import Login from '@/components/Login'
+import ToolManager from '@/components/manager/ToolManager'
+import Tools from '@/components/Tools'
 
 Vue.use(Router)
 Vue.use(Vuex)
@@ -71,6 +73,11 @@ export default new Router({
       component: TopicExplorer
     },
     {
+      path: '/tools',
+      name: 'tools',
+      component: Tools
+    },
+    {
       path: '/systemManager',
       name: 'systemManager',
       component: SystemManager,
@@ -109,6 +116,11 @@ export default new Router({
           path: '/topic/topicEdit/:topicId',
           name: 'topicEdit',
           component: TopicEdit
+        },
+        {
+          path: 'toolManager',
+          name: 'toolManager',
+          component: ToolManager
         }
       ]
     },

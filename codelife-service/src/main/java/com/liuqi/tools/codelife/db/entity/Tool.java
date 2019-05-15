@@ -25,10 +25,10 @@ public class Tool {
     @Column(name = "version", columnDefinition = "varchar(10) comment '版本'")
     private String version;
 
-    @Column(name = "create_time", columnDefinition = "timestamp default current_timestamp comment '创建时间'")
+    @Column(name = "create_time", columnDefinition = "timestamp not null default current_timestamp comment '创建时间'")
     private LocalDateTime createTime;
 
-    @Column(name = "update_time", columnDefinition = "timestamp default current_timestamp " +
+    @Column(name = "update_time", columnDefinition = "timestamp not null default current_timestamp " +
             "on update current_timestamp comment '更新时间'")
     private LocalDateTime updateTime;
 
@@ -43,9 +43,11 @@ public class Tool {
      * 图片信息
      */
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "tool_image", joinColumns = {@JoinColumn(name = "tool_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "file_id", referencedColumnName = "id")})
+    @JoinColumn(name = "item_id", referencedColumnName = "id")
     private List<FileInfo> images;
+
+    @Column(name = "download_count", columnDefinition = "integer not null default 0 comment '下载次数'")
+    private Integer downloadCount;
 
     public Integer getId() {
         return id;
@@ -116,6 +118,15 @@ public class Tool {
 
     public Tool setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
+        return this;
+    }
+
+    public Integer getDownloadCount() {
+        return downloadCount;
+    }
+
+    public Tool setDownloadCount(Integer downloadCount) {
+        this.downloadCount = downloadCount;
         return this;
     }
 }

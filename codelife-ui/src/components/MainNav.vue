@@ -38,6 +38,12 @@
                         :to="{name: 'topicExplorer'}">专题浏览</router-link>
                 </li>
 
+                <li class="nav-item"
+                    v-if="null == loginUser || !loginUser.systemAdmin">
+                    <router-link class="nav-link text-center font-weight-bold"
+                        :to="{name: 'tools'}">常用工具</router-link>
+                </li>
+
                 <!-- 只有管理员才能看到系统管理界面 -->
                 <li class="nav-item" v-if="null != loginUser && '' != loginUser">
                     <router-link class="nav-link text-center font-weight-bold"
