@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- <login class="col-sm-2"></login> -->
-        <div class="col-sm">
+        <div class="col-sm mb-1">
           <div class="row">
             <div class="col-sm block p-0">
               <h5 class="row block-title mb-0 mr-0 ml-0">热门文章</h5>
@@ -9,7 +9,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-3 ml-1 mr-0 pl-0 pr-0">
+        <div class="col-sm-3 ml-sm-1 mr-0 pl-0 pr-0">
           <div class="block">
               <h5 class="block-title block-title-topic">热门专题</h5>
               <div class="w-100"></div>
@@ -20,7 +20,7 @@
               </div>
           </div>
 
-          <div class="block mt-1">
+          <div class="block mt-1 mb-1">
             <h5 class="block-title">最新评论</h5>
             <div class="w-100"></div>
             <div class="block-item ml-4 mr-4 p-0" v-for="comment in comments" :key="comment.id">

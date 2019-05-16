@@ -2,10 +2,7 @@ package com.liuqi.tools.codelife.service.impl;
 
 import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.db.dao.ArticleDao;
-import com.liuqi.tools.codelife.db.entity.Article;
-import com.liuqi.tools.codelife.db.entity.ArticleType;
-import com.liuqi.tools.codelife.db.entity.User;
-import com.liuqi.tools.codelife.db.entity.UserArticleStatInfo;
+import com.liuqi.tools.codelife.db.entity.*;
 import com.liuqi.tools.codelife.util.exceptions.ErrorCodes;
 import com.liuqi.tools.codelife.util.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
@@ -127,7 +124,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
     
     @Override
-    public void saveArticle(String title, String content, Integer type, Integer topicId, Integer forumId, List<Integer> fileIds) throws RestException {
+    public void saveArticle(String title, String content, Integer type, Integer topicId,
+                            Integer forumId, List<Integer> fileIds, ArticleStatus articleStatus) throws RestException {
         if (null == title || "".equals(title.trim())) {
             logger.error("Title cannot be null or empty");
             throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章标题");
@@ -150,6 +148,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .setType(articleTypeService.findById(type))
                 .setContent(content, contentFilePath)
                 .setAuthor(user)
+                .setStatus(articleStatus)
                 .build();
         if (null != forumId) {
             article.setForum(articleTypeService.findById(forumId));

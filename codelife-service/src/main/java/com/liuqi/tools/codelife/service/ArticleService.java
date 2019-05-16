@@ -2,6 +2,7 @@ package com.liuqi.tools.codelife.service;
 
 import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.db.entity.Article;
+import com.liuqi.tools.codelife.db.entity.ArticleStatus;
 import com.liuqi.tools.codelife.db.entity.User;
 import com.liuqi.tools.codelife.db.entity.UserArticleStatInfo;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
@@ -119,9 +120,10 @@ public interface ArticleService {
      * @param topicId 专题 可以为空
      * @param forumId 版块，可以为空，文章可以不发表到任何版块
      * @param fileIds
+     * @param articleStatus
      * @throws RestException
      */
-    void saveArticle(String title, String content, Integer type, Integer topicId, Integer forumId, List<Integer> fileIds) throws RestException;
+    void saveArticle(String title, String content, Integer type, Integer topicId, Integer forumId, List<Integer> fileIds, ArticleStatus articleStatus) throws RestException;
     
     /**
      * 对应文章的阅读次数加1

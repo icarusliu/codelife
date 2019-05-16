@@ -18,7 +18,10 @@
           v-model="forumId">
           <option :value="forum.id" v-for="forum in forums" :key="forum.id">{{forum.name}}</option>
         </select>
-        <div class="col-sm-1">
+        <div class="col-sm-1 pt-2">
+          <input type="checkbox" v-model="draft" class="mr-1"/>存草稿
+        </div>
+        <div class="col-sm-2">
           <button type="button" class="btn btn-primary" v-on:click="submit">发表</button>
         </div>
       </div>
@@ -68,7 +71,8 @@ export default {
       fileManager: {
         showDialog: false,
         dialogTitle: '文件管理'
-      }
+      },
+      draft: false
     }
   },
   components: {
@@ -142,6 +146,10 @@ export default {
 
       if (this.topicId !== null && Number(this.topicId) !== 0) {
         params.topic = this.topicId
+      }
+
+      if (this.draft) {
+        params.status = 4
       }
 
       ajax.post('/article/manager/save', params, function () {

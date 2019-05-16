@@ -245,6 +245,7 @@ export default {
   margin: 0px;
   padding: 0px;
   line-height: 2em;
+  font-size: 14px;
 }
 
 .datatable th{
@@ -256,5 +257,12 @@ export default {
 .datatable td{
   border: 1px solid #ADD8E6;
   padding-left: 10px;
+
+  max-width: 300px;
+}
+
+.datatable td>p {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

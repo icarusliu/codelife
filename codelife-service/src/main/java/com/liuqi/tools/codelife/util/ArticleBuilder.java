@@ -92,6 +92,11 @@ public final class ArticleBuilder {
         article.setForum(forum);
         return this;
     }
+
+    public ArticleBuilder setStatus(ArticleStatus status) {
+        article.setStatus(status);
+        return this;
+    }
     
     /**
      * 生成文章对象

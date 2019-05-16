@@ -44,6 +44,8 @@ public class AuthenticationConfiguration extends AuthorizationServerConfigurerAd
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        // 后端接口默认添加/api前缀，以方便在前后端分离模式下nginx区分前后端请求
+        endpoints.pathMapping("/oauth/token", "/api/oauth/token");
         endpoints.authenticationManager(authentication -> realAuthenticationProvider.authenticate(authentication));
     }
 

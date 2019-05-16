@@ -2,6 +2,7 @@ package com.liuqi.tools.codelife.web.rest;
 
 import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.db.entity.Article;
+import com.liuqi.tools.codelife.db.entity.ArticleStatus;
 import com.liuqi.tools.codelife.db.entity.User;
 import com.liuqi.tools.codelife.util.exceptions.ErrorCodes;
 import com.liuqi.tools.codelife.util.exceptions.ExceptionTool;
@@ -114,7 +115,8 @@ public class ArticleManagerController {
                               @RequestParam(value = "topic", required = false) Integer topicId,
                               @RequestParam(value = "forumId", required = false) Integer forumId,
                               @RequestParam(name = "id", required = false) Integer id,
-                             @RequestParam(name = "fileIds", required = false) String fileIdsStr) throws RestException {
+                             @RequestParam(name = "fileIds", required = false) String fileIdsStr,
+                             @RequestParam(name = "status", required = false) Integer status) throws RestException {
         List<Integer> fileIds = new ArrayList<>(16);
         if (StringUtils.isNotBlank(fileIdsStr)) {
             for (String s : fileIdsStr.split(",")) {
@@ -122,7 +124,11 @@ public class ArticleManagerController {
             }
         }
         if (null == id) {
-            articleService.saveArticle(title, content, type, topicId, forumId, fileIds);
+            ArticleStatus articleStatus = ArticleStatus.APPROVED;
+            if (null != status) {
+                articleStatus = ArticleStatus.parse(status);
+            }
+            articleService.saveArticle(title, content, type, topicId, forumId, fileIds, articleStatus);
         } else {
             //判断登录用户是否是作者，如果不是则不能进行保存
             User loginUser = authenticationService.getLoginUser();

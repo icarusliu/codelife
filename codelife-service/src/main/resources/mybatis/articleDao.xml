@@ -56,7 +56,7 @@
 
     <select id="findForExplorerOrderByRecommended" resultMap="articleResult">
         <include refid="selectArticle"/>
-        where 1 = 1
+        where t1.status = 1
         <if test="forumId != null">
             and t1.forum = #{forumId}
         </if>
@@ -65,7 +65,7 @@
 
     <select id="findForExplorerOrderByFixTop" resultMap="articleResult">
         <include refid="selectArticle"/>
-        where 1 = 1
+        where t1.status = 1
         <if test="typeId != null">
             and t1.type = #{typeId}
         </if>
@@ -85,6 +85,7 @@
         left join topic_article t4
         on t4.article_id = t1.id
         where t4.topic_id = #{topicId}
+          and t1.status = 1
         order by t1.create_date desc
     </select>
 
@@ -94,6 +95,7 @@
         left join topic_article t4
         on t4.article_id = t1.id
         where t4.topic_id = #{topicId}
+          and t1.status = 1
         order by create_date desc
     </select>
 
@@ -103,6 +105,7 @@
         on t4.article_id = t1.id
         where (t4.topic_id is null or t4.topic_id != #{topicId})
           and t1.title like concat('%', #{key}, '%')
+          and t1.status = 1
         order by create_date desc
     </select>
 
@@ -115,6 +118,7 @@
     <select id="search" resultMap="articleResult">
         <include refid="selectArticle"/>
         where t1.title like concat('%', concat(#{key}, '%'))
+          and t1.status = 1
         <include refid="orderByRecommended"/>
     </select>
 
@@ -125,10 +129,12 @@
         from
             article
         where author = #{authorId}
+          and status = 1
     </select>
 
     <select id="findHotArticles" resultMap="articleResult">
         <include refid="selectArticle"/>
+        where t1.status = 1
         order by read_count desc
     </select>
 
