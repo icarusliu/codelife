@@ -26,7 +26,7 @@ Vue.use(Router)
 Vue.use(Vuex)
 
 // 统一设置后台服务地址
-Axios.defaults.baseURL = 'http://liumoran.cn/'
+Axios.defaults.baseURL = 'http://liumoran.cn/api/'
 Axios.defaults.withCredentials = true
 
 // 转换数据成标准格式
