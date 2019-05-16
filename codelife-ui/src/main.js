@@ -13,6 +13,24 @@ Vue.config.productionTip = false
 
 Vue.use(Vuex)
 
+Axios.defaults.baseURL = process.env.API_ROOT + 'api/'
+Axios.defaults.withCredentials = true
+
+// 转换数据成标准格式
+Axios.defaults.transformRequest = function (data) {
+  if (data instanceof FormData) {
+    return data
+  }
+
+  var result = new URLSearchParams()
+
+  for (var i in data) {
+    result.append(i, data[i])
+  }
+
+  return result
+}
+
 Axios.interceptors.request.use(config => {
   let token = window.localStorage.getItem('accessToken')
   if (token && config.url.indexOf('/oauth/token') === -1) {

@@ -1,7 +1,5 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
 import Router from 'vue-router'
-import Axios from 'axios'
 import Index from '@/components/Index'
 import ArticleExplorer from '@/components/article/ArticleExplorer'
 import UserIndex from '@/components/UserIndex'
@@ -23,26 +21,6 @@ import ToolManager from '@/components/manager/ToolManager'
 import Tools from '@/components/Tools'
 
 Vue.use(Router)
-Vue.use(Vuex)
-
-// 统一设置后台服务地址
-Axios.defaults.baseURL = 'http://liumoran.cn/api/'
-Axios.defaults.withCredentials = true
-
-// 转换数据成标准格式
-Axios.defaults.transformRequest = function (data) {
-  if (data instanceof FormData) {
-    return data
-  }
-
-  var result = new URLSearchParams()
-
-  for (var i in data) {
-    result.append(i, data[i])
-  }
-
-  return result
-}
 
 export default new Router({
   mode: 'history',
