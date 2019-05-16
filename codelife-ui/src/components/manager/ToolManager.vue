@@ -146,7 +146,7 @@ export default {
         _this.uploadImgAndAddInternal()
       } else {
         ajax.uploadFile('常用工具', files[0], resp => {
-          _this.uploadImgAndAddInternal(resp.data)
+          _this.uploadImgAndAddInternal(resp)
         })
       }
     },
@@ -158,7 +158,7 @@ export default {
 
         if (imgFiles && imgFiles.length !== 0) {
           ajax.batchUpload('常用工具', imgFiles, imgFileInfos => {
-            _this.addInternal(files, imgFileInfos.data)
+            _this.addInternal(files, imgFileInfos)
           })
         } else {
           _this.addInternal(files)

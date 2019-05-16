@@ -11,7 +11,7 @@ ajax.post = function post (url, data, success) {
     }
 
     if (success) {
-      success(resp)
+      success(resp.data)
     }
   })
 }
@@ -22,7 +22,7 @@ ajax.delete = (url, data, success) => {
       alert('请求失败，错误消息：[' + resp.errorMessage + ']')
     }
 
-    success && success(resp)
+    success && success(resp.data)
   })
 }
 
