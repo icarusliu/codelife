@@ -26,7 +26,7 @@
         </div>
       </div>
 
-      <mavon-editor class="row content"
+      <mavon-editor class="row content" @imgAdd='imgAdd' ref="md"
         v-model="content"></mavon-editor>
     </div>
 
@@ -44,6 +44,7 @@
 
 <script>
 import ajax from '@/components/common/Ajax.js'
+import axios from 'axios'
 import Vue from 'vue'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
@@ -72,7 +73,8 @@ export default {
         showDialog: false,
         dialogTitle: '文件管理'
       },
-      draft: false
+      draft: false,
+      baseUrl: axios.defaults.baseURL
     }
   },
   components: {
@@ -155,6 +157,15 @@ export default {
       ajax.post('/article/manager/save', params, function () {
         alert('保存成功！')
         window.history.back(-1)
+      })
+    },
+
+    // 添加图片
+    imgAdd: function (pos, file) {
+      let _this = this
+      ajax.uploadFile('文章', file, (resp) => {
+        console.log(resp)
+        _this.$refs.md.$img2Url(pos, _this.baseUrl + 'file/download/' + resp.id)
       })
     }
   }
