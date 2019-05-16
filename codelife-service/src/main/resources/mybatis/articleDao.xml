@@ -159,7 +159,9 @@
     </delete>
 
     <update id="updateArticle">
-        update article set type=#{type}, title=#{title}, forum=#{forumId}, remark = #{remark} where id=#{id}
+        update article set type=#{type}, title=#{title}, forum=#{forumId}, remark = #{remark},
+            status = #{status, typeHandler=com.liuqi.tools.codelife.db.dao.typehandler.ArticleStatusTypeHandler}
+        where id=#{id}
     </update>
 
     <update id="addPraiseCount">

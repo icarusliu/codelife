@@ -123,11 +123,13 @@ public class ArticleManagerController {
                 fileIds.add(Integer.valueOf(s));
             }
         }
+
+        ArticleStatus articleStatus = ArticleStatus.APPROVED;
+        if (null != status) {
+            articleStatus = ArticleStatus.parse(status);
+        }
+
         if (null == id) {
-            ArticleStatus articleStatus = ArticleStatus.APPROVED;
-            if (null != status) {
-                articleStatus = ArticleStatus.parse(status);
-            }
             articleService.saveArticle(title, content, type, topicId, forumId, fileIds, articleStatus);
         } else {
             //判断登录用户是否是作者，如果不是则不能进行保存
@@ -140,7 +142,7 @@ public class ArticleManagerController {
             }
             
             //只允许更新标题与内容
-            articleService.updateArticle(id, title, content, type, fileIds);
+            articleService.updateArticle(id, title, content, type, fileIds, articleStatus);
         }
         
         return "succeed";
