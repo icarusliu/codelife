@@ -45,7 +45,7 @@
               {{ topic.title }}
               </router-link>
 
-            <img class="col-sm-3 p-0" v-if="topic.img != ''"
+            <img class="col-sm-3 p-0" v-if="topic.img != ''" height="200" width="200"
                 :src="baseUrl + 'topic/getImg' + '?fileName=' + topic.img"/>
 
             <img class="col-sm-3 p-0" v-if="topic.img == ''"/>
