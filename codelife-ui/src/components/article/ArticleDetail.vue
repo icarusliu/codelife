@@ -323,9 +323,6 @@ export default {
 
   #content {
     background: #fcfcfc;
-  }
-
-  #content>p{
     font-size: 14px;
   }
 

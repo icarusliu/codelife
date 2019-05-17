@@ -19,6 +19,7 @@ import NewArticle from '@/components/article/NewArticle'
 import Login from '@/components/Login'
 import ToolManager from '@/components/manager/ToolManager'
 import Tools from '@/components/Tools'
+import UpdatePassword from '@/components/UpdatePassword'
 
 Vue.use(Router)
 
@@ -121,6 +122,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/updatePassword',
+      name: 'updatePassword',
+      component: UpdatePassword
     }
   ]
 })

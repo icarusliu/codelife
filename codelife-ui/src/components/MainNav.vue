@@ -65,6 +65,7 @@
                 <div style="font-size: 0.8em; color: #fff;" v-if="null != loginUser && '' != loginUser">
                     登录用户：<font class="mr-4" style="color: #fc3962;">{{ loginUser.realName }}</font>
                     <a href="#" @click="logout" style="color: rgb(245, 222, 222);">注销</a>
+                    <a href="#" @click="updatePassword" style="color: rgb(245, 222, 222);">修改密码</a>
                 </div>
 
                  <div v-if="null == loginUser || '' == loginUser" style="font-size: 0.8em; ">
@@ -99,6 +100,10 @@ export default {
     },
     login: function () {
       this.$router.push({path: '/login'})
+    },
+
+    updatePassword: function () {
+      this.$router.push({path: '/updatePassword'})
     }
   }
 }

@@ -118,4 +118,9 @@ public interface UserService {
      * @param newPassword   新密码
      */
     void resetPassword(Integer userId, String password, String newPassword) throws RestException;
+
+    /**
+     * 重置密码错误次数
+     */
+    void resetErrorCount();
 }

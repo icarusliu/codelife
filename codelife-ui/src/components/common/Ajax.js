@@ -11,7 +11,7 @@ ajax.post = function post (url, data, success) {
     }
 
     if (success) {
-      success(resp.data)
+      success(resp.data ? resp.data : resp)
     }
   })
 }

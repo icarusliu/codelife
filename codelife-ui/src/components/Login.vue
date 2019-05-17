@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import ajax from '@/components/common/Ajax'
 import { mapState } from 'vuex'
 
 export default {
@@ -49,20 +49,12 @@ export default {
       formData.grant_type = 'password'
 
       var that = this
-      axios.post('/oauth/token', formData).then(function (resp) {
+      ajax.post('/oauth/token', formData, function (resp) {
         console.log('oauth token response: ' + resp)
 
         window.localStorage.setItem('accessToken', resp.access_token)
         that.$store.dispatch('updateLoginUser')
         that.$router.push('/')
-      }).catch(function (error) {
-        console.log('Oauth token response error: ' + error)
-
-        if (error.statusCode && error.statusCode === 200) {
-          that.errorMessage = error.errorMessage
-        } else {
-          alert(error)
-        }
       })
     }
   }
