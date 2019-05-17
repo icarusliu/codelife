@@ -44,19 +44,4 @@ public class ExceptionHandlerAdvice {
                 .setDatasFromMap(map)
                 .build();
     }
-
-    /**
-     * 处理登录失败异常
-     */
-    @ExceptionHandler(RealAuthenticationException.class)
-    @ResponseBody
-    public Map<String, Object> authenticationException(HttpServletRequest request,
-                                                       RealAuthenticationException ex) {
-        return MapBuilder.of()
-                .put("exception", ex)
-                .put("errorMessage", ex.getMessage())
-                .put("url", request.getRequestURL())
-                .put("statusCode", "403")
-                .build();
-    }
 }

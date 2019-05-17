@@ -13,6 +13,13 @@ ajax.post = function post (url, data, success) {
     if (success) {
       success(resp.data ? resp.data : resp)
     }
+  }).catch(message => {
+    let msg = message
+    if (message.response && message.response.data && message.response.data.error_description) {
+      msg = message.response.data.error_description
+    }
+
+    alert(msg)
   })
 }
 
