@@ -26,9 +26,9 @@
             <div class="block-item ml-4 mr-4 p-0" v-for="comment in comments" :key="comment.id">
               <a class="comment-article row" 
                 v-bind:href="'/articleDetail/' + comment.article.id">{{comment.article.title}}</a>
-              <div class="row">
-                <small>{{ null != comment.showName ? comment.showName : '匿名用户'}}：</small>
-                <label>{{ comment.content }}</label>
+              <div class="row comment-content mt-1">
+                <label>{{ null != comment.showName ? comment.showName : '匿名用户'}}：</label>
+                <p class="mb-1 col-sm">{{ comment.content }}</p>
               </div>
             </div>
           </div>
@@ -88,5 +88,14 @@ export default {
   text-overflow: ellipsis;
   color: gray;
   border-bottom: 1px dotted gray; 
+}
+
+.comment-content {
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.comment-content>label {
+  color: rgb(12, 8, 247);
 }
 </style>
