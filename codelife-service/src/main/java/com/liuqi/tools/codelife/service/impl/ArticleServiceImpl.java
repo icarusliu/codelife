@@ -197,10 +197,12 @@ public class ArticleServiceImpl implements ArticleService {
      * @param title
      * @param content
      * @param fileIds
+     * @param forumId
      * @param articleStatus
      */
     @Override
-    public void updateArticle(Integer id, String title, String content, Integer type, List<Integer> fileIds, ArticleStatus articleStatus) throws RestException {
+    public void updateArticle(Integer id, String title, String content, Integer type, List<Integer> fileIds,
+                              Integer forumId, ArticleStatus articleStatus) throws RestException {
         if (null == id) {
             logger.error("Id cannot be null!");
             throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章编号");
@@ -234,14 +236,24 @@ public class ArticleServiceImpl implements ArticleService {
         FileUtils.saveToFile(content, contentFilePath, article.getContentUrl());
         ArticleUtils.setRemark(article, content);
 
+        if (null == forumId) {
+            forumId = article.getForum().getId();
+        }
+
         //更新数据库信息 版块不进行更新
         articleDao.updateArticle(id, title, type,
-                article.getForum().getId(), article.getRemark(), articleStatus);
+                forumId, article.getRemark(), articleStatus);
         
         //更新分类中的文章计数信息
         if (oldType.getId() != type) {
             articleTypeService.addArticleCount(type);
             articleTypeService.deduceArticleCount(oldType.getId());
+        }
+
+        // 更新版本中的文章计数信息
+        if (!forumId.equals(article.getForum().getId())) {
+            articleTypeService.addArticleCount(forumId);
+            articleTypeService.deduceArticleCount(article.getForum().getId());
         }
 
         // 更新文章附件

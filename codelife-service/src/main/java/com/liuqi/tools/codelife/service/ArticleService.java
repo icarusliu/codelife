@@ -145,10 +145,11 @@ public interface ArticleService {
      * @param content 文章内容，不能为空
      * @param type  文章分类，不能为空
      * @param fileIds
+     * @param forumId
      * @param articleStatus
      * @throws RestException
      */
-    void updateArticle(Integer id, String title, String content, Integer type, List<Integer> fileIds, ArticleStatus articleStatus) throws RestException;
+    void updateArticle(Integer id, String title, String content, Integer type, List<Integer> fileIds, Integer forumId, ArticleStatus articleStatus) throws RestException;
     
     /**
      * 对文章进行点赞

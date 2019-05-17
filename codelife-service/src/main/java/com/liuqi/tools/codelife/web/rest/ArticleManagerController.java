@@ -142,7 +142,7 @@ public class ArticleManagerController {
             }
             
             //只允许更新标题与内容
-            articleService.updateArticle(id, title, content, type, fileIds, articleStatus);
+            articleService.updateArticle(id, title, content, type, fileIds, forumId, articleStatus);
         }
         
         return "succeed";
