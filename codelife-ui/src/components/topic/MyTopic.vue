@@ -23,7 +23,7 @@
             <h5 class="block-title">
                 热门专题
             </h5>
-            <router-link class="block-item"
+            <router-link class="block-item d-block w-100"
                 v-for="topic in hotTopics" :key="topic.id"
                 :to="{name: 'myTopics', params: {topicId: topic.id}}">
                 <span>{{ topic.title }}</span>

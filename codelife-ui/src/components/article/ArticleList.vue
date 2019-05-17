@@ -142,7 +142,7 @@ export default {
 .article-item {
     border-bottom: 1px dotted #efefef;
     padding-top: 10px;
-    padding-left: 10px;
+    padding-left: 20px;
 }
 
 .article-item:hover {
