@@ -14,7 +14,7 @@
           <option v-for="type in types" :key="type.id" :value="type.id">{{type.name}}</option>
         </select>
         <label class="item-title" v-if="null == article">版块：</label>
-        <select name="forumId" class="col-sm-2 form-control" id="forum" required v-if="null == article"
+        <select name="forumId" class="col-sm-2 form-control" id="forum" required
           v-model="forumId">
           <option :value="forum.id" v-for="forum in forums" :key="forum.id">{{forum.name}}</option>
         </select>
