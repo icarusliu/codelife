@@ -43,7 +43,8 @@ public class Tool {
      * 图片信息
      */
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "item_id", referencedColumnName = "id")
+    @JoinTable(name = "app_file", joinColumns = {@JoinColumn(name = "tool_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "file_id", referencedColumnName = "id")})
     private List<FileInfo> images;
 
     public Integer getId() {
