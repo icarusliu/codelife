@@ -17,6 +17,7 @@
         <result property="praiseCount" column="praise_count"/>
         <result property="fixTop" column="fix_top"/>
         <result property="recommended" column="recommended"/>
+        <result property="coverFileId" column="cover_file_id"/>
         <association property="articleType" column="type"
                      select="com.liuqi.tools.codelife.db.dao.ArticleTypeDao.findById"
                      javaType="ArticleType"/>
@@ -42,7 +43,8 @@
             t1.read_count as read_count,
             t1.praise_count as praise_count,
             t1.fix_top as fix_top,
-            t1.recommended as recommended
+            t1.recommended as recommended,
+            t1.cover_file_id as cover_file_id
         from article t1
         left join user t2
             on t1.author = t2.id
@@ -142,11 +144,13 @@
     <insert id="save" parameterType="com.liuqi.tools.codelife.db.entity.Article" useGeneratedKeys="true" keyProperty="id">
         insert into article(title, type, author, create_date, status, content_url, read_count, remark
         <if test="null != forum">, forum</if>
+        <if test="null != fileCoverId">, fileCoverId</if>
         )
         values(#{title}, #{articleType.id}, #{authorID}, #{createDate},
             #{status, typeHandler=com.liuqi.tools.codelife.db.dao.typehandler.ArticleStatusTypeHandler},
             #{contentUrl}, #{readCount}, #{remark}
         <if test="null != forum">, #{forum.id}</if>
+        <if test="null != fileCoverId">, #{fileCoverId}</if>
         )
     </insert>
 
@@ -158,9 +162,10 @@
         delete from article where id=#{id}
     </delete>
 
-    <update id="updateArticle">
-        update article set type=#{type}, title=#{title}, forum=#{forumId}, remark = #{remark},
+    <update id="updateArticle" parameterType="Article">
+        update article set type=#{articleType.id}, title=#{title}, forum=#{forum.id}, remark = #{remark},
             status = #{status, typeHandler=com.liuqi.tools.codelife.db.dao.typehandler.ArticleStatusTypeHandler}
+            <if test="null != coverFileId">, cover_file_id = #{coverFileId}</if>
         where id=#{id}
     </update>
 

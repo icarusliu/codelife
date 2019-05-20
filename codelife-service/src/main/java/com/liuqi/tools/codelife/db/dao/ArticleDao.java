@@ -107,16 +107,8 @@ public interface ArticleDao {
     
     /**
      * 更新文章标题、分类等信息
-     * @param id
-     * @param title
-     * @param type
-     * @param forumId
-     * @param remark
-     * @param articleStatus
      */
-    void updateArticle(@Param("id") Integer id, @Param("title") String title, @Param("type") Integer type,
-                       @Param("forumId") Integer forumId, @Param("remark") String remark,
-                       @Param("status") ArticleStatus articleStatus);
+    void updateArticle(Article article);
     
     /**
      * 点赞

@@ -20,7 +20,10 @@
           <slot class="col"></slot>
         </div>
         <div class="row justify-content-end mr-2 mb-2">
-          <input type='button' class='btn mr-2' value='关闭' @click="close"/>
+          <input type='button' class='btn mr-2' v-for="button in buttons" :key="button.value" :value="button.value" 
+            @click="button.event"/>
+          <input type='button' class='btn mr-2' value='关闭' @click="close" v-if="showCloseButton == null || showCloseButton == undefined
+           || showCloseButton"/>
           <input type='button' class='btn btn-primary' value='确定' v-on:click="submit"/>
         </div>
       </div>
@@ -32,7 +35,7 @@
 import $ from 'jquery'
 
 export default {
-  props: ['title', 'submit', 'show'],
+  props: ['title', 'submit', 'show', 'showCloseButton', 'buttons'],
   data () {
     return {
     }

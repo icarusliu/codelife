@@ -43,7 +43,7 @@ public class ArticleServiceImpl implements ArticleService {
     
     @Value("${app.file.savePath}")
     private String contentFilePath;
-    
+
     @Autowired
     private ArticleTypeService articleTypeService;
 
@@ -124,46 +124,16 @@ public class ArticleServiceImpl implements ArticleService {
     }
     
     @Override
-    public void saveArticle(String title, String content, Integer type, Integer topicId,
-                            Integer forumId, List<Integer> fileIds, ArticleStatus articleStatus) throws RestException {
-        if (null == title || "".equals(title.trim())) {
-            logger.error("Title cannot be null or empty");
-            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章标题");
-        }
-    
-        if (null == content || "".equals(content)) {
-            logger.error("Content cannot be null!");
-            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章内容");
-        }
-        
-        //type不能为空
-        if (null == type) {
-            logger.error("Type cannot be null!");
-            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章分类");
-        }
-        
-        User user = authenticationService.getLoginUser();
-        
-        Article article = ArticleBuilder.of(title)
-                .setType(articleTypeService.findById(type))
-                .setContent(content, contentFilePath)
-                .setAuthor(user)
-                .setStatus(articleStatus)
-                .build();
-        if (null != forumId) {
-            article.setForum(articleTypeService.findById(forumId));
-        }
+    public void saveArticle(Article article, List<Integer> fileIds) throws RestException {
+        article.setRemark(article.getContent());
         Integer articleId = articleDao.save(article);
         
         //文章分类对象中文章数目加1
-        articleTypeService.addArticleCount(forumId);
-        articleTypeService.addArticleCount(type);
-        
-        //将文章添加到专题
-        if (null != topicId && 0 != topicId) {
-            topicService.addTopicArticls(topicId, Collections.singletonList(article.getId()));
+        if (null != article.getForum()) {
+            articleTypeService.addArticleCount(article.getForum().getId());
         }
-
+        articleTypeService.addArticleCount(article.getArticleType().getId());
+        
         // 绑定文件与文章的关系
         if (!CollectionUtils.isEmpty(fileIds)) {
             fileInfoService.batchUpdateItemId(fileIds, articleId);
@@ -193,72 +163,28 @@ public class ArticleServiceImpl implements ArticleService {
     
     /**
      * 更新文章
-     * @param id
-     * @param title
-     * @param content
-     * @param fileIds
-     * @param forumId
-     * @param articleStatus
+     * @param fileIds   附件文件编号清单
      */
     @Override
-    public void updateArticle(Integer id, String title, String content, Integer type, List<Integer> fileIds,
-                              Integer forumId, ArticleStatus articleStatus) throws RestException {
-        if (null == id) {
-            logger.error("Id cannot be null!");
-            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章编号");
-        }
-        
-        if (null == title || "".equals(title.trim())) {
-            logger.error("Title cannot be null or empty");
-            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章标题");
-        }
-        
-        if (null == content || "".equals(content)) {
-            logger.error("Content cannot be null!");
-            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章内容");
-        }
-        
-        //type不能为空
-        if (null == type) {
-            logger.error("Type cannot be null!");
-            throw ExceptionTool.getException(ErrorCodes.COMM_PARAMETER_EMPTY, "文章分类");
-        }
-        
-        Article article = articleDao.findById(id);
-        if (null == article) {
-            logger.error("Article with the special id does not exist!");
-            throw ExceptionTool.getException(ErrorCodes.ARTICLE_NOT_EXISTS, id);
-        }
-        
-        ArticleType oldType = article.getArticleType();
-        
-        //更新文件内容
-        FileUtils.saveToFile(content, contentFilePath, article.getContentUrl());
-        ArticleUtils.setRemark(article, content);
-
-        if (null == forumId) {
-            forumId = article.getForum().getId();
-        }
-
+    public void updateArticle(Article article, List<Integer> fileIds, Integer oldForumId, Integer oldType) throws RestException {
         //更新数据库信息 版块不进行更新
-        articleDao.updateArticle(id, title, type,
-                forumId, article.getRemark(), articleStatus);
+        articleDao.updateArticle(article);
         
         //更新分类中的文章计数信息
-        if (oldType.getId() != type) {
-            articleTypeService.addArticleCount(type);
-            articleTypeService.deduceArticleCount(oldType.getId());
+        if (oldType != article.getArticleType().getId()) {
+            articleTypeService.addArticleCount(article.getArticleType().getId());
+            articleTypeService.deduceArticleCount(oldType);
         }
 
         // 更新版本中的文章计数信息
-        if (!forumId.equals(article.getForum().getId())) {
-            articleTypeService.addArticleCount(forumId);
-            articleTypeService.deduceArticleCount(article.getForum().getId());
+        if (!oldForumId.equals(article.getForum().getId())) {
+            articleTypeService.addArticleCount(article.getForum().getId());
+            articleTypeService.deduceArticleCount(oldForumId);
         }
 
         // 更新文章附件
         if (!CollectionUtils.isEmpty(fileIds)) {
-            fileInfoService.batchUpdateItemId(fileIds, id);
+            fileInfoService.batchUpdateItemId(fileIds, article.getId());
         }
     }
     

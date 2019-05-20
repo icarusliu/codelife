@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.db.entity.Article;
 import com.liuqi.tools.codelife.db.entity.ArticleStatus;
 import com.liuqi.tools.codelife.db.entity.User;
+import com.liuqi.tools.codelife.util.ArticleBuilder;
+import com.liuqi.tools.codelife.util.FileUtils;
 import com.liuqi.tools.codelife.util.exceptions.ErrorCodes;
 import com.liuqi.tools.codelife.util.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
@@ -16,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,8 +48,11 @@ public class ArticleManagerController {
     private TopicService topicService;
     
     @Autowired
-    private ArticleTypeService typeService;
-    
+    private ArticleTypeService articleTypeService;
+
+    @Value("${app.file.savePath}")
+    private String contentFilePath;
+
     /**
      * 获取用于管理的文章清单
      * 根据当前登录用户获取其有权限管理的文章清单
@@ -84,8 +90,8 @@ public class ArticleManagerController {
         User loginUser = authenticationService.getLoginUser();
         
         MapBuilder builder = MapBuilder.of()
-                .put("types", typeService.findByUser(loginUser))
-                .put("forums", typeService.findSystemTypes())
+                .put("types", articleTypeService.findByUser(loginUser))
+                .put("forums", articleTypeService.findSystemTypes())
                 .put("myTopics", topicService.getUserTopics(loginUser.getId()));
         
         if (null != articleId) {
@@ -116,6 +122,7 @@ public class ArticleManagerController {
                               @RequestParam(value = "forumId", required = false) Integer forumId,
                               @RequestParam(name = "id", required = false) Integer id,
                              @RequestParam(name = "fileIds", required = false) String fileIdsStr,
+                             @RequestParam(name = "coverFileId", required = false) Integer coverFileId,
                              @RequestParam(name = "status", required = false) Integer status) throws RestException {
         List<Integer> fileIds = new ArrayList<>(16);
         if (StringUtils.isNotBlank(fileIdsStr)) {
@@ -129,20 +136,34 @@ public class ArticleManagerController {
             articleStatus = ArticleStatus.parse(status);
         }
 
-        if (null == id) {
-            articleService.saveArticle(title, content, type, topicId, forumId, fileIds, articleStatus);
-        } else {
+        Article article;
+        if (id != null) {
             //判断登录用户是否是作者，如果不是则不能进行保存
+            article = articleService.findById(id);
             User loginUser = authenticationService.getLoginUser();
-            Article article = articleService.findById(id);
-            
+
             if (article.getAuthorID() != loginUser.getId()) {
                 logger.error("User is not the author, user: {}!", loginUser.getUsername());
                 throw ExceptionTool.getException(ErrorCodes.ARTICLE_MANAGER_EDIT_NOT_AUTHOR);
             }
-            
-            //只允许更新标题与内容
-            articleService.updateArticle(id, title, content, type, fileIds, forumId, articleStatus);
+
+            FileUtils.saveToFile(content, contentFilePath, article.getContentUrl());
+        } else {
+            article = ArticleBuilder.of(title).setContent(content, contentFilePath).build();
+        }
+
+        if (null != forumId) {
+            article.setForum(articleTypeService.findById(forumId));
+        }
+        article.setTitle(title);
+        article.setArticleType(articleTypeService.findById(type));
+        article.setStatus(articleStatus);
+        article.setCoverFileId(coverFileId);
+
+        if (null == id) {
+            articleService.saveArticle(article, fileIds);
+        } else {
+            articleService.updateArticle(article, fileIds, forumId, type);
         }
         
         return "succeed";

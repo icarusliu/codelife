@@ -50,6 +50,11 @@ public class Article implements Serializable {
      * 点赞数
      */
     private int praiseCount;
+
+    /**
+     * 封面文件编号
+     */
+    private Integer coverFileId;
     
     public int getId() {
         return id;
@@ -170,5 +175,14 @@ public class Article implements Serializable {
     
     public void setRecommended(boolean recommended) {
         this.recommended = recommended;
+    }
+
+    public Integer getCoverFileId() {
+        return coverFileId;
+    }
+
+    public Article setCoverFileId(Integer coverFileId) {
+        this.coverFileId = coverFileId;
+        return this;
     }
 }

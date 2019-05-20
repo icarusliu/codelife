@@ -2,27 +2,29 @@
 <template>
   <div class="row">
     <div class="col mr-0 ml-0 pr-0 pl-0">
-      <div id="articleList">
-        <div class="article-item" v-for="article in articles" :key="article.id">
-            <sup v-if="article.recommended" style="color: red; ">[置顶]</sup>
-            <router-link class="article-item-title font-weight-bold"
-                :to="{name: 'articleDetail', params: {id: article.id}}">{{ article.title }}</router-link>
-
-            <p class="article-item-remark">{{article.remark}}</p>
-            <div class="row ml-0 mr-0">
-              <div class="article-item-info col-sm">
-                <span class="mr-4">{{article.authorName}}</span>
-                发表于：<span class="mr-5">{{article.createDate}}</span>
-                阅读次数：<span class="mr-5">{{article.readCount}}</span>
-                点赞数：<span>{{article.praiseCount}}</span>
-              </div>
-              <div class="article-list-item-buttons col-sm-2 text-right">
-                <div class="btn btn-link mb-2 mr-2" @click="editArticle(article.id)"
-                  v-if="null != loginUser && article.authorID === loginUser.id">
-                  编辑
-                </div>
+      <div class="article-item row m-0 p-0 pl-2" v-for="article in articles" :key="article.id">
+        <img class="col-3 m-2 p-0" v-if="article.coverFileId" 
+          style="box-shadow: 0px 0px 10px #bbb;"
+          :src="baseUrl + 'file/download/' + article.coverFileId"/>
+        <div class="col">
+          <sup v-if="article.recommended" style="color: red; ">[置顶]</sup>
+          <router-link class="article-item-title font-weight-bold"
+              :to="{name: 'articleDetail', params: {id: article.id}}">{{ article.title }}</router-link>
+          <p class="article-item-remark" style="height: calc(100% - 70px);">{{article.remark}}</p>
+          <div class="row ml-0 mr-0">
+            <div class="article-item-info col-sm ml-0 pl-0">
+              <span>{{article.authorName}}</span>
+              发表于：<span class="mr-5">{{article.createDate}}</span>
+              阅读次数：<span class="mr-5">{{article.readCount}}</span>
+              点赞数：<span>{{article.praiseCount}}</span>
+            </div>
+            <div class="article-list-item-buttons col-sm-2 text-right">
+              <div class="btn btn-link mb-2 mr-2" @click="editArticle(article.id)"
+                v-if="null != loginUser && article.authorID === loginUser.id">
+                编辑
               </div>
             </div>
+          </div>
         </div>
       </div>
       <div class="article-item text-center hidden" id="loadingInfo" v-if="isLoading && !noPage">
@@ -53,7 +55,8 @@ export default {
       nowPage: 1,
       pageSize: 20,
       noMoreData: false,
-      isLoading: false
+      isLoading: false,
+      baseUrl: axios.defaults.baseURL
     }
   },
   watch: {
