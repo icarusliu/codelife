@@ -5,6 +5,7 @@ import com.liuqi.tools.codelife.db.entity.Article;
 import com.liuqi.tools.codelife.db.entity.ArticleStatus;
 import com.liuqi.tools.codelife.db.entity.User;
 import com.liuqi.tools.codelife.util.ArticleBuilder;
+import com.liuqi.tools.codelife.util.ArticleUtils;
 import com.liuqi.tools.codelife.util.FileUtils;
 import com.liuqi.tools.codelife.util.exceptions.ErrorCodes;
 import com.liuqi.tools.codelife.util.exceptions.ExceptionTool;
@@ -137,19 +138,22 @@ public class ArticleManagerController {
         }
 
         Article article;
+        User loginUser = authenticationService.getLoginUser();
         if (id != null) {
             //判断登录用户是否是作者，如果不是则不能进行保存
             article = articleService.findById(id);
-            User loginUser = authenticationService.getLoginUser();
 
-            if (article.getAuthorID() != loginUser.getId()) {
+            if (article.getAuthorID() != loginUser.getId() && 0 != article.getAuthorID()) {
                 logger.error("User is not the author, user: {}!", loginUser.getUsername());
                 throw ExceptionTool.getException(ErrorCodes.ARTICLE_MANAGER_EDIT_NOT_AUTHOR);
             }
 
             FileUtils.saveToFile(content, contentFilePath, article.getContentUrl());
+            ArticleUtils.setRemark(article, content);
         } else {
-            article = ArticleBuilder.of(title).setContent(content, contentFilePath).build();
+            article = ArticleBuilder.of(title)
+                    .setAuthor(loginUser)
+                    .setContent(content, contentFilePath).build();
         }
 
         if (null != forumId) {
@@ -179,7 +183,7 @@ public class ArticleManagerController {
         User loginUser = authenticationService.getLoginUser();
 
         Article article = articleService.findById(id);
-        if (article.getAuthorID() != loginUser.getId() && !loginUser.isSystemAdmin()) {
+        if (article.getAuthorID() != loginUser.getId() && 0 != article.getAuthorID() && !loginUser.isSystemAdmin()) {
             logger.error("User is not the author, user: {}!", loginUser.getUsername());
             throw ExceptionTool.getException(ErrorCodes.ARTICLE_MANAGER_DELETE_NOT_AUTHOR);
         }
