@@ -35,14 +35,14 @@ public class Tool {
     /**
      * 附件信息
      */
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "file_id", referencedColumnName = "id")
     private FileInfo fileInfo;
 
     /**
      * 图片信息
      */
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "app_file", joinColumns = {@JoinColumn(name = "tool_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "file_id", referencedColumnName = "id")})
     private List<FileInfo> images;
