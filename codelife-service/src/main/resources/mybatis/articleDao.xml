@@ -144,13 +144,13 @@
     <insert id="save" parameterType="com.liuqi.tools.codelife.db.entity.Article" useGeneratedKeys="true" keyProperty="id">
         insert into article(title, type, author, create_date, status, content_url, read_count, remark
         <if test="null != forum">, forum</if>
-        <if test="null != fileCoverId">, fileCoverId</if>
+        <if test="null != coverFileId">, coverFileId</if>
         )
         values(#{title}, #{articleType.id}, #{authorID}, #{createDate},
             #{status, typeHandler=com.liuqi.tools.codelife.db.dao.typehandler.ArticleStatusTypeHandler},
             #{contentUrl}, #{readCount}, #{remark}
         <if test="null != forum">, #{forum.id}</if>
-        <if test="null != fileCoverId">, #{fileCoverId}</if>
+        <if test="null != coverFileId">, #{coverFileId}</if>
         )
     </insert>
 
