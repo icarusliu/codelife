@@ -6,7 +6,7 @@
         <img class="col-3 m-2 p-0" v-if="article.coverFileId" 
           style="box-shadow: 0px 0px 10px #bbb;"
           :src="baseUrl + 'file/download/' + article.coverFileId"/>
-        <div class="col p-0">
+        <div class="col p-0 pt-1">
           <sup v-if="article.recommended" style="color: red; ">[置顶]</sup>
           <router-link class="article-item-title font-weight-bold"
               :to="{name: 'articleDetail', params: {id: article.id}}">{{ article.title }}</router-link>
@@ -144,8 +144,8 @@ export default {
 
 .article-item {
     border-bottom: 1px dotted #efefef;
-    padding-top: 10px;
-    padding-left: 20px;
+    padding-top: 4px;
+    padding-left: 4px;
 }
 
 .article-item:hover {

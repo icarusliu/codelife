@@ -1,5 +1,9 @@
 body {
-    background-image: url('../icons/bg.gif');
+    background-image: url('../icons/bg.gif')!important;
+}
+
+.container-fluid {
+    background: none;  
 }
 
 .btn {
