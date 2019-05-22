@@ -21,6 +21,7 @@
                               '|&nbsp; &nbsp;' + article.readCount + '&nbsp; 次阅读'
                             }}</span>
                     <span id="praiseCount">{{article.praiseCount}}</span>&nbsp; 次点赞
+                    <span class="btn btn-link edit-button mb-1 ml-4" v-if="null != loginUser && article.authorID === loginUser.id">编辑</span>
                 </p>
             </div>
         </div>
@@ -109,6 +110,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import ajax from '@/components/common/Ajax.js'
 import Vue from 'vue'
 import '@/static/css/article-detail.css'
@@ -147,6 +149,9 @@ export default {
       parentCommentId: -1
     }
   },
+  computed: mapState([
+    'loginUser'
+  ]),
   watch: {
     /**
      * 监控请求参数是否变化，如果变化则刷新数据
@@ -317,8 +322,9 @@ export default {
     box-shadow: 1px 1px 5px gray;
   }
 
-  .article-subtitle {
-    font-size: 0.8em;
+  .article-subtitle>* {
+    font-size: 13px!important;
+    line-height: 25px!important;
   }
 
   #content {

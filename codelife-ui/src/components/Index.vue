@@ -16,7 +16,7 @@
               <div class="article-item" v-for="topic in topics" :key="topic.id">
                   <a class="article-item-title font-weight-bold"
                       v-bind:href="'/topic/detail?id=' + topic.id">{{ topic.title }}</a>
-                  <p class="article-item-remark">{{ topic.introduction }}</p>
+                  <p class="topic-item-remark">{{ topic.introduction }}</p>
               </div>
           </div>
 
@@ -97,5 +97,12 @@ export default {
 
 .comment-content>label {
   color: rgb(12, 8, 247);
+}
+
+.topic-item-remark {
+  font-size: 13px; 
+  max-height: 80px;
+  overflow: hidden;  
+  text-overflow: ellipsis;
 }
 </style>
