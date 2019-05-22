@@ -1,6 +1,6 @@
 <!-- 文章清单 -->
 <template>
-  <div class="row">
+  <div class="row" style="box-sizing: content-box; ">
     <div class="col mr-0 ml-0 pr-0 pl-0">
       <div class="article-item row m-0 p-0 pl-2" v-for="article in articles" :key="article.id">
         <img class="col-3 m-2 p-0" v-if="article.coverFileId" 
@@ -10,20 +10,20 @@
           <sup v-if="article.recommended" style="color: red; ">[置顶]</sup>
           <router-link class="article-item-title font-weight-bold"
               :to="{name: 'articleDetail', params: {id: article.id}}">{{ article.title }}</router-link>
-          <p class="article-item-remark">{{article.remark}}</p>
-          <div class="row ml-0 mr-0">
-            <div class="article-item-info col ml-0 pl-0">
-              <span>{{article.authorName}}</span>
-              发表于：<span class="mr-5">{{article.createDate}}</span>
-              阅读次数：<span class="mr-5">{{article.readCount}}</span>
-              点赞数：<span>{{article.praiseCount}}</span>
-            </div>
-            <div class="article-list-item-buttons col-2 text-right">
-              <div class="btn btn-link mb-2 mr-2" @click="editArticle(article.id)"
-                v-if="null != loginUser && article.authorID === loginUser.id">
-                编辑
+          <p class="article-item-remark" :class="{'remark-img': article.coverFileId, 'remark-no-img': !article.coverFileId}">{{article.remark}}</p>
+
+          <div class="row m-0 p-0">
+            <div class="article-item-info-row col m-0 p-0">
+              <div class="row ml-0 mr-0 article-item-info">
+                <span class="mr-2">{{article.createDate}}</span>
+                阅读：<span class="mr-2">{{article.readCount}}</span>
+                点赞：<span>{{article.praiseCount}}</span>
               </div>
             </div>
+            <span class="edit-button btn btn-link" @click="editArticle(article.id)"
+              v-if="null != loginUser && article.authorID === loginUser.id">
+              编辑
+            </span>
           </div>
         </div>
       </div>
@@ -161,22 +161,37 @@ export default {
     font-size: 0.8em;
     margin-top: 4px;
     color: gray;
+    max-height: 80px;
+    margin-bottom: 0px;
+    overflow: hidden; 
+    text-overflow: ellipsis;
 }
 
 .article-item-info {
-    font-size: 0.9em;
+    font-size: 13px;
+    line-height: 23px;
     color: #bbb;
 }
 
-.article-item-info>span, .article-item-info>cite {
+.article-item-info>span {
     color: #3261A7;
+    margin-right: 10px;
 }
 
-.article-list-item-buttons .btn {
-    font-size: 0.8em;
-    line-height: 1em;
+.edit-button {
     margin: 0px;
     padding: 0px;
+    font-size: 13px;
+    line-height: 23px;
+    color: blue;
+    margin-right: 10px;
 }
 
+.remark-img {
+  height: 80px!important;
+}
+
+.remark-no-img {
+  height: auto!important; 
+}
 </style>
