@@ -181,7 +181,7 @@ export default {
 .edit-button {
     margin: 0px;
     padding: 0px;
-    font-size: 13px;
+    font-size: 13px!important;
     line-height: 23px;
     color: blue;
     margin-right: 10px;
