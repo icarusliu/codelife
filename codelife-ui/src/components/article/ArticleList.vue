@@ -3,7 +3,7 @@
   <div class="row" style="box-sizing: content-box; ">
     <div class="col mr-0 ml-0 pr-0 pl-0">
       <div class="article-item row m-0 p-0 pl-2" v-for="article in articles" :key="article.id">
-        <img class="col-3 m-2 p-0" v-if="article.coverFileId" 
+        <img class="col-3 col-md-2 m-2 p-0 mr-4" v-if="article.coverFileId" 
           style="box-shadow: 0px 0px 10px #bbb; max-height: 120px;"
           :src="baseUrl + 'file/download/' + article.coverFileId"/>
         <div class="col p-0 pt-1">
