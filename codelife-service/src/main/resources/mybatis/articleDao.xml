@@ -18,6 +18,7 @@
         <result property="fixTop" column="fix_top"/>
         <result property="recommended" column="recommended"/>
         <result property="coverFileId" column="cover_file_id"/>
+        <result property="keywords" column="keywords"/>
         <association property="articleType" column="type"
                      select="com.liuqi.tools.codelife.db.dao.ArticleTypeDao.findById"
                      javaType="ArticleType"/>
@@ -44,7 +45,8 @@
             t1.praise_count as praise_count,
             t1.fix_top as fix_top,
             t1.recommended as recommended,
-            t1.cover_file_id as cover_file_id
+            t1.cover_file_id as cover_file_id,
+            t1.keywords as keywords
         from article t1
         left join user t2
             on t1.author = t2.id
@@ -145,12 +147,14 @@
         insert into article(title, type, author, create_date, status, content_url, read_count, remark
         <if test="null != forum">, forum</if>
         <if test="null != coverFileId">, cover_file_id</if>
+        <if test="null != keywords and '' != keyword">, keywords</if>
         )
         values(#{title}, #{articleType.id}, #{authorID}, #{createDate},
             #{status, typeHandler=com.liuqi.tools.codelife.db.dao.typehandler.ArticleStatusTypeHandler},
             #{contentUrl}, #{readCount}, #{remark}
         <if test="null != forum">, #{forum.id}</if>
         <if test="null != coverFileId">, #{coverFileId}</if>
+        <if test="null != keywords and '' != keyword">, #{keywords}</if>
         )
     </insert>
 
@@ -166,6 +170,7 @@
         update article set type=#{articleType.id}, title=#{title}, forum=#{forum.id}, remark = #{remark},
             status = #{status, typeHandler=com.liuqi.tools.codelife.db.dao.typehandler.ArticleStatusTypeHandler}
             <if test="null != coverFileId">, cover_file_id = #{coverFileId}</if>
+            <if test="null != keywords and '' != keywords">, keywords = #{keywords}</if>
         where id=#{id}
     </update>
 
