@@ -117,3 +117,5 @@ npm install --save popper.js
 引入highlight
 npm install highlight.js
 npm install showdown
+
+安装依赖
