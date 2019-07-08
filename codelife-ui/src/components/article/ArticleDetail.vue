@@ -7,6 +7,8 @@
         </div>
     </div>
 
+    <!--{{article.keywords}} -->
+
     <!--文章内容-->
     <div class="article-block col-sm-8 offset-sm-2 mr-0">
         <!--文章标题 -->
@@ -371,5 +373,25 @@ export default {
   }
   .article-detail-footer button:hover {
     background: #bbb;
+  }
+
+  .title2 {
+    padding-left: 20px;
+  }
+
+  .title3 {
+    padding-left: 40px;
+  }
+
+  .title4 {
+    padding-left: 60px;
+  }
+
+  .title5 {
+    padding-left: 80px;
+  }
+
+  .title6 {
+    padding-left: 100px;
   }
 </style>

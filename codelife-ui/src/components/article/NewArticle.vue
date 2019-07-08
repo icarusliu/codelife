@@ -8,6 +8,15 @@
         autofocus
         v-model="title"/>
       </div>
+
+      <div class="row mb-2 mt-2">
+        <label class="item-title">关键词：</label>
+        <input class="col-sm form-control"
+        type="text" id="keywords" placeholder="关键词" style="height: 40px;"
+        autofocus
+        v-model="keywords"/>
+      </div>
+
       <div class="row mb-2 mt-2">
         <label class="item-title">分类：</label>
         <select name="type" class="col-sm-2 form-control" id="type" v-model="typeId">
@@ -85,6 +94,7 @@ export default {
       article: null, // 如果是编辑模式下，表示的是编辑的文章
       articleId: this.$route.params.articleId, // 传入的文章编号，如果不是-1，表示是编辑模式
       title: '',
+      keywords: '',
       content: '',
       typeId: null,
       forumId: null,
@@ -169,6 +179,7 @@ export default {
       let params = Object()
       params.type = this.typeId
       params.title = this.title.trim()
+      params.keywords = this.keywords.trim()
       params.content = this.content.trim()
       if (Number(this.articleId) !== -1) {
         params.id = this.articleId

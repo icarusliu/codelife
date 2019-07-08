@@ -2,14 +2,14 @@ package com.liuqi.tools.codelife.service.impl;
 
 import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.db.dao.ArticleDao;
-import com.liuqi.tools.codelife.db.entity.*;
+import com.liuqi.tools.codelife.db.entity.Article;
+import com.liuqi.tools.codelife.db.entity.User;
+import com.liuqi.tools.codelife.db.entity.UserArticleStatInfo;
+import com.liuqi.tools.codelife.service.*;
+import com.liuqi.tools.codelife.util.FileUtils;
 import com.liuqi.tools.codelife.util.exceptions.ErrorCodes;
 import com.liuqi.tools.codelife.util.exceptions.ExceptionTool;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
-import com.liuqi.tools.codelife.service.*;
-import com.liuqi.tools.codelife.util.ArticleBuilder;
-import com.liuqi.tools.codelife.util.ArticleUtils;
-import com.liuqi.tools.codelife.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +17,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
  * 文章服务类的实现类
  *
- * @Author: LiuQI
- * @Created: 2018/3/26 17:26
- * @Version: V1.0
+ * @author  LiuQi 2019/5/29-14:40
+ * @version V1.0
  **/
 @Service
+@SuppressWarnings("unused")
 public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private ArticleDao articleDao;
@@ -62,9 +61,9 @@ public class ArticleServiceImpl implements ArticleService {
      * 查找文章用于展现用
      * 按是否置顶等顺序进行排序
      *
-     * @param nowPage
-     * @param pageSize
-     * @return
+     * @param nowPage   当前页码
+     * @param pageSize  每页记录数
+     * @return          数据
      */
     @Override
     public PageInfo<Article> findForExplorer(int nowPage, int pageSize) {
@@ -118,14 +117,13 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public PageInfo<Article> search(String key, int nowPage, int pageSize) {
         if (null == key) {
-            return new PageInfo(Collections.EMPTY_LIST);
+            return new PageInfo<>();
         }
-        return new PageInfo(articleDao.search(key));
+        return new PageInfo<>(articleDao.search(key));
     }
     
     @Override
     public void saveArticle(Article article, List<Integer> fileIds) throws RestException {
-        article.setRemark(article.getContent());
         Integer articleId = articleDao.save(article);
         
         //文章分类对象中文章数目加1
@@ -148,7 +146,7 @@ public class ArticleServiceImpl implements ArticleService {
     /**
      * 根据ID删除文章
      *
-     * @param id
+     * @param id    文章编号
      */
     @Override
     public void deleteArticle(Integer id) {
