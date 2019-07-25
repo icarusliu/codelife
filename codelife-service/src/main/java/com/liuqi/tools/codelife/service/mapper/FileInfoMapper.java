@@ -12,5 +12,5 @@ import org.mapstruct.Mapper;
  * @version V1.0
  **/
 @Mapper(componentModel = "spring")
-public interface FileInfoMapper extends EntityMapper<FileInfo, FileInfoVO> {
+public interface FileInfoMapper extends EntityMapper<FileInfoVO, FileInfo> {
 }

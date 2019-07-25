@@ -2,7 +2,7 @@ package com.liuqi.commons.service;
 
 import java.util.List;
 
-public interface EntityMapper<E, D> {
+public interface EntityMapper<D, E> {
 
     E toEntity(D dto);
 

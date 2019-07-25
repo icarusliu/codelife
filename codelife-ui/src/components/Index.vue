@@ -14,8 +14,7 @@
               <h5 class="block-title block-title-topic">热门专题</h5>
               <div class="w-100"></div>
               <div class="article-item" v-for="topic in topics" :key="topic.id">
-                  <a class="article-item-title font-weight-bold"
-                      v-bind:href="'/topic/detail?id=' + topic.id">{{ topic.title }}</a>
+                  <router-link :to="{name: 'myTopics', params: {topicId: topic.id}}">{{topic.title}}</router-link>
                   <p class="topic-item-remark">{{ topic.introduction }}</p>
               </div>
           </div>

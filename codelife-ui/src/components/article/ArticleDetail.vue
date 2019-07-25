@@ -23,7 +23,7 @@
                               '|&nbsp; &nbsp;' + article.readCount + '&nbsp; 次阅读'
                             }}</span>
                     <span id="praiseCount">{{article.praiseCount}}</span>&nbsp; 次点赞
-                    <span class="btn btn-link edit-button mb-1 ml-4" v-if="null != loginUser && article.authorID === loginUser.id">编辑</span>
+                    <span class="btn btn-link edit-button mb-1 ml-4" v-if="null != loginUser && article.authorID === loginUser.id" @click="editArticle(article.id)">编辑</span>
                 </p>
             </div>
         </div>
@@ -283,6 +283,11 @@ export default {
           }
         ]
       })()})
+    },
+
+    editArticle: function (id) {
+      // 打开编辑界面
+      this.$router.push({path: '/newArticle/' + id})
     }
   }
 }
