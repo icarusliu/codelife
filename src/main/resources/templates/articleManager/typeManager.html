@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+        xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+        layout:decorator="layout/systemLayout">
+<head>
+    <meta charset="UTF-8"/>
+    <title>文章分类管理</title>
+
+    <script th:inline="javascript">
+        var pTypeId;
+
+        function rowStyle(row, index) {
+            return {
+                 classes: 'text-primary another-class',
+                 css: {"color": "blue", "font-size": "1em"}
+            };
+        }
+
+        //刷新数据
+        function refreshTable() {
+            $("#typeTable").bootstrapTable("refresh");
+        }
+
+        //保存分类
+        function saveType() {
+            var typeName = $("#typeName").val();
+
+            if ("" == typeName) {
+                alert("分类名称不能为空！");
+                return;
+            }
+
+            var data = {typeName: typeName};
+            if (null != pTypeId) {
+                data.id = pTypeId;
+            }
+
+            post([[@{/system/articleTypeManager/add}]], data, function(resp){
+                    $("#newTypeDialog").modal("hide");
+                    alert("保存成功！");
+                    refreshTable();
+
+                    pTypeId = null;
+                }
+            );
+        }
+
+        //显示新增对话框
+        function showAddDialog() {
+            $("#exampleModalLongTitle").text("新增分类");
+            pTypeId = null;
+
+            $("#newTypeDialog").modal('show');
+        }
+
+        //添加操作按钮
+        function addButtons(value, row, index, field) {
+            return [
+                '<button id="renameButton" type="button" class="btn btn-sm">重命名</button>'
+            ].join("");
+        }
+
+        //按钮事件处理
+        window.operateEvent = {
+            "click #renameButton": function(e, value, row, index) {
+                pTypeId = row.id;
+                $("#exampleModalLongTitle").text("重命名分类");
+
+                $("#newTypeDialog").modal('show');
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div layout:fragment="subContent">
+    <div class="row">
+        <!-- 右侧列表 -->
+        <div class="col">
+            <table data-toggle="table" data-pagination="true" data-search="true" th:data-url="@{/articleType/getAll}"
+                   id="typeTable"
+                   data-smart-display="true" data-row-style="rowStyle"
+                   data-toolbar="#toolBar"
+                   data-striped="true">
+                <thead>
+                    <tr>
+                        <th data-width="500" data-field="name">名称</th>
+                        <th data-width="100" data-formatter="addButtons" data-events="operateEvent">操作</th>
+                    </tr>
+                </thead>
+            </table>
+
+            <!-- 工具栏 -->
+            <div id="toolBar">
+                <button type="button" class="btn" data-toggle="modal" onclick="javascript: showAddDialog(); ">新增</button>
+                <button type="button" class="btn" onclick="javascript: refreshTable(); ">刷新</button>
+            </div>
+
+            <!-- 新增分类对话框 -->
+            <div class="modal fade" id="newTypeDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title" id="exampleModalLongTitle">新增分类</h6>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input class="form-control" type="text" id="typeName" placeholder="分类名称" required/>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" onclick="javascript: saveType(); ">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+        xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+        layout:decorator="layout/layout">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="/css/index.css"/>
+    <script th:src="@{/js/pager.js}"></script>
+
+    <title>搜索</title>
+
+    <script th:inline="javascript">
+        var articleNowPage = [[${nowPage}]];
+        var articlePages = [[${pages}]];
+        $(function(){
+            new Pager("articlePager", [[@{/search}]] + "?key=" + [[${key}]], articleNowPage, articlePages);
+        });
+    </script>
+</head>
+<body>
+<div layout:fragment="content" class="container-fluid m-1 row">
+    <div class="col-sm">
+        <!--搜索操作-->
+        <form method="get" th:action="@{/search}"
+              class="row m-4">
+            <input type="text"
+                   placeholder="搜索" name="key" required
+                   class="form-control col-md-6 mr-md-2 offset-md-2"/>
+            <input type="submit" value="搜索"
+                   class="btn btn-primary"/>
+        </form>
+
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="block">
+                    <h5 class="block-title">文章搜索结果</h5>
+                    <div class="w-100"></div>
+                    <div class="article-item" th:each="article: ${articles}">
+                        <a th:text="${article.title}" class="article-item-title font-weight-bold"
+                           th:href="@{'/article/detail?id=' + ${article.id}}"></a>
+                        <p class="article-item-remark" th:text="${article.remark}"></p>
+                        <div class="article-item-info">
+                            <span th:text="${article.authorName}" class="mr-4"></span>
+                            发表于：<cite th:text="${article.createDate}" class="mr-5"></cite>
+                            阅读次数：<cite th:text="${article.readCount}" class="mr-5"></cite>
+                            点赞数：<cite th:text="${article.praiseCount}"></cite>
+                        </div>
+                    </div>
+
+                    <!--分页栏-->
+                    <nav class="row mt-2 ml-2  justify-content-center">
+                        <ul class="pagination" id="articlePager">
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="col-sm">
+                <div class="block">
+                    <h5 class="block-title block-title-topic">专题搜索结果</h5>
+                    <div class="w-100"></div>
+                    <div class="article-item" th:each="topic: ${topics}">
+                        <a th:text="${topic.title}" class="article-item-title font-weight-bold"
+                           th:href="@{/topic/detail} + '?id=' + ${topic.id}"></a>
+                        <p class="article-item-remark" th:text="${topic.introduction}"></p>
+                    </div>
+
+                    <div class="btn-link text-right mr-2 mt-1 mb-1" style="font-size: 0.8em; ">
+                        <a th:href="@{/topic/search} + '?key=' + ${key}">>>更多专题</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
