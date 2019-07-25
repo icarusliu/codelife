@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+        xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+        layout:decorator="layout/systemLayout">
+<head>
+    <meta charset="UTF-8"/>
+    <title>用户管理</title>
+
+    <script th:inline="javascript">
+        var dataTableUrl = [[@{/role/getAll}]];
+        var addUrl = [[@{/role/save}]];
+        var tableId = "#dataTable";
+        var dialogId = "#newDialog";
+        var table = null;
+
+        var pId;
+
+        $(function(){
+            //初始化表格
+            table = $(tableId).bootstrapTable({
+                url: dataTableUrl,
+                /*pagination: true,*/ /*角色少不需要分页*/
+                search: true,
+                smartDisplay: true,
+                rowStyle: rowStyle,
+                toolbar: "#toolBar"
+            });
+
+            refreshTable();
+
+            //绑定提交事件，使用函数进行提交操作
+            $.formSubmit("newForm", save);
+        });
+
+        //检测角色名称是否存在
+        function checkRoleName() {
+            var roleName = $("#roleName").val();
+            var roles = $(tableId).bootstrapTable("getData");
+
+            //与数据表格中的数据进行比对来判断是否存在 如果存在了不让提交
+            if (roles) {
+                for (var i in roles) {
+                    if (roles[i].name.toLowerCase() == roleName.toLowerCase() && roles[i].id != pId) {
+                        $("#roleNameErrorMessage").show();
+                        $("#roleName").focus();
+                        $("#submitButton").attr("disabled", true);
+                        return ;
+                    }
+                }
+            }
+
+            $("#roleNameErrorMessage").hide();
+            $("#submitButton").attr("disabled", false);
+        }
+
+        function rowStyle(row, index) {
+            return {
+                 classes: 'text-primary another-class',
+                 css: {"color": "blue", "font-size": "1em"}
+            };
+        }
+
+        //刷新数据
+        function refreshTable() {
+            $(tableId).bootstrapTable("refresh");
+        }
+
+        //保存角色
+        function save() {
+            var roleName = $("#roleName").val();
+            var remark = $("#remark").val();
+
+            var data = {roleName: roleName, remark: remark};
+            if (null != pId) {
+                data.id = pId;
+            }
+
+            post(addUrl, data, function(resp){
+                    $(dialogId).modal("hide");
+                    alert("保存成功！");
+                    refreshTable();
+
+                    pId = null;
+                }
+            );
+        }
+
+        //显示新增对话框
+        function showAddDialog() {
+            $("#exampleModalLongTitle").text("新增");
+            pId = null;
+
+            $("#roleName").attr("disabled", false);
+            $("#roleName").val("");
+
+            $(dialogId).modal('show');
+        }
+
+        //添加操作按钮
+        function addButtons(value, row, index, field) {
+            return [
+                '<button id="renameButton" type="button" class="btn btn-sm">修改</button>'
+            ].join("");
+        }
+
+        //按钮事件处理
+        window.operateEvent = {
+            "click #renameButton": function(e, value, row, index) {
+                pId = row.id;
+                $("#exampleModalLongTitle").text("修改");
+                $("#roleName").val(row.name);
+                $("#roleName").attr("disabled", "true"); //名称无法修改
+
+                $(dialogId).modal('show');
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div layout:fragment="subContent">
+    <div class="row">
+        <!-- 右侧列表 -->
+        <div class="col">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th data-width="500" data-field="name">名称</th>
+                        <th data-width="500" data-field="remark">说明</th>
+                        <th data-width="300" data-formatter="addButtons" data-events="operateEvent">操作</th>
+                    </tr>
+                </thead>
+            </table>
+
+            <!-- 工具栏 -->
+            <div id="toolBar">
+                <button type="button" class="btn" data-toggle="modal" onclick="javascript: showAddDialog(); ">新增</button>
+                <button type="button" class="btn" onclick="javascript: refreshTable(); ">刷新</button>
+            </div>
+
+            <!-- 新增角色对话框 -->
+            <div class="modal fade" id="newDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title" id="exampleModalLongTitle">新增角色</h6>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="newForm" method="post">
+                                <label class="error-message" id="roleNameErrorMessage">相同名称的角色已存在！</label>
+                                <input class="form-control mb-2" type="text" id="roleName" placeholder="角色名称"
+                                       maxlength="20"
+                                       onblur="javascript: checkRoleName();  "
+                                       required/>
+                                <input class="form-control mb-2" type="text" id="remark"
+                                       maxlength="100" placeholder="说明" required/>
+                                <button type="button" class="btn btn-secondary offset-sm-8" data-dismiss="modal">取消</button>
+                                <button type="submit" class="btn btn-primary" id="submitButton">保存</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

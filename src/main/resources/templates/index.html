@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+        xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+        layout:decorator="layout/layout">
+<head>
+    <meta charset="UTF-8"/>
+    <title>首页</title>
+
+    <link rel="stylesheet" href="/css/index.css"/>
+
+    <script th:inline="javascript">
+        function inputUsername() {
+            $("#errorMessage").hide();
+        }
+
+        function register() {
+            window.open([[@{/register}]], "_blank");
+        }
+
+        var isLoading = false;
+        var nowPage = 1;
+        var pageSize = 20;
+        var detailUrl = [[@{/article/detail}]];
+        var noMoreData = false;
+
+        $(function(){
+            $("#loadingInfo").hide();
+
+            $(window).scroll(function(){
+                if ($(window).scrollTop() + 20 >= $(document).height() - $(window).height()) {
+                    //继续加载文档数据
+                    if (isLoading || noMoreData) {
+                        return;
+                    }
+                    isLoading = true;
+                    $("#loadingInfo").show();
+                    post([[@{/article/getForExplorer}]], {nowPage: nowPage + 1, pageSize: pageSize}, function(data) {
+                        if (data && 0 != data.length) {
+                            for (var i = 0, length = data.length; i < length; i++) {
+                                var article = data[i];
+
+                                var html = '<div class="article-item">';
+                                if (article.recommended) {
+                                    html += '<sup style="color: red; ">[置顶]</sup>';
+                                }
+                                html += '<a class="article-item-title font-weight-bold" href="'
+                                    + detailUrl + '?id=' + article.id + '">' + article.title + '</a>';
+
+                                html += '<p class="article-item-remark">' + article.remark + '</p>'
+                                    + '<div class="article-item-info">'
+                                    + '<span class="mr-4">' + article.authorName + '</span>'
+                                    + '发表于：<cite class="mr-5">' + article.createDate + '</cite>'
+                                    + '阅读次数：<cite class="mr-5">' + article.readCount + '</cite>'
+                                    + '点赞数：<cite' + article.praiseCount + '</cite></div></div>';
+
+                                $("#articleList").append(html);
+                            }
+
+                            nowPage++;
+                        } else {
+                            noMoreData = true;
+                            $("#noMoreDataInfo").show();
+                        }
+
+                        isLoading = false;
+                        $("#loadingInfo").hide();
+                    });
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div layout:fragment="content" class="container-fluid">
+    <form method="get" th:action="@{/search}"
+          class="row m-4">
+        <input type="text"
+               placeholder="搜索" name="key" required
+               class="form-control col-md-6 mr-md-2 offset-md-2"/>
+        <input type="submit" value="搜索"
+               class="btn btn-primary"/>
+    </form>
+
+    <div class="row">
+        <!-- 登录框 -->
+        <div class="col-sm-2" th:if="${#authentication.name eq 'anonymousUser'}">
+            <form class="login-form pt-2 pl-4 pb-2"
+                  th:if="${login}"
+                  th:action="@{/login}" method="POST">
+                <input class="form-control row mb-2" name="username" type="text"
+                       oninput="javascript: inputUsername(); "
+                       placeholder="用户名" required/>
+                <input class="form-control row mb-2" name="password" type="password" placeholder="密码" required/>
+                <div class="row">
+                    <div class="col-3"></div>
+                    <input type="button" class="btn btn-link" value="注册" onclick="javascript: register(); "/>
+                    <input type="submit" class="btn btn-primary col-4 ml-1" value="登录"/>
+                </div>
+
+                <!-- 如果返回的链接中带有error参数，那么说明后台登录出现异常，可以通过Spring在Session中保存的异常变量获取异常信息并提示 -->
+                <div id="errorMessage" class="mt-1 text-danger"
+                     style="font-size: 12px;  ">
+                    <!-- 登录失败的信息  -->
+                    <div  th:if="${param.error}"
+                          th:text="${'登录失败：' + session.SPRING_SECURITY_LAST_EXCEPTION.message}">
+                    </div>
+                </div>
+            </form>
+
+            <div class="block">
+                <h5 class="block-title article-type-block-title">文章分类</h5>
+                <div class="w-100"></div>
+                <div class="article-type-item" th:each="articleType: ${articleTypes}">
+                    <a th:text="${articleType.name}" class="article-type-title font-weight-bold"
+                       th:href="@{/article/articles} + '?forumId=' + ${articleType.id}"></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm">
+            <!--搜索操作-->
+
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="block" id="articleList">
+                        <h5 class="block-title">热门文章</h5>
+                        <div class="w-100"></div>
+                        <div class="article-item" th:each="article: ${articles}">
+                            <sup th:if="${article.recommended}" style="color: red; ">[置顶]</sup>
+                            <a th:text="${article.title}" class="article-item-title font-weight-bold"
+                               th:href="@{'/article/detail?id=' + ${article.id}}"></a>
+
+                            <p class="article-item-remark" th:text="${article.remark}"></p>
+                            <div class="article-item-info">
+                                <span th:text="${article.authorName}" class="mr-4"></span>
+                                发表于：<cite th:text="${article.createDate}" class="mr-5"></cite>
+                                阅读次数：<cite th:text="${article.readCount}" class="mr-5"></cite>
+                                点赞数：<cite th:text="${article.praiseCount}"></cite>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="article-item text-center hidden" id="loadingInfo">
+                        <p class="article-item-remark">加载中...</p>
+                    </div>
+
+                    <div class="article-item text-center hidden" id="noMoreDataInfo">
+                        <p class="article-item-remark">无更多数据</p>
+                    </div>
+                </div>
+
+                <div class="col-sm">
+                    <div class="block mb-2" th:if="${null != myTopics && myTopics.size() != 0}">
+                        <h5 class="block-title block-title-subscribed-topic">订阅专题</h5>
+                        <div class="w-100"></div>
+                        <div class="article-item" th:each="myTopic: ${myTopics}">
+                            <a th:text="${myTopic.title}" class="article-item-title font-weight-bold"
+                               th:href="@{/topic/detail} + '?id=' + ${myTopic.id}"></a>
+                            <p class="article-item-remark" th:text="${myTopic.introduction}"></p>
+                        </div>
+                    </div>
+
+                    <div class="block">
+                        <h5 class="block-title block-title-topic">热门专题</h5>
+                        <div class="w-100"></div>
+                        <div class="article-item" th:each="topic: ${topics}">
+                            <a th:text="${topic.title}" class="article-item-title font-weight-bold"
+                               th:href="@{/topic/detail} + '?id=' + ${topic.id}"></a>
+                            <p class="article-item-remark" th:text="${topic.introduction}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

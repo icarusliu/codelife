@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicMapper">
+    <resultMap id="topicResult" type="com.liuqi.tools.codelife.entity.Topic">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="introduction" column="introduction"/>
+        <result property="img" column="img"/>
+        <result property="status" column="status" jdbcType="INTEGER"
+            typeHandler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicStatusTypeHandler"/>
+        <result property="type" column="type" jdbcType="INTEGER"
+                typeHandler="com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicTypeTypeHandler"/>
+        <association property="creator" javaType="User" column="creator"
+                     select="com.liuqi.tools.codelife.db.dao.mybatis.mapper.UserMapper.findById"></association>
+        <association property="admin" javaType="User" column="admin"
+                     select="com.liuqi.tools.codelife.db.dao.mybatis.mapper.UserMapper.findById"></association>
+    </resultMap>
+
+    <sql id="selectSql">
+        select
+            t1.id as id,
+            t1.title,
+            t1.introduction,
+            t1.img,
+            t1.creator,
+            t1.admin,
+            t1.status,
+            t1.type
+        from
+            topic t1
+    </sql>
+
+    <select id="findAll" resultMap="topicResult">
+        <include refid="selectSql"/>
+    </select>
+
+    <select id="findByAdmin" resultMap="topicResult">
+        <include refid="selectSql"/>
+        where admin=#{userId}
+    </select>
+
+    <select id="findByUser" resultMap="topicResult">
+        <include refid="selectSql"/>
+        left join topic_user t2
+        on t1.id = t2.topic_id
+        where t2.user_id = #{id}
+    </select>
+
+    <select id="findByTitle" resultMap="topicResult">
+        <include refid="selectSql"/>
+        where title=#{title}
+    </select>
+
+    <select id="findById" resultMap="topicResult">
+        <include refid="selectSql"/>
+        where id=#{id}
+    </select>
+
+    <select id="findByArticle" resultMap="topicResult">
+        <include refid="selectSql"/>
+        inner join topic_article t2
+        on t1.id = t2.topic_id
+        where t2.article_id = #{articleId}
+    </select>
+
+    <!--查找用户未订阅的并且是开放的专题清单，而且专题需要是Normal状态 -->
+    <select id="findUserNotSubscribed" resultMap="topicResult" parameterType="User">
+        <include refid="selectSql"/>
+        left join topic_user t2
+            on t1.id = t2.topic_id
+            and t2.user_id = #{id}
+        where t2.id is null
+            and t1.type=0
+            and t1.status=1
+    </select>
+
+    <select id="search" resultMap="topicResult">
+        <include refid="selectSql"/>
+        where (t1.title like concat('%', #{key}, '%') or t1.introduction like concat('%', #{key}, '%'))
+        and t1.type=0 and t1.status = 1
+    </select>
+
+    <insert id="insert" parameterType="Topic">
+        insert into topic(title, introduction, img, type, status, creator, admin)
+        values(#{title}, #{introduction}, #{img},
+            #{type, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicTypeTypeHandler},
+            #{status, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicStatusTypeHandler},
+            #{creator.id},
+            #{admin.id}
+        )
+    </insert>
+
+    <update id="update" parameterType="Topic">
+        update topic
+        set title = #{title}, introduction=#{introduction}, img = #{img},
+            type=#{type, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicTypeTypeHandler},
+            admin=#{admin.id}
+        where id=#{id}
+    </update>
+
+    <update id="updateStatus">
+        update topic
+        set status = #{status, typeHandler=com.liuqi.tools.codelife.db.dao.mybatis.mapper.TopicStatusTypeHandler}
+        where id=#{id}
+    </update>
+
+    <insert id="addTopicArticles" parameterType="java.util.List">
+        insert into topic_article(topic_id, article_id)
+        values
+        <foreach collection="articles" item="item" index="index" open="" close="" separator=",">
+            (#{id}, #{item})
+        </foreach>
+    </insert>
+
+    <insert id="subscribeTopic">
+        insert into topic_user(topic_id, user_id)
+        values(#{topicId}, #{userId})
+    </insert>
+
+    <delete id="unSubscribeTopic">
+        delete from topic_user where topic_id=#{topicId} and user_id = #{userId}
+    </delete>
+
+    <delete id="deleteTopicArticle">
+        delete from topic_article where topic_id=#{id} and article_id = #{articleId}
+    </delete>
+
+    <delete id="clearTopicSubscribers">
+        delete from topic_user where topic_id =#{id}
+    </delete>
+
+    <delete id="clearTopicArticles">
+        delete from topic_article where topic_id=#{id}
+    </delete>
+
+    <delete id="delete">
+        delete from topic where id=#{id}
+    </delete>
+</mapper>
