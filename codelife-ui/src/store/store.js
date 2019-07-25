@@ -13,6 +13,7 @@ const store = new Vuex.Store({
     updateLoginUser: function ({commit, state}) {
       axios.post('/getLoginUser').then((resp) => {
         commit('setLoginUser', resp.data)
+        window.localStorage.setItem('loginUserId', resp.data.id)
       })
     }
   },

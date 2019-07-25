@@ -45,12 +45,12 @@
               {{ topic.title }}
               </router-link>
 
-            <img class="col-sm-3 p-0" v-if="topic.img != ''"
+            <img class="col-sm-3 p-0" v-if="topic.img != ''" height="200" width="200"
                 :src="baseUrl + 'topic/getImg' + '?fileName=' + topic.img"/>
 
             <img class="col-sm-3 p-0" v-if="topic.img == ''"/>
 
-            <div class="col-sm m-0">
+            <div class="col-sm m-0 mt-1">
               <p>{{topic.introduction}}</p>
               <ul class="col-sm-12">
                 <li v-for="article in topic.articles" :key="article.id">

@@ -7,6 +7,8 @@
         </div>
     </div>
 
+    <!--{{article.keywords}} -->
+
     <!--文章内容-->
     <div class="article-block col-sm-8 offset-sm-2 mr-0">
         <!--文章标题 -->
@@ -21,13 +23,14 @@
                               '|&nbsp; &nbsp;' + article.readCount + '&nbsp; 次阅读'
                             }}</span>
                     <span id="praiseCount">{{article.praiseCount}}</span>&nbsp; 次点赞
+                    <span class="btn btn-link edit-button mb-1 ml-4" v-if="null != loginUser && article.authorID === loginUser.id" @click="editArticle(article.id)">编辑</span>
                 </p>
             </div>
         </div>
 
         <!-- 文章内容  -->
         <div class="row">
-            <div class="col ml-1 mr-1" id="content" v-html="htmlContent">
+            <div class="col" id="content" v-html="htmlContent">
             </div>
         </div>
 
@@ -44,16 +47,14 @@
 
         <!--评论对话框-->
         <form class="row m-2" method="post" id="commentForm">
+            <div class="w-100 mb-1">
+              <input class="col-sm-4 clear"
+                type="text" v-model="comment.showName" placeholder="显示名称"/>
+            </div>
             <textarea class="col-sm mr-3 form-control" placeholder="评论内容"
                       id="commentContent" v-model="comment.content"></textarea>
-            <div>
-                <div class="row ml-1 text-center">
-                    <input class="mr-1" type="checkbox" v-model="comment.anonymos" style="margin-top: 2px; "/>
-                    <label for="anonymos" style="line-height: 16px; ">匿名</label>
-                </div>
-                <div class="w-100"></div>
-                <input class="btn btn-primary" type="button" value="提交" @click="addComment"/>
-            </div>
+            <div class="w-100 mb-1"></div>
+            <input class="btn btn-primary btn-small" type="button" value="提交" @click="addComment"/>
         </form>
 
         <!--评论内容-->
@@ -62,8 +63,10 @@
                 <h6 class="comment-list-item-info">
                     <span class="mr-2">{{ (index + 1) + '楼'}}</span>
                     <span class="mr-2">
-                        {{comment.commentUser != null && comment.commentUser.id == article.authorID
-                        ? '题主' : (comment.commentUser != null ? comment.commentUser.realName : '匿名用户')}}
+                        {{comment.showName != null ? comment.showName : (
+                          comment.commentUser != null && comment.commentUser.id == article.authorID
+                        ? '作者' : (comment.commentUser != null ? comment.commentUser.realName : '匿名用户')
+                        )}}
                     </span>
                     评论于<cite>{{comment.commentTime}}</cite>
                 </h6>
@@ -71,7 +74,7 @@
 
                 <div class="comment-list-item-buttons row">
                     <input class="btn btn-link" type="button" value="答复"
-                            @click="replyComment(comment.id)"/>
+                            @click="replyComment(comment)"/>
                 </div>
 
                 <!--子评论-->
@@ -79,10 +82,12 @@
                     && comment.children.length != 0">
                     <div class="comment-list-item col-sm-12" v-for="subComment in comment.children" :key="subComment.id">
                         <h6 class="comment-list-item-info">
-                              <span class="mr-2">{{subComment.commentUser != null
-                                        && subComment.commentUser.id == article.authorID
-                                  ? '题主' : (subComment.commentUser != null
-                                                ? subComment.commentUser.realName : '匿名用户')}}</span>
+                              <span class="mr-2">
+                                {{subComment.showName != null ? subComment.showName : (
+                                  subComment.commentUser != null && subComment.commentUser.id == article.authorID
+                                ? '作者' : (subComment.commentUser != null ? subComment.commentUser.realName : '匿名用户')
+                                )}}
+                              </span>
                             评论于<cite>{{subComment.commentTime}}</cite>
                         </h6>
                         <p class="comment-list-item-content">{{subComment.content}}</p>
@@ -107,7 +112,8 @@
 </template>
 
 <script>
-import ajax from '@/components/Ajax.js'
+import { mapState } from 'vuex'
+import ajax from '@/components/common/Ajax.js'
 import Vue from 'vue'
 import '@/static/css/article-detail.css'
 import '@/static/css/comment.css'
@@ -145,6 +151,9 @@ export default {
       parentCommentId: -1
     }
   },
+  computed: mapState([
+    'loginUser'
+  ]),
   watch: {
     /**
      * 监控请求参数是否变化，如果变化则刷新数据
@@ -157,6 +166,11 @@ export default {
   },
   created () {
     this.refreshData()
+
+    let cachedShowName = localStorage.getItem('commentShowName')
+    if (cachedShowName) {
+      this.comment.showName = cachedShowName
+    }
   },
   methods: {
     /**
@@ -183,13 +197,17 @@ export default {
      * 新增评论
      */
     addComment: function () {
+      this.comment.articleId = this.articleId
       if (this.parentCommentId !== -1) {
-        this.comment.id = this.parentCommentId
-        this.comment.type = 'comment'
-      } else {
-        this.comment.id = this.articleId
-        this.comment.type = 'article'
+        this.comment.parent = this.parentCommentId
       }
+
+      if (!this.comment.showName) {
+        alert('请输入显示名称')
+        return
+      }
+
+      localStorage.setItem('commentShowName', this.comment.showName)
 
       if (!this.comment.content) {
         alert('请输入评论内容')
@@ -197,9 +215,9 @@ export default {
       }
 
       let _this = this
-      axios.post('/comment/add', this.comment).then(function (data) {
+      axios.post('/article/comment/add', this.comment).then(function (data) {
         console.log('Add comment result: ' + data)
-        axios.get('/comment/findByDestination', {params: {id: _this.articleId, type: 'article'}}).then(function (resp) {
+        axios.get('/article/comment/findByArticle', {params: {articleId: _this.articleId}}).then(function (resp) {
           console.log(resp)
           _this.comments = resp.data
           _this.parentCommentId = -1
@@ -208,8 +226,11 @@ export default {
       })
     },
 
-    replyComment: function (parentId) {
-      this.parentCommentId = parentId
+    replyComment: function (parent) {
+      this.parentCommentId = parent.id
+      let parentUser = (parent.commentUser !== null && parent.commentUser.id === this.article.authorID) ? '作者' : (parent.showName === null ? '匿名用户' : parent.showName)
+
+      this.comment.content = '【回复: ' + parentUser + '】'
       $('#commentContent').focus()
     },
 
@@ -262,6 +283,11 @@ export default {
           }
         ]
       })()})
+    },
+
+    editArticle: function (id) {
+      // 打开编辑界面
+      this.$router.push({path: '/newArticle/' + id})
     }
   }
 }
@@ -276,10 +302,18 @@ export default {
     color: #00008B;
   }
 
+  .article-catalog-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .article-catalog-content a{
     font-size: 0.8em;
     line-height: 2em;
     color: #4169E1;
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   #title {
@@ -295,15 +329,13 @@ export default {
     box-shadow: 1px 1px 5px gray;
   }
 
-  .article-subtitle {
-    font-size: 0.8em;
+  .article-subtitle>* {
+    font-size: 13px!important;
+    line-height: 25px!important;
   }
 
   #content {
     background: #fcfcfc;
-  }
-
-  #content>p{
     font-size: 14px;
   }
 
@@ -346,5 +378,25 @@ export default {
   }
   .article-detail-footer button:hover {
     background: #bbb;
+  }
+
+  .title2 {
+    padding-left: 20px;
+  }
+
+  .title3 {
+    padding-left: 40px;
+  }
+
+  .title4 {
+    padding-left: 60px;
+  }
+
+  .title5 {
+    padding-left: 80px;
+  }
+
+  .title6 {
+    padding-left: 100px;
   }
 </style>

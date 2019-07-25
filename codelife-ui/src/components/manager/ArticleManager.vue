@@ -25,7 +25,7 @@ export default {
           id: 1,
           title: '标题',
           field: 'title',
-          width: 400
+          width: 200
         },
         {
           id: 2,
@@ -37,7 +37,7 @@ export default {
           id: 3,
           title: '发表时间',
           field: 'createDate',
-          width: 180
+          width: 200
         },
         {
           id: 4,
@@ -59,6 +59,11 @@ export default {
           width: 60
         },
         {
+          title: '状态',
+          field: 'status',
+          width: 60
+        },
+        {
           id: 7,
           title: '操作',
           buttons: [
@@ -66,7 +71,7 @@ export default {
             {value: '删除', event: this.deleteRow},
             {value: '编辑', event: this.editRow}
           ],
-          width: 240
+          width: 300
         }
       ],
       buttons: [

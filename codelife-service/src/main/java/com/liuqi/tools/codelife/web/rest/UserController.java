@@ -37,6 +37,7 @@ import java.util.Map;
  * @Version: V1.0
  **/
 @RestController
+@RequestMapping("/")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -51,7 +52,7 @@ public class UserController {
     private ArticleTypeService typeService;
     
     @Autowired
-    private CommentService commentService;
+    private ArticleCommentService commentService;
     
     @Autowired
     private AuthenticationProvider authenticationProvider;

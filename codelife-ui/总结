@@ -107,6 +107,8 @@ watch: {
 父组件
 <article-list class="col-sm" :forumId="forumId"></article-list>
 
+引入maven-editor
+npm install mavon-editor --save
 
 引入bootstrap:  
 npm install bootstrap --save-dev
@@ -115,3 +117,5 @@ npm install --save popper.js
 引入highlight
 npm install highlight.js
 npm install showdown
+
+安装依赖

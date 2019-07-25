@@ -1,5 +1,9 @@
 body {
-    background-image: url('../icons/bg.gif');
+    background-image: url('../icons/bg.gif')!important;
+}
+
+.container-fluid {
+    background: none;  
 }
 
 .btn {
@@ -92,6 +96,7 @@ body {
     color: #000;
     text-overflow: ellipsis; 
     overflow: hidden;
+    white-space: nowrap;
 }
 
 /*右侧内容区域样式调整*/
@@ -205,7 +210,7 @@ body {
     display: block;
     box-shadow: 2px 2px 2px gray;
     border: 1px solid #fff;
-    font-size: 12px;
+    font-size: 14px;
     border-radius: 2px;
 }
 
@@ -251,4 +256,43 @@ body {
 
 .form-group>div{
     padding-left: 0px;
+}
+
+/*表单元素*/
+.form-row {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.form-row>* {
+    height: 30px; 
+    line-height: 30px;
+}
+
+.form-row>textarea {
+    min-height: 100px;
+}
+
+.form-row>.form-row-control {
+    min-width: 200px;
+}
+
+.my-btn {
+    min-width: 60px;
+    background: rgb(219, 250, 250);
+    border: 1px solid rgb(172, 211, 247); 
+    border-radius: 2px;
+    line-height: 24px;
+    text-align: center;
+    color: #000;
+    box-shadow: 2px 2px 2px gray;
+}
+
+.my-btn-gray {
+    background: #efefef;
+}
+
+.my-btn:hover {
+    background: #fff;
+    box-shadow: none;
 }

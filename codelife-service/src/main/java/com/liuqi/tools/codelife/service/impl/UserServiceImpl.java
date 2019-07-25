@@ -290,5 +290,13 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    /**
+     * 重置密码错误次数
+     */
+    @Override
+    public void resetErrorCount() {
+        userDao.resetErrorCount();
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 }

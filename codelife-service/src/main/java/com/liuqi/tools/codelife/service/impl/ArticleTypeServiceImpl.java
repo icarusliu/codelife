@@ -47,8 +47,10 @@ public class ArticleTypeServiceImpl implements ArticleTypeService {
     
     @Override
     public void saveType(String name) throws RestException {
+        Integer userId = authenticationService.getLoginUser().getId();
+
         //先检查同名的Type是否存在，如果存在则抛出异常
-        ArticleType type = articleTypeDao.findByName(name);
+        ArticleType type = articleTypeDao.findByName(userId, name);
         if (null != type) {
             logger.error("Article type with the same name exists already, name: " + name);
             throw ExceptionTool.getException(ErrorCodes.ARTICLE_TYPE_EXISTS);

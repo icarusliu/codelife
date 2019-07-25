@@ -29,6 +29,7 @@
     <select id="findByName" resultType="com.liuqi.tools.codelife.db.entity.ArticleType">
         <include refid="selectType"/>
         where name = #{name}
+          and user = #{userId}
     </select>
 
     <select id="findByUser" resultType="ArticleType">

@@ -79,6 +79,10 @@
         update user set status = 1, error_count = 0 where id = #{id}
     </update>
 
+    <update id="resetErrorCount">
+        update user set error_count = 0, status = 1
+    </update>
+
     <update id="resetPassword">
         update user set status = 1, error_count = 0, password = #{password} where id = #{id}
     </update>

@@ -1,7 +1,9 @@
 package com.liuqi.tools.codelife.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -19,6 +21,17 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Resource
     private RequestLogInterceptor logInterceptor;
+
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        // 后端接口默认添加/api前缀，以方便在前后端分离模式下nginx区分前后端请求
+        configurer.setPathMatcher( new AntPathMatcher() {
+            @Override
+            public String combine(String pattern1, String pattern2) {
+                return "/api" + super.combine(pattern1, pattern2);
+            }
+        });
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

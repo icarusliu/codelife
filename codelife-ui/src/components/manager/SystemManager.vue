@@ -19,6 +19,9 @@
                 :to="{name: 'systemTopicManager'}"
                   v-if="null != loginUser && (loginUser.systemAdmin || loginUser.topicAdmin)">专题管理</router-link>
               <router-link class="list-group-item"
+                :to="{name: 'toolManager'}"
+                  v-if="null != loginUser && loginUser.systemAdmin">工具管理</router-link>
+              <router-link class="list-group-item"
                 :to="{name: 'systemIndexManager'}"
                   v-if="null != loginUser && loginUser.systemAdmin">首页管理</router-link>
           </div>

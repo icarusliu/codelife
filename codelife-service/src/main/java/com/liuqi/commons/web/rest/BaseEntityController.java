@@ -18,17 +18,17 @@ public abstract class BaseEntityController<D, S extends EntityService> {
         this.entityService = entityService;
     }
 
-    @PostMapping
+    @PostMapping("")
     public void save(@RequestBody D d) {
         entityService.save(d);
     }
 
-    @GetMapping
+    @GetMapping("")
     public List<D> findAll() {
         return entityService.findAll();
     }
 
-    @DeleteMapping
+    @DeleteMapping("")
     public void delete(@RequestParam("id") Integer id) {
         entityService.delete(id);
     }

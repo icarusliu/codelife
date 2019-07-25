@@ -5,10 +5,8 @@ import java.io.Serializable;
 /**
  * 文章对象
  *
- *
- * @Author: LiuQI
- * @Created: 2018/3/26 16:12
- * @Version: V1.0
+ * @author  LiuQi 2019/5/29-11:40
+ * @version V1.0
  **/
 public class Article implements Serializable {
     private int id;
@@ -36,6 +34,12 @@ public class Article implements Serializable {
     private String contentUrl;
     private String content;
     private String remark;
+
+    /**
+     * 文章关键字
+     */
+    private String keywords;
+
     /**
      * 是否置顶
      */
@@ -50,6 +54,11 @@ public class Article implements Serializable {
      * 点赞数
      */
     private int praiseCount;
+
+    /**
+     * 封面文件编号
+     */
+    private Integer coverFileId;
     
     public int getId() {
         return id;
@@ -170,5 +179,22 @@ public class Article implements Serializable {
     
     public void setRecommended(boolean recommended) {
         this.recommended = recommended;
+    }
+
+    public Integer getCoverFileId() {
+        return coverFileId;
+    }
+
+    public Article setCoverFileId(Integer coverFileId) {
+        this.coverFileId = coverFileId;
+        return this;
+    }
+
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
     }
 }

@@ -93,4 +93,9 @@ public interface UserDao {
      * @param defPassword 新密码
      */
     void resetPassword(@Param("id") Integer id, @Param("password") String defPassword);
+
+    /**
+     * 重置密码错误次数
+     */
+    void resetErrorCount();
 }

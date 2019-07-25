@@ -1,46 +1,7 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
 import Router from 'vue-router'
-import Axios from 'axios'
-import Index from '@/components/Index'
-import ArticleExplorer from '@/components/article/ArticleExplorer'
-import UserIndex from '@/components/UserIndex'
-import MyTopic from '@/components/topic/MyTopic'
-import TopicExplorer from '@/components/topic/TopicExplorer'
-import About from '@/components/About'
-import SystemManager from '@/components/manager/SystemManager'
-import SystemRoleManager from '@/components/manager/RoleManager'
-import SystemUserManager from '@/components/manager/UserManager'
-import SystemArticleManager from '@/components/manager/ArticleManager'
-import SystemArticleTypeManager from '@/components/manager/ArticleTypeManager'
-import SystemTopicManager from '@/components/manager/TopicManager'
-import TopicEdit from '@/components/manager/TopicEdit'
-import SystemIndexManager from '@/components/manager/IndexManager'
-import ArticleDetail from '@/components/article/ArticleDetail'
-import NewArticle from '@/components/article/NewArticle'
-import Login from '@/components/Login'
 
 Vue.use(Router)
-Vue.use(Vuex)
-
-// 统一设置后台服务地址
-Axios.defaults.baseURL = 'http://localhost:8081/'
-Axios.defaults.withCredentials = true
-
-// 转换数据成标准格式
-Axios.defaults.transformRequest = function (data) {
-  if (data instanceof FormData) {
-    return data
-  }
-
-  var result = new URLSearchParams()
-
-  for (var i in data) {
-    result.append(i, data[i])
-  }
-
-  return result
-}
 
 export default new Router({
   mode: 'history',
@@ -48,89 +9,104 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: Index
+      component: (resolve) => require(['@/components/Index.vue'], resolve)
     },
     {
       path: '/articles/:forumId/:title',
       name: 'articles',
-      component: ArticleExplorer
+      component: (resolve) => require(['@/components/article/ArticleExplorer.vue'], resolve)
     },
     {
       path: '/userIndex/:userId/:typeId/:nowPage/:pageSize/:url',
       name: 'userIndex',
-      component: UserIndex
+      component: (resolve) => require(['@/components/UserIndex.vue'], resolve)
     },
     {
       path: '/topic/myTopics/:topicId',
       name: 'myTopics',
-      component: MyTopic
+      component: (resolve) => require(['@/components/topic/MyTopic.vue'], resolve)
     },
     {
       path: '/topic/topicExplorer',
       name: 'topicExplorer',
-      component: TopicExplorer
+      component: (resolve) => require(['@/components/topic/TopicExplorer.vue'], resolve)
+    },
+    {
+      path: '/tools',
+      name: 'tools',
+      component: (resolve) => require(['@/components/Tools.vue'], resolve)
     },
     {
       path: '/systemManager',
       name: 'systemManager',
-      component: SystemManager,
+      component: (resolve) => require(['@/components/manager/SystemManager.vue'], resolve),
       children: [
         {
           name: 'systemRoleManager',
           path: 'roleManager',
-          component: SystemRoleManager
+          component: (resolve) => require(['@/components/manager/RoleManager.vue'], resolve)
         },
         {
           name: 'systemUserManager',
           path: 'userManager',
-          component: SystemUserManager
+          component: (resolve) => require(['@/components/manager/UserManager.vue'], resolve)
         },
         {
           name: 'systemArticleManager',
           path: 'articleManager',
-          component: SystemArticleManager
+          component: (resolve) => require(['@/components/manager/ArticleManager.vue'], resolve)
         },
         {
           name: 'systemArticleTypeManager',
           path: 'articleTypeManager',
-          component: SystemArticleTypeManager
+          component: (resolve) => require(['@/components/manager/ArticleTypeManager.vue'], resolve)
         },
         {
           name: 'systemTopicManager',
           path: 'topicManager',
-          component: SystemTopicManager
+          component: (resolve) => require(['@/components/manager/TopicManager.vue'], resolve)
         },
         {
           name: 'systemIndexManager',
           path: 'indexManager',
-          component: SystemIndexManager
+          component: (resolve) => require(['@/components/manager/IndexManager.vue'], resolve)
         },
         {
           path: '/topic/topicEdit/:topicId',
           name: 'topicEdit',
-          component: TopicEdit
+          component: (resolve) => require(['@/components/manager/TopicEdit.vue'], resolve)
+        },
+        {
+          path: 'toolManager',
+          name: 'toolManager',
+          component: (resolve) => require(['@/components/manager/ToolManager.vue'], resolve)
         }
       ]
     },
     {
       path: '/about',
       name: 'about',
-      component: About
+      component: (resolve) => require(['@/components/About.vue'], resolve)
     },
     {
       path: '/articleDetail/:id',
       name: 'articleDetail',
-      component: ArticleDetail
+      component: (resolve) => require(['@/components/article/ArticleDetail.vue'], resolve)
     },
     {
       path: '/newArticle/:articleId',
       name: 'newArticle',
-      component: NewArticle
+      component: (resolve) => require(['@/components/article/NewArticle.vue'], resolve)
     },
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: (resolve) => require(['@/components/Login.vue'], resolve)
+    },
+    {
+      path: '/updatePassword',
+      name: 'updatePassword',
+      component: (resolve) => require(['@/components/UpdatePassword.vue'], resolve)
     }
   ]
 })

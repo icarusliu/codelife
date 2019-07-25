@@ -1,6 +1,8 @@
 package com.liuqi.tools.codelife.config;
 
+import com.liuqi.tools.codelife.util.MapBuilder;
 import com.liuqi.tools.codelife.util.ModelAndViewBuilder;
+import com.liuqi.tools.codelife.util.exceptions.RealAuthenticationException;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,10 +22,6 @@ import java.util.Map;
 public class ExceptionHandlerAdvice {
     /**
      * 处理Rest接口请求时的异常
-     * @param request
-     * @param response
-     * @param ex
-     * @return
      */
     @ExceptionHandler(RestException.class)
     @ResponseBody

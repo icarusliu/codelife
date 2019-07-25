@@ -111,7 +111,10 @@
 
     <update id="update" parameterType="Topic">
         update topic
-        set title = #{title}, introduction=#{introduction}, img = #{img},
+        set title = #{title}, introduction=#{introduction},
+            <if test="null != img and '' != img">
+                img = #{img},
+            </if>
             type=#{type, typeHandler=com.liuqi.tools.codelife.db.dao.typehandler.TopicTypeTypeHandler},
             admin=#{admin.id}
         where id=#{id}

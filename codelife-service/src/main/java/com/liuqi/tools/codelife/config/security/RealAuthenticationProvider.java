@@ -2,6 +2,7 @@ package com.liuqi.tools.codelife.config.security;
 
 import com.liuqi.tools.codelife.db.entity.User;
 import com.liuqi.tools.codelife.db.entity.UserStatus;
+import com.liuqi.tools.codelife.util.exceptions.RealAuthenticationException;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
 import com.liuqi.tools.codelife.service.UserService;
 import org.slf4j.Logger;
@@ -43,17 +44,17 @@ public class RealAuthenticationProvider implements AuthenticationProvider {
             user = userService.findByUsername(username);
         } catch (RestException e) {
             logger.error("Find user by username failed, user does not exist, username: {}!", username, e);
-            throw new AuthenticationException(e.getMessage(), e){};
+            throw new RealAuthenticationException(e.getMessage(), e){};
         }
     
         //判断用户是否被锁定或者注销，如果是则不让登录
         //需要在验证密码的前面完成，否则如下场景下会出异常：用户状态是注销时，密码输入超过3次错误被锁定，而第二天被重新置成正常！
         if (UserStatus.LOCKED.equals(user.getStatus())) {
             logger.error("User has been locked!");
-            throw new AuthenticationException("用户被锁定，第二天会自动解锁，请谅解！"){};
+            throw new RealAuthenticationException("用户被锁定，第二天会自动解锁，请谅解！"){};
         } else if (UserStatus.CANCEL.equals(user.getStatus())) {
             logger.error("User has been canceled!");
-            throw new AuthenticationException("用户被注销，请联系管理员！"){};
+            throw new RealAuthenticationException("用户被注销，请联系管理员！"){};
         }
         
         //判断密码是否正确
@@ -75,7 +76,7 @@ public class RealAuthenticationProvider implements AuthenticationProvider {
             //更新出错次数
             userService.updateErrorCount(user, user.getErrorCount() + 1);
     
-            throw new AuthenticationException(errorMessage) {
+            throw new RealAuthenticationException(errorMessage) {
             };
         }
         

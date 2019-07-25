@@ -38,6 +38,12 @@
                         :to="{name: 'topicExplorer'}">专题浏览</router-link>
                 </li>
 
+                <li class="nav-item"
+                    v-if="null == loginUser || !loginUser.systemAdmin">
+                    <router-link class="nav-link text-center font-weight-bold"
+                        :to="{name: 'tools'}">常用工具</router-link>
+                </li>
+
                 <!-- 只有管理员才能看到系统管理界面 -->
                 <li class="nav-item" v-if="null != loginUser && '' != loginUser">
                     <router-link class="nav-link text-center font-weight-bold"
@@ -51,7 +57,7 @@
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
-                <router-link tag="a" target="_blank" v-if="null != loginUser" class="btn btn-sm btn-link mr-4" 
+                <router-link tag="a" v-if="null != loginUser" class="btn btn-sm btn-link mr-4" 
                     style="color: rgb(151, 229, 255); line-height: 24px; font-size: 0.8em;" :to="{name: 'newArticle', params: {articleId: -1}}">
                     <img src="/static/icons/write.png" width="15px" height="15px">写文章  
                 </router-link>
@@ -59,6 +65,7 @@
                 <div style="font-size: 0.8em; color: #fff;" v-if="null != loginUser && '' != loginUser">
                     登录用户：<font class="mr-4" style="color: #fc3962;">{{ loginUser.realName }}</font>
                     <a href="#" @click="logout" style="color: rgb(245, 222, 222);">注销</a>
+                    <a href="#" @click="updatePassword" style="color: rgb(245, 222, 222);">修改密码</a>
                 </div>
 
                  <div v-if="null == loginUser || '' == loginUser" style="font-size: 0.8em; ">
@@ -93,6 +100,10 @@ export default {
     },
     login: function () {
       this.$router.push({path: '/login'})
+    },
+
+    updatePassword: function () {
+      this.$router.push({path: '/updatePassword'})
     }
   }
 }

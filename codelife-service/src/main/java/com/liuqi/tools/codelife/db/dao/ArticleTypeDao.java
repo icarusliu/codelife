@@ -26,10 +26,12 @@ public interface ArticleTypeDao {
     
     /**
      * 通过分类名称查找分类
+     *
+     * @param userId
      * @param typeName
      * @return
      */
-    ArticleType findByName(@Param("name") String typeName);
+    ArticleType findByName(@Param("userId") Integer userId, @Param("name") String typeName);
     
     /**
      * 查找用户的分类
