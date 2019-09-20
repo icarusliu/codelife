@@ -4,7 +4,6 @@
     <div class="col mr-0 ml-0 pr-0 pl-0">
       <div class="article-item row m-0 p-0 pl-2" v-for="article in articles" :key="article.id">
         <img class="col-3 col-md-2 m-2 p-0 mr-4" v-if="article.coverFileId" 
-          style="box-shadow: 0px 0px 10px #bbb; max-height: 120px;"
           :src="baseUrl + 'file/download/' + article.coverFileId"/>
         <div class="col p-0 pt-1">
           <sup v-if="article.recommended" style="color: red; ">[置顶]</sup>
@@ -150,6 +149,13 @@ export default {
 
 .article-item:hover {
     background: #f8f8f8;
+}
+
+.article-item>img {
+  box-shadow: 0px 0px 4px #bbb; 
+  max-height: 120px;
+  border: 1px solid #fff;
+  border-radius: 5px;
 }
 
 .article-item-title {
