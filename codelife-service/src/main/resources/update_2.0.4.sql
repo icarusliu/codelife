@@ -1,0 +1,1 @@
+alter table article add column keywords varchar(150) comment '文章关键字';

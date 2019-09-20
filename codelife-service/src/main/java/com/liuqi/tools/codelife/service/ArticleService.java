@@ -2,7 +2,6 @@ package com.liuqi.tools.codelife.service;
 
 import com.github.pagehelper.PageInfo;
 import com.liuqi.tools.codelife.db.entity.Article;
-import com.liuqi.tools.codelife.db.entity.ArticleStatus;
 import com.liuqi.tools.codelife.db.entity.User;
 import com.liuqi.tools.codelife.db.entity.UserArticleStatInfo;
 import com.liuqi.tools.codelife.util.exceptions.RestException;
@@ -94,7 +93,7 @@ public interface ArticleService {
      * @param pageSize
      * @return
      */
-    PageInfo<Article> search(String key, int nowPage, int pageSize);
+    PageInfo search(String key, int nowPage, int pageSize);
     
     /**
      * 通过ID查找文章内容并返回

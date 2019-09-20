@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>新增</title>
+
+    <link type="text/css" href="/js/simpleMDE/simplemde.min.css" rel="stylesheet"/>
+
+    <script src="/js/simpleMDE/simplemde.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"></script>
+    <!--<script src="/js/markdown/markdown.js"></script>-->
+    <script src="/js/showdown/showdown.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
+
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"  crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <script th:src="@{/js/common.js}"></script>
+
+    <script th:inline="javascript">
+        //@grant window.close
+        var converter = new showdown.Converter();
+        var article = [[${article}]];
+
+        $(function(){
+            var editor = new SimpleMDE({
+                element: $("#editor")[0]
+            });
+            editor.codemirror.on("change", function(){
+                $("#htmlContent").html(converter.makeHtml(editor.value()));
+            });
+
+            //如果是编辑某个文章，则设置标题、分类等
+            if (undefined != article) {
+                $("#title").val(article.title);
+                $("#type").val(article.articleType.id);
+                $("#forum").val(article.forum.id);
+            }
+
+            //绑定form的提交事件
+            $("#form").bind("submit", function() {
+                var formSubmitUrl = $("#formSubmitUrl").val();
+                var title = $("#title").val();
+                var type = $("#type").val();
+                var content = editor.value();
+                var forumId = $("#forum").val();
+                var topic = $("#topic").val();
+
+                var data = {title: title, type: type, content: content, forumId: forumId, topic: topic};
+                if (undefined != article) {
+                    data.id = article.id;
+                }
+
+                post(formSubmitUrl,data,
+                    function(data) {
+                        if ("succeed" == data) {
+                            alert("提交成功，页面将关闭！");
+                            window.close();
+                        } else {
+                            alert("提交失败，错误信息：" + data.exception.message);
+                        }
+                    });
+
+                return false;
+            });
+        });
+    </script>
+
+    <style>
+        #htmlContent{
+            border: 1px solid #eee;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <form class="container-fluid" id="form">
+        <input type="text" id="formSubmitUrl" th:value="@{/system/articleManager/saveArticle}" hidden/>
+        <div class="row mt-1">
+            <label class="col-sm-1 text-right mt-2">标题：</label>
+            <input type="text" size="50"
+                   name="title" id="title"
+                   class="col-sm-5 form-control mb-2" placeholder="标题" required/>
+        </div>
+
+        <div class="row mb-2">
+            <label class="col-sm-1 text-right mt-2">分类：</label>
+            <select name="type" class="col-sm-2 form-control" id="type">
+                <option th:value="${type.id}"  th:each="type: ${types}" th:text="${type.name}"></option>
+            </select>
+            <label class="col-sm-1 text-right mt-2"  th:if="${null == article}">版块：</label>
+            <select name="forumId" class="col-sm-2 form-control" id="forum" required th:if="${null == article}">
+                <option th:value="${forum.id}"  th:each="forum: ${forums}" th:text="${forum.name}"></option>
+            </select>
+            <label class="col-sm-1 text-right mt-2" th:if="${null == article}">专题：</label>
+            <select name="topic" id="topic"
+                    class="col-sm-2 form-control"  th:if="${null == article}">
+                <!--编辑文章时，不能修改发表的专题-->
+                <option value="0">不发表到专题</option>
+                <option th:each="topic: ${myTopics}" th:value="${topic.id}" th:text="${topic.title}"></option>
+            </select>
+            <div class="col-sm-1">
+                <button type="submit" class="btn btn-primary">发表</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <textarea id="editor" rows="40" cols="200" th:text="${article} ? ${article.content} : ''"></textarea>
+            </div>
+            <div id="htmlContent" class="col-sm-6"></div>
+        </div>
+    </form>
+</body>
+</html>

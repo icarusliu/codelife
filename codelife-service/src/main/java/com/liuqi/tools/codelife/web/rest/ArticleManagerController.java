@@ -124,6 +124,7 @@ public class ArticleManagerController {
                               @RequestParam(name = "id", required = false) Integer id,
                              @RequestParam(name = "fileIds", required = false) String fileIdsStr,
                              @RequestParam(name = "coverFileId", required = false) Integer coverFileId,
+                             @RequestParam(name = "keyword", required = false) String keywords,
                              @RequestParam(name = "status", required = false) Integer status) throws RestException {
         List<Integer> fileIds = new ArrayList<>(16);
         if (StringUtils.isNotBlank(fileIdsStr)) {
@@ -162,7 +163,8 @@ public class ArticleManagerController {
         article.setTitle(title);
         article.setArticleType(articleTypeService.findById(type));
         article.setStatus(articleStatus);
-        article.setCoverFileId(coverFileId);
+        article.setCoverFileId(coverFileId)
+            .setKeywords(keywords);
 
         if (null == id) {
             articleService.saveArticle(article, fileIds);

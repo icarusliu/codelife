@@ -14,10 +14,7 @@
               <h5 class="block-title block-title-topic">热门专题</h5>
               <div class="w-100"></div>
               <div class="article-item" v-for="topic in topics" :key="topic.id">
-                  <router-link class="article-item-title font-weight-bold"
-                    :to="{name: 'myTopics', params: {topicId: topic.id}}">
-                    {{topic.title}}
-                  </router-link>
+                  <router-link :to="{name: 'myTopics', params: {topicId: topic.id}}">{{topic.title}}</router-link>
                   <p class="topic-item-remark">{{ topic.introduction }}</p>
               </div>
           </div>
@@ -26,7 +23,7 @@
             <h5 class="block-title">最新评论</h5>
             <div class="w-100"></div>
             <div class="block-item ml-4 mr-4 p-0" v-for="comment in comments" :key="comment.id">
-              <a class="comment-article row" 
+              <a class="comment-article row"
                 v-bind:href="'/articleDetail/' + comment.article.id">{{comment.article.title}}</a>
               <div class="row comment-content mt-1">
                 <label>{{ null != comment.showName ? comment.showName : '匿名用户'}}：</label>
@@ -86,10 +83,10 @@ export default {
 
 <style>
 .comment-article {
-  overflow: hidden; 
+  overflow: hidden;
   text-overflow: ellipsis;
   color: gray;
-  border-bottom: 1px dotted gray; 
+  border-bottom: 1px dotted gray;
 }
 
 .comment-content {
@@ -102,9 +99,9 @@ export default {
 }
 
 .topic-item-remark {
-  font-size: 13px; 
+  font-size: 13px;
   max-height: 80px;
-  overflow: hidden;  
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 </style>

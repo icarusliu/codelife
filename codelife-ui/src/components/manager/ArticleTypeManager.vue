@@ -31,7 +31,7 @@ export default {
   ]),
   data () {
     return {
-      dataUrl: '/system/articleTypeManager/getAllForManager',
+      dataUrl: '/articleType/manager/list',
       columns: [
         {
           id: 1,

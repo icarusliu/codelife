@@ -7,6 +7,8 @@
         </div>
     </div>
 
+    <!--{{article.keywords}} -->
+
     <!--文章内容-->
     <div class="article-block col-sm-8 offset-sm-2 mr-0">
         <!--文章标题 -->
@@ -21,7 +23,7 @@
                               '|&nbsp; &nbsp;' + article.readCount + '&nbsp; 次阅读'
                             }}</span>
                     <span id="praiseCount">{{article.praiseCount}}</span>&nbsp; 次点赞
-                    <span class="btn btn-link edit-button mb-1 ml-4" v-if="null != loginUser && article.authorID === loginUser.id">编辑</span>
+                    <span class="btn btn-link edit-button mb-1 ml-4" v-if="null != loginUser && article.authorID === loginUser.id" @click="editArticle(article.id)">编辑</span>
                 </p>
             </div>
         </div>
@@ -281,6 +283,11 @@ export default {
           }
         ]
       })()})
+    },
+
+    editArticle: function (id) {
+      // 打开编辑界面
+      this.$router.push({path: '/newArticle/' + id})
     }
   }
 }
@@ -371,5 +378,25 @@ export default {
   }
   .article-detail-footer button:hover {
     background: #bbb;
+  }
+
+  .title2 {
+    padding-left: 20px;
+  }
+
+  .title3 {
+    padding-left: 40px;
+  }
+
+  .title4 {
+    padding-left: 60px;
+  }
+
+  .title5 {
+    padding-left: 80px;
+  }
+
+  .title6 {
+    padding-left: 100px;
   }
 </style>

@@ -65,10 +65,7 @@ function processHtml (content) {
     if (isCatalog(line)) {
       // 是目录时生成目录的HTML
       var titleObject = processCatalog(line)
-      for (var j = 1; j < titleObject.level; j++) {
-        catalogHtml += '&nbsp &nbsp '
-      }
-      catalogHtml += '<a href="#' + titleObject.id + '">' + titleObject.title + '</a></br>'
+      catalogHtml += '<a href="#' + titleObject.id + '" class="title' + titleObject.level + '">' + titleObject.title + '</a></br>'
     }
 
     // 如果表格前有空行时，会添加<p>这个标签，需要去掉

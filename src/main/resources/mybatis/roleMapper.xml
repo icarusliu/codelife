@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuqi.tools.codelife.db.dao.mybatis.mapper.RoleMapper">
+    <resultMap id="roleResult" type="com.liuqi.tools.codelife.entity.Role">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select
+            id as id,
+            name as name,
+            remark as remark
+        from
+            role
+    </sql>
+
+    <!-- 通过用户名称查找用户-->
+    <select id="findAllRoles" resultMap="roleResult">
+        <include refid="selectSql"/>
+    </select>
+
+    <insert id="add">
+        insert into role(name, remark)
+        values(#{roleName}, #{remark});
+    </insert>
+
+    <update id="update">
+        update role
+        set name = #{roleName}, remark = #{remark}
+        where id=#{id}
+    </update>
+</mapper>

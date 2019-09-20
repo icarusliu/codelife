@@ -12,5 +12,5 @@ import org.mapstruct.Mapper;
  * @version V1.0
  **/
 @Mapper(componentModel = "spring")
-public interface ToolMapper extends EntityMapper<Tool, ToolVO> {
+public interface ToolMapper extends EntityMapper<ToolVO, Tool> {
 }
